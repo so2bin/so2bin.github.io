@@ -4,7 +4,7 @@
 
 # Site
 title: so2bin
-subtitle: '关于AI、k8s、架构、编程的分享之地'
+subtitle: '关于AI、k8s、架构、编程的分享'
 description: '专注于AI框架、部署、平台、k8s、Go、Python等领域'
 keywords: "Python, Go, AI框架, AI部署, 平台, 架构, k8s, tritonserver, Pytorch, NVIDIA, GPU, NPUm HPC"
 author: so2bin
@@ -41,18 +41,20 @@ external_link:
 filename_case: 0
 render_drafts: false
 post_asset_folder: true # 使用本地相对image目录
-relative_link: false
+relative_link: true # 相对链接
 future: true
 syntax_highlighter: highlight.js
 highlight:
-  line_number: true
+  enable: false
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
   hljs: false
 prismjs:
+  enable: true
   preprocess: true
-  line_number: true
+  line_number: false
   tab_replace: ''
 
 # Home page setting
@@ -96,7 +98,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-# theme: next
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -104,3 +106,19 @@ deploy:
   type: 'git'
   repo: git@github.com:so2bin/so2bin.github.io.git
   branch: master
+
+# 新增文章字数统计
+symbols_count_time:
+  #文章内是否显示
+  symbols: true # 文章字数
+  time: true # 阅读时长
+  # 网页底部是否显示
+  total_symbols: false # 所有文章总字数
+  total_time: false # 所有文章阅读中时长
+
+# 本地搜索
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000

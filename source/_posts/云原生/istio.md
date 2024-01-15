@@ -11,6 +11,8 @@ tags:
  * 金丝雀发布：变更是导致脆弱性的重要原因，任何形式的上线新版本都应该基于灰度部署
 * 将服务治理下沉到基础设施中：service mesh
 
+<!-- more -->
+
 ## Service Mesh技术标准
 * UDPA(Universal Data Plane API) 统一数据平台API, Envoy就是该标准的实现
 * SMI(Service Mesh Interface) 控制平面规范，如docker, LINKERD

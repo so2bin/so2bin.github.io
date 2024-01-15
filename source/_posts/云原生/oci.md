@@ -1,7 +1,7 @@
 ---
-title: oci
+title: OCI规范
 date: 2024-01-14 16:01:07
-tags:
+tags: [OCI, Cloud Native]
 ---
 ## OCI镜像规范
 ### 资料
@@ -37,6 +37,7 @@ nginx/
 ├── index.json
 └── oci-layout
 ```
+<!-- more -->
 可以看到OCI镜像由以下内容组成：
 #### 1. oci-layout
 * 该文件为镜像布局版本号
@@ -64,8 +65,6 @@ nginx/
 ##### manifest文件
 
 * manifest文件为JSON格式文件，包含：镜像配置文件的引用和文件系统层文件（镜像layers）的引用；
-
-
 ```json
 {
   "schemaVersion": 2,
@@ -156,7 +155,13 @@ nginx/
     "rootfs":{
         "type":"layers",
         "diff_ids":[
-            "sha256:571ade696b261f0ff46e3cdac4635afc009c4ed3429950cb95cd7e5f70ba0a07","sha256:b6c2a8d6f0ac89ef77e161532f3d9d0dc5dfe0a5f20042e0afc0ad14288405eb","sha256:b61d4b2cd2daf06047984c5876a35338c2beb5ae3f6bef479d25f05772a6a482","sha256:eddcd06e5ef9b91677526f6c55fa01a7d6963c435d5cf2bfb488d91aaa72d4a8","sha256:b4ad478450363f0a8020bb5552641fe6077e78fca48da4d77a979724a3ad2a72","sha256:fbcc9bc44d3e165e7e4f56fb189a05ea5c562a733985ec00d5e3fad309eb63cc","sha256:009507b8560964795eab5126f6363cb2b7403596adf370c9e95d4648c43e771f"
+            "sha256:571ade696b261f0ff46e3cdac4635afc009c4ed3429950cb95cd7e5f70ba0a07",
+            "sha256:b6c2a8d6f0ac89ef77e161532f3d9d0dc5dfe0a5f20042e0afc0ad14288405eb",
+            "sha256:b61d4b2cd2daf06047984c5876a35338c2beb5ae3f6bef479d25f05772a6a482",
+            "sha256:eddcd06e5ef9b91677526f6c55fa01a7d6963c435d5cf2bfb488d91aaa72d4a8",
+            "sha256:b4ad478450363f0a8020bb5552641fe6077e78fca48da4d77a979724a3ad2a72",
+            "sha256:fbcc9bc44d3e165e7e4f56fb189a05ea5c562a733985ec00d5e3fad309eb63cc",
+            "sha256:009507b8560964795eab5126f6363cb2b7403596adf370c9e95d4648c43e771f"
         ]
     },
 	"created": "2023-10-24T22:44:45Z",
@@ -175,6 +180,7 @@ nginx/
 }
 ```
 * 综合上述理解，再看下图的镜像组成结构即能很好理解：
+
 ![image组成](./oci/manifest-index.png)
 
 
