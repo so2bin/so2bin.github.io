@@ -175,7 +175,7 @@ nginx/
 }
 ```
 * 综合上述理解，再看下图的镜像组成结构即能很好理解：
-![image组成](image.png)
+![image组成](./oci/manifest-index.png)
 
 
 ### OCI镜像分发标准
