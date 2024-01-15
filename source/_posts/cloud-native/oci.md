@@ -12,15 +12,17 @@ tags: [OCI, Cloud Native]
 * https://github.com/opencontainers/distribution-spec
 
 ### OCI镜像格式标准
+> https://www.rectcircle.cn/posts/oci-image-spec/
 > https://github.com/opencontainers/image-spec
+
 * OCI定义了镜像的格式规范：即镜像的文件和目录结构，相关的配置协议格式等；
 * 可以通过`skopeo`工具将docker镜像导出为OCI标准目录；
-```
+```bash
 # 如该命令为利用skopeo镜像完成将nginx镜像导出OCI标准目录
 docker run --rm -v ./:/data  quay.io/skopeo/stable:latest copy docker://nginx:latest oci:/data/nginx
 ```
 如下所示：
-```
+```bash
 hbb@hbb:~/tmp/oci$ tree nginx/
 nginx/
 ├── blobs
@@ -122,7 +124,7 @@ nginx/
 
 ##### config文件
 * 在manifest文件中有一段config内容，引用了该config文件的sha256值，通过该值可以读取到该文件的内容，如下述mainfest文件的config为：
-```
+```json
 "config": {
     "mediaType": "application/vnd.oci.image.config.v1+json",
     "digest": "sha256:a8758716bb6aa4d90071160d27028fe4eaee7ce8166221a97d30440c8eac2be6",
@@ -180,17 +182,105 @@ nginx/
 }
 ```
 * 综合上述理解，再看下图的镜像组成结构即能很好理解：
-
 ![image组成](./oci/manifest-index.png)
 
 
 ### OCI镜像分发标准
 > https://github.com/opencontainers/distribution-spec
-> 
 
-* 该标准定义了一个 API 协议，以促进和标准化镜像内容的分发；
+* 该标准定义了一套HTTP API 协议，以促进和标准化镜像内容的分发；
+* 该标准定义镜像仓库应该实现的接口协议以及镜像分发过程的交互逻辑，如Pull, Push, Content Discovery, Content Management等；
+* 所有的镜像仓库都必须最小实例Pull的所有API协议；
 
+* 镜像在镜像仓库中的组成：
+![image组成](./oci/image-contents.png)
 
+#### Pull
+* pull镜像分两块：manifest的拉取和blobs文件（可能多个）的拉取；
+* 一般是先pull manifest，再pull blobs；
+* pull manifest API:
+```HTTP
+GET /v2/<name>/manifests/<reference>
+```
+* pull blobs API:
+```
+GET /v2/<name>/blobs/<digest>
+```
+* 检查内容存在：
+```
+HEAD /v2/<name>/manifests/<reference>
+or 
+HEAD /v2/<name>/blobs/<digest>
+```
 
+#### Push
+* 上传的顺序是blobs先上传，manifest后上传；
+> It follows that during an upload, we need to upload layers before the config file, and we need to upload the config file before the manifest.
+* 可在下面文档中查看上传的过程：
+> https://github.com/google/go-containerregistry/tree/d7f8d06c87ed209507dd5f2d723267fe35b38a9f/pkg/v1/remote#anatomy-of-an-image-upload
+
+<img src="oci-push.png" width="60%" height="60%"  style="margin: 0 auto;"/>
 
 ### overlay2
+> https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/#overlay2
+> https://arkingc.github.io/2018/01/15/2018-01-15-docker-storage-overlay2/#%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F
+
+* docker镜像的层包含容器层和镜像层，所谓容器层就是在容器运行起来后的层，如下图所示；
+<img src="overlay2.png" width="60%" height="60%"  style="margin: 0 auto;"/>
+* overlay驱动实现了对多层进行联合挂载的机制来为容器提供可见的文件系统；
+<img src="overlay-view.png" width="90%" height="90%"  style="margin: 0 auto;"/>
+
+* 当前docker默认使用的存储驱动是`overlay2`，该驱动天然支持多层（最多128层）；
+* 每层的目录由多个文件夹组成：`diff`, `lower`, `work`, `merged`, `link`，其中:
+  * `link`是文件，保存了当前层的软连接信息，软连接是用于避免mount时因128层导致数据过大超出page限制；
+  * `lower`是文件，保存了父层的信息；
+  * `diff`是当前层相对于父层的不同文件/目录；
+  * `merged`仅在容器层有，是在容器运行时，由overlay2驱动将所有diff进行合并后挂载起来的，提供给容器看到的文件夹，所以只有最上层的目录才有内容；
+  * `work`目录用于copy-up操作；
+* 镜像最底层不包含`lower`文件夹；
+* 容器挂载阶段，在docker Driver的源码实现中，本质就是调用了overlay2驱动的mount命令：
+```go
+func (d *Driver) Get(id string, mountLabel string) (s string, err error) {
+  // ...
+  //挂载命令的参数字符串
+	opts := fmt.Sprintf("lowerdir=%s,upperdir=%s,workdir=%s", strings.Join(absLowers, ":"), path.Join(dir, "diff"), path.Join(dir, "work"))
+	//挂载命令的数据
+	mountData := label.FormatMountLabel(opts, mountLabel)
+	//挂载函数
+	mount := syscall.Mount
+	//挂载目标目录
+	mountTarget := mergedDir
+  // ...
+  if err := mount("overlay", mountTarget, "overlay", 0, mountData); err != nil {
+		return "", fmt.Errorf("error creating overlay mount to %s: %v", mergedDir, err)
+	}
+  // ...
+}
+```
+* 删除/停止容器时，overlay2驱动仅仅做的是卸载`merged`目录的挂载：
+```go
+func (d *Driver) Put(id string) error {
+	d.locker.Lock(id)
+	defer d.locker.Unlock(id)
+	//获取该层路径
+	dir := d.dir(id)
+	//读取lower文件，获取lower层信息
+	_, err := ioutil.ReadFile(path.Join(dir, lowerFile))
+	if err != nil {
+		// If no lower, no mount happened and just return directly
+		// ....
+	}
+
+	//获取挂载点路径，即merged目录的路径
+	mountpoint := path.Join(dir, "merged")
+	//挂载时增加了引用计数，卸载时减少
+	if count := d.ctr.Decrement(mountpoint); count > 0 {
+		return nil
+	}
+	//卸载
+	if err := syscall.Unmount(mountpoint, 0); err != nil {
+		logrus.Debugf("Failed to unmount %s overlay: %s - %v", id, mountpoint, err)
+	}
+	return nil
+}
+```
