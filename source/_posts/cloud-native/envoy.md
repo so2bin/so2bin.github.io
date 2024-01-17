@@ -1,5 +1,5 @@
 ---
-title: 云原生-Service Mesh-Envoy组件
+title: Envoy
 date: 2024-01-06 16:52:44
 tags:
 ---
@@ -13,11 +13,10 @@ tags:
 
 ### Service Mesh
 * Linkerd, Envoy, Istio
-![Alt text](image.png)
 * 起源于："What's a service mesh? And do I need one?"
 * 指专注于服务之间通信的基础设施，负责在现代云原生应用的复杂网络拓扑中可靠的传递请求；
 * 除了基本网络通信的基础功能外，还需要包括分布式应用程序之间通信应该具备的功能，如熔断，限流，trace, metrics, 服务发现，负载均衡；
-![Alt text](image-1.png)
+<img src="sm-base.png" width="80%">
 * 即微服务业务程序独立于网络通信proxy组件运行，proxy提供服务间的通信，以及熔断、限流、trace, metrcis, 服务发现，安全，LB，超时，mirror，认证和授权等功能，这就是Service Mesh；
 * 数据平面 + 控制平面
 * 数据平面：䚣及系统中的每个数据包或请求，完成网络相关功能；
@@ -62,8 +61,7 @@ tags:
 * Listeners: 面向请求输出的一端
 * Cluster: 面向上游后端
 * Filter Chains: 中间的过滤链，如Router
-![envoy拓扑](image-2.png)
-![envoy拓扑2](image-3.png)
+<img src="envoy-top.png" width="80%">
 
 #### cluster
 * cluster可以静态配置，也可以通过Cluster Discovery Server（CDS）动态发现
@@ -83,7 +81,7 @@ tags:
 * Main线程：启动、关闭，xDS API的调用处理，动态配置，健康检测，集群管理等，所有事件均以异步非阻塞模式完成
 * Worker线程：默认根据当前CPU核数创建同等数量的工作线程，也可通过`--concurrency`来指定线程数；每个线程都会启动一个非阻塞事件循环，为每个连接初始休一个过滤器栈并处理此连接的整个生命周期的所有事件；每个线程都会监听所有用户配置的socket，对于某次连接请求，是由系统kernel负责将请求派发给一个工作线程处理；
 * 文件刷新线程：专用的独立写文件线程
-![Alt text](image-4.png)
+<img src="envoy-threads.png" width="70%" name="envoy线程模型">
 
 ### Envoy配置方式
 * 支持非常灵活的配置方式，且各内部组件的配置均可支持静态与动态配置；
@@ -120,7 +118,7 @@ tags:
 * 该filter本身是L3/L4 filter，能够将原始数据转换为HTTP级别消息和事件，拿到L7的数据，如headers，body等
 * 其处理了所有HTTP连接和请求共有的功能，如访问日志，trace，header/body操作，路由管理，统计信息等；
 * 在该管理器中，还支持使用L7层HTTP过滤器：Router，Rate limit, Health check, Gzip, Fault Injection等；
-![Alt text](image-6.png)
+![HTTP Filters](http-filters.png)
 
 #### clusters CDS and EDS
 * Envoy可配置任意数量的upstream clusters，并使用Cluster Manager进行管理
@@ -154,7 +152,7 @@ envoy -c /etc/envoy/envoy.yaml
 * `/stats/prometheus` prometheus格式的指标数据 
 
 #### /clusters相关参数
-![Alt text](image-7.png)
+![/clusters](clusters.png)
 * `region::` 位置，一般指机房
 * `zone::` 机房中的区域
 * `sub_zone::` 区域中的子区域，如节点
