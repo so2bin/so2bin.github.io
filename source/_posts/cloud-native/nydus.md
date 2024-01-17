@@ -15,7 +15,7 @@ tags: ["Nydus", "Cloud Native"]
 * 提供用户态文件系统Fuse，兼容OCI分发标准，和artifacts标准（lazy加载就是基于该fuse实现）；
 * 支持镜像存储backend，镜像数据可以放registry或对象存储上；
 * 与Dragonfly P2P系统集成；
-
+<!--more-->
 ## 架构
 * 主要包括一种新的镜像格式和一个负责解析容器镜像的FUSE用户态文件系统进程；
 <img src="arch.png" width="70%" height="70%"  style="margin: 0 auto;"/>
