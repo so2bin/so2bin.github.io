@@ -16,7 +16,7 @@ tags:
 ## Service Mesh技术标准
 * UDPA(Universal Data Plane API) 统一数据平台API, Envoy就是该标准的实现
 * SMI(Service Mesh Interface) 控制平面规范，如docker, LINKERD
-![SMI vs UDPA](./image-8.png)
+<img src="image-8.png" width="70%" title="SMI vs UDPA">
 
 ## Istio发展历程
 * 2017年5月随Linkerd1.0后，5月发布了Istio 0.1版本
