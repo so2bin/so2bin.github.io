@@ -18,6 +18,9 @@ tags: [OCI, Cloud Native]
 * OCI定义了镜像的格式规范：即镜像的文件和目录结构，相关的配置协议格式等；
 * 如下图为一demo示图：
 ![OCI Image](oci-image.png)
+
+<!-- more -->
+
 * 下图为容器层和镜像层的关系图：
 <img src="container-image.png" width="50%" style="margin: 0 auto;"/>
 
@@ -44,7 +47,7 @@ nginx/
 ├── index.json
 └── oci-layout
 ```
-<!-- more -->
+
 可以看到OCI镜像由以下内容组成：
 #### 1. oci-layout
 * 该文件为镜像布局版本号

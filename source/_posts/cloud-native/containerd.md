@@ -17,6 +17,8 @@ tags: ["Cloud Native", "Containerd"]
 * 由overlay filesystem提供的能力，支持将多个文件系统层叠加在一起，且只显示最顶层的文件和目录，OverlayFS是其实现，docker当前默认存储驱动为overlay2，就是基于该文件系统；
 * 在contaierd中这个联合挂载的roofs视图是由snapshotter准备的snapshots；
 
+<!-- more -->
+
 ### filesystem
 * 在容器生态中，有两种类型的文件系统：overlays filesystem, snapshoting filesystem；
 * AUFS, OverlayFS是overlays filesystem，通过联合挂载将多层目录合并提供给容器，提供file级差异，通常工作于常用文件系统如EXT4, XFS；
