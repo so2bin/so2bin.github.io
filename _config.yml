@@ -4,8 +4,8 @@
 
 # Site
 title: so2bin
-subtitle: '关于AI、k8s、架构、编程的分享'
-description: '专注于AI框架、部署、平台、k8s、Go、Python等领域'
+subtitle: '青山一道同云雨，明月何曾是两乡'
+description: '专注于AI框架、平台、架构、k8s、Go、Python领域'
 keywords: "Python, Go, AI框架, AI部署, 平台, 架构, k8s, tritonserver, Pytorch, NVIDIA, GPU, NPUm HPC"
 author: so2bin
 language: zh-CN
