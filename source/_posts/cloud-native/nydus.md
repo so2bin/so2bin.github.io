@@ -7,6 +7,7 @@ tags: ["Nydus", "Cloud Native"]
 * [官方技术博客介绍](https://developer.aliyun.com/article/979419)
 * [容器技术之容器镜像篇](https://mp.weixin.qq.com/s?spm=a2c6h.12873639.article-detail.7.71813892qT8cYh&__biz=MzUxNjE3MTcwMg==&mid=2247485160&idx=1&sn=289581225c168e86c5ed3e6819f2a719&chksm=f9aa3431ceddbd277ae447934fbe3fa7bf773158976c5f2b95dcf516ab87e1a32871692683dd&scene=21#wechat_redirect)
 * [Dragonfly 发布 Nydus 容器镜像加速服务](https://mp.weixin.qq.com/s?spm=a2c6h.12873639.article-detail.8.71813892qT8cYh&__biz=MzUxNjE3MTcwMg==&mid=2247484853&idx=1&sn=4ef7232be5e32a479987f073e3c6bd20&chksm=f9aa376cceddbe7ab678e11a1b6baa89a338a7d6dd7fd2de7734fb50a4bc3963d850fdb5f991&scene=21#wechat_redirect)
+* [Toward Next Generation Container Image](https://drive.google.com/file/d/1LRfLUkNxShxxWU7SKjc_50U0N9ZnGIdV/view?pli=1)
 
 ## 特点
 * 镜像lazy加载，按需下载镜像blob数据，容器启动速度更快；
@@ -62,4 +63,8 @@ tags: ["Nydus", "Cloud Native"]
 * 镜像数据是被分成固定大小的blobs数据块，大小为4MB；
 * blobs可以用于多镜像共享；
 * 传统OCI镜像是以gzip从仓库拉到本地并进行解压的，解压前会有数据校验，但解压后并不会再进行校验，这里可能就存在漏洞，而nydus的数据不需要解压到本地，且对每一次数据访问均会进行校验，因此提供了blobs级的安全校验；
+
+### 对比
+* 如下图，是官方给出的nydus与之前的镜像加速方案的对比图，如Slacker, dragonfly方案:
+![nydus-vs-other](nydus-vs-other.png)
 

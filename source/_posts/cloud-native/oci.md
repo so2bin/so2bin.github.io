@@ -18,6 +18,9 @@ tags: [OCI, Cloud Native]
 * OCI定义了镜像的格式规范：即镜像的文件和目录结构，相关的配置协议格式等；
 * 如下图为一demo示图：
 ![OCI Image](oci-image.png)
+* 下图为容器层和镜像层的关系图：
+<img src="container-image.png" width="50%" style="margin: 0 auto;"/>
+
 * 可以通过`skopeo`工具将docker镜像导出为OCI标准目录；
 ```bash
 # 如该命令为利用skopeo镜像完成将nginx镜像导出OCI标准目录
