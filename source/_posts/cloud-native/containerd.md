@@ -127,6 +127,8 @@ version = 2
 > https://github.com/containerd/stargz-snapshotter?tab=readme-ov-file
 > [Startup Containers in Lightning Speed with Lazy Image Distribution on Containerd](https://medium.com/nttlabs/startup-containers-in-lightning-speed-with-lazy-image-distribution-on-containerd-243d94522361)
 
+* Stargz Snapshotter是containerd的子项目；
+
 #### 原理
 * 谷歌提出了[`Stargz Snapshotter`](https://github.com/containerd/stargz-snapshotter?tab=readme-ov-file)就是`Remote Snapshotter`的一种实现，该方案实现了lazy pulling；
 ![stargz-lazypull](stargz-lazypull.png)
@@ -137,3 +139,8 @@ version = 2
 > 如我的另一篇介绍`nydus`的文章说到的，stagz镜像格式是以文件为粒度的lazy pull，共享粒度相对于nydus的block来说更粗；
 
 * AWS也实现了一种lazy pull snapshotter方案，声称不需要进行镜像格式的转换，而是生成了一份独立的index artifact(SOCI index)：https://github.com/awslabs/soci-snapshotter
+
+## nydus-snapshotter
+> https://github.com/containerd/nydus-snapshotter
+
+* nydus-snapshotter目前也是containerd的子项目；
