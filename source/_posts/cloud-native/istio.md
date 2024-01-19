@@ -3,6 +3,9 @@ title: istio
 date: 2024-01-07 07:25:24
 tags:
 ---
+## 资料
+* [xDS与配置推送]https://blog.fatedier.com/2022/06/01/istio-control-plane-config-push-optimization/#xds-%E6%A6%82%E5%BF%B5%E8%AF%B4%E6%98%8E
+
 ## 背景
 * 云原生拓荒者-Netflix: 性能Performance，扩容Scalability，可用性Availability
 * 提升可用性（反脆弱性），可通过 弹性处理局部故障：
