@@ -144,3 +144,37 @@ version = 2
 > https://github.com/containerd/nydus-snapshotter
 
 * nydus-snapshotter目前也是containerd的子项目；
+
+## containerd vs OCI-O vs runC
+### 资料
+* https://humalect.com/blog/containerd-vs-docker
+* https://www.dtstack.com/bbs/article/258
+* https://www.rectcircle.cn/posts/containerd-1-quickstart/
+* [Architecture of The CRI Plugin](https://github.com/containerd/containerd/blob/v1.7.0/docs/cri/architecture.md)
+
+### 层级关系图
+![containerd+crio+runc](containerd+crio+runc.png)
+
+### containerd
+* 由docker捐献给CNCF，作为容器运行时标准；
+* 作为docker的守护进程，与docker-cli之间是C/S架构，docker本身是一整套E2E容器管理方案，具体很多更高层的镜像管理和编排能力，而containerd是一轻量级容器运行时，相对docker而言，其更聚焦于容器运行时的执行和管理；
+* containerd以守护进程的方式管理着机器上的所有容器生命周期，包括：
+  * 镜像下载和存储
+  * 容器rootfs生成
+  * 容器启动和守护
+  * 容器低级存储和网络（接入CNI）
+* docker是直接通过GRPC API使用containerd的，但k8s是通过CRI GRPC API plugin（原生插件，打包到了containerd进进制中）来与containerd交互，这个plugin的存在也就是说containerd是实现了CRI标准[Architecture of The CRI Plugin](https://github.com/containerd/containerd/blob/v1.7.0/docs/cri/architecture.md)；
+* containerd是容器运行时的抽象实现层，具体到底层的系统，需要由对应的CRI底层运行时来实现与内核的交互，linux系统下，默认实现是`runC`；
+
+### docker vs containerd
+* 理解了containerd的作用，即可理解下面的docker与containerd的关系：
+![docker vs containerd](docker+contaierd.png)
+* docker有两块：
+  * docker-cli：命令行工具，提供如docker pull, build, run, exec等高级功能
+  * containerd：守护进程，负责镜像拉取，容器运行时环境创建（网络，存储，ns），管理容器生命周期；
+  * runc：底层容器运行时实现，实现了OCI标准；
+
+### CRI-O
+* 开源社区专门为k8s生态打造的CRI标准实现，与k8s seamless integration，与containerd处于同一层，都是实现容器生命周期的管理；
+* 因其是专对k8s实现的，因此不适用于非k8s的运行时场景；
+
