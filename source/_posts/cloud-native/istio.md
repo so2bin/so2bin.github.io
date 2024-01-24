@@ -32,3 +32,7 @@ tags:
 * sidecar
 * host级别，即每个主机共享一个
 
+## 多集群部署
+### 资料
+* https://mp.weixin.qq.com/s/tPxw48np5bAaTeumUET1fA
+
