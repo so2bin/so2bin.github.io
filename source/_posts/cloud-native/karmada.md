@@ -146,7 +146,7 @@ kubectl get clusters --kubeconfig ~/.kube/karmada-apiserver.config
 ```
 5. OK
 
-## uninstall
+### uninstall
 * 命令如下：
 ```bash
 kubectl --kubeconfig /etc/karmada/karmada-apiserver.config get clusters
