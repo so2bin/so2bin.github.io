@@ -4,7 +4,7 @@ date: 2024-01-28 19:58:17
 tags: ["Go", "GMP", "Scheduler"]
 ---
 ## 资料
-* https://medium.com/@sanilkhurana7/understanding-the-go-scheduler-and-looking-at-how-it-works-e431a6daacf
+* https://medium.com/@sanilkhurana7/understanding-the-go-scheduler-and-looking-at   1-how-it-works-e431a6daacf
 * https://segmentfault.com/a/1190000041860912/en
 
 ## 结构
