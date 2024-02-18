@@ -6,6 +6,8 @@ tags: ["k8s", "CNI"]
 ---
 
 ## 容器网络
+> * https://zhuanlan.zhihu.com/p/364886965
+
 ### docker网络模式
 * 默认创建如下三种：bridge, host, none
 ```bash
@@ -59,7 +61,10 @@ NETWORK ID     NAME      DRIVER    SCOPE
 * 默认，flannel跨节点通信是通过`vxlan`实现，即通过隧道技术`L2 Oery UDP`；
 
 ### calico CNI
-
+*  calico是一个运行在纯三层的组件，基于BGP协议和Linux自身的路由转发机制，容器通信也不依赖iptables NAT或Tunnel 等技术，因此相对于flannel会少一些封包与拆包的过程，效率更高：
+![calico](calico.png)
+* 其跨主机的通信模型如下所示：
+![calico communicate](calico-communicate.png)
 
 ## 集群网络
 * 通过service来维护pod IP的抽象，管理与负载均衡；
