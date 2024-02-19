@@ -85,5 +85,18 @@ pods, err = index.ByIndex("nodeName", "xxx")
 * `InformerFor`方法，是用于返回`SharedInformerFactory`中指定资源类型所对应的informer，如果不存在则会先创建；
 * k8s client-go已经提供了内置的常用informer，如`PodInforer`, `ServiceInformer`等；
 
+```go
+sharedInformerFactory := informers.NewSharedInformerFactory(clientSet, 0)
+podInformer := sharedInformerFactory.Core().V1().Pods()
+// 生成一个indexer便于查询数据
+indexer := podInformer.Lister()
+
+// 启动informer
+sharedInformerFactory.Start(nil)
+sharedInformerFactory.WaitForCacheSync(nil)
+
+// 查询pod
+pods, err := indexer.List(labels.Everything())
+```
 
 
