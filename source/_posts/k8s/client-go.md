@@ -19,6 +19,7 @@ tags: [k8s, client-go]
 ### DiscoveryClient
 * 与前面三种client不同，该client不是用于管理k8s资源对象的，该client是用于查询k8s支持的GVR资源类型的，与`kubectl api-versions`和`kubectl api-resources`返回的资源内容相关；
 
+<!-- more -->
 
 ## Informer
 ### Reflector and List-Watch

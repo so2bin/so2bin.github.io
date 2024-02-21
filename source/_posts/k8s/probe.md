@@ -12,6 +12,9 @@ tags: [k8s]
 
 #### Exec探针执行
 * 由kubelet组件调用CRI接口的ExecSync接口，在对应的容器内执对应的cmd命令，获取其返回值；
+
+<!-- more -->
+
 ```go
 func (pb *prober) runProbe(p *v1.Probe, pod *v1.Pod, status v1.PodStatus, container v1.Container, containerID kubecontainer.ContainerID) (probe.Result, string, error) {
     ...     

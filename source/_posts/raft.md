@@ -15,3 +15,5 @@ tags: ["raft"]
 2. 任期Term：用于标记选举任期，可用于让故障回复后的leader变成follower，任期小的选举请求会被拒绝；
 3. 角色：leader, follower, candidate
 4. leader选择出来后，leader会定时向follower发起心跳，如心跳超时，则最先timeout的节点会发起选举请求，此时该节点会从follower转变成cadidate；
+
+<!-- more -->
