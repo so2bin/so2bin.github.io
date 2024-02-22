@@ -23,6 +23,8 @@ tags: [k8s, client-go]
 
 ## Informer
 ### Reflector and List-Watch
+* 资料：https://xiaorui.cc/archives/7361
+
 * List: 通过k8s apiserver Restful API获取全量数据列表，并同步到本地缓存中，该操作基于HTTP短连接实现；
 * Watch负责监听资源变化，并调用相应事件处理函数进行处理，如更新本地缓存，使本地缓存与ETCD保持一致，该操作基于HTTP长连接实现；
 * Reflector是client-go中用于监听指定资源的组件，当资源发生变化时，会以事件的形式存储到本地队列，然后触发后续的相应处理函数；
@@ -31,6 +33,9 @@ tags: [k8s, client-go]
     * Watch: 监听资源的变更；
     * 定时同步：定时更触发同步机制，定时更新缓存数据，可配置定时同步的周期；
 * 当Watch断开时，Reflector会重新走List-Watch流程；
+
+* 第一次执行List操作时，由于`resourceVersion`为空，拉取的是全是数据；
+* 当list-wathc出现异常重试时，List会根据本地存储的最新的`resourceVersion`拉取其之后的所有新数据；
 
 ### DeltaFIFO
 * 增量的本地阶段，记录了资源的变化过程；
