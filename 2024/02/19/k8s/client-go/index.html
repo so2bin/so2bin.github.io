@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"so2bin.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="client k8s client-go提供4个client：RESTClient, ClientSet, DynamicClient, DiscoveryClient  RESTClient 作为另外三类client的基类，提供与k8s apiserver的底层API请求构造与请求；  ClientSet 用于方便访问k8s内置api group资源的client，如deployment, po">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s client-go">
+<meta property="og:url" content="https://so2bin.github.io/2024/02/19/k8s/client-go/index.html">
+<meta property="og:site_name" content="so2bin">
+<meta property="og:description" content="client k8s client-go提供4个client：RESTClient, ClientSet, DynamicClient, DiscoveryClient  RESTClient 作为另外三类client的基类，提供与k8s apiserver的底层API请求构造与请求；  ClientSet 用于方便访问k8s内置api group资源的client，如deployment, po">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-02-19T14:01:07.000Z">
+<meta property="article:modified_time" content="2024-03-01T16:09:42.927Z">
+<meta property="article:author" content="so2bin">
+<meta property="article:tag" content="k8s">
+<meta property="article:tag" content="client-go">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://so2bin.github.io/2024/02/19/k8s/client-go/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://so2bin.github.io/2024/02/19/k8s/client-go/","path":"2024/02/19/k8s/client-go/","title":"k8s client-go"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>k8s client-go | so2bin</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="so2bin" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">so2bin</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">青山一道同云雨，明月何曾是两乡</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#client"><span class="nav-number">1.</span> <span class="nav-text">client</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RESTClient"><span class="nav-number">1.1.</span> <span class="nav-text">RESTClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClientSet"><span class="nav-number">1.2.</span> <span class="nav-text">ClientSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DynamicClient"><span class="nav-number">1.3.</span> <span class="nav-text">DynamicClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DiscoveryClient"><span class="nav-number">1.4.</span> <span class="nav-text">DiscoveryClient</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Informer"><span class="nav-number">2.</span> <span class="nav-text">Informer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reflector-and-List-Watch"><span class="nav-number">2.1.</span> <span class="nav-text">Reflector and List-Watch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeltaFIFO"><span class="nav-number">2.2.</span> <span class="nav-text">DeltaFIFO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Indexer"><span class="nav-number">2.3.</span> <span class="nav-text">Indexer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SharedInformer"><span class="nav-number">3.</span> <span class="nav-text">SharedInformer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SharedIndexInformer"><span class="nav-number">4.</span> <span class="nav-text">SharedIndexInformer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SharedInformerFactory"><span class="nav-number">5.</span> <span class="nav-text">SharedInformerFactory</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="so2bin"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">so2bin</p>
+  <div class="site-description" itemprop="description">专注于AI框架、平台、架构、k8s、Go、Python领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/so2bin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;so2bin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/bbhe_work@163.com" title="E-Mail → bbhe_work@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/19/k8s/client-go/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="k8s client-go | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          k8s client-go
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-19 22:01:07" itemprop="dateCreated datePublished" datetime="2024-02-19T22:01:07+08:00">2024-02-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-02 00:09:42" itemprop="dateModified" datetime="2024-03-02T00:09:42+08:00">2024-03-02</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><ul>
+<li>k8s client-go提供4个client：<code>RESTClient</code>, <code>ClientSet</code>, <code>DynamicClient</code>, <code>DiscoveryClient</code></li>
+</ul>
+<h3 id="RESTClient"><a href="#RESTClient" class="headerlink" title="RESTClient"></a>RESTClient</h3><ul>
+<li>作为另外三类client的基类，提供与k8s apiserver的底层API请求构造与请求；</li>
+</ul>
+<h3 id="ClientSet"><a href="#ClientSet" class="headerlink" title="ClientSet"></a>ClientSet</h3><ul>
+<li>用于方便访问k8s内置api group资源的client，如deployment, pod等；</li>
+</ul>
+<h3 id="DynamicClient"><a href="#DynamicClient" class="headerlink" title="DynamicClient"></a>DynamicClient</h3><ul>
+<li>通过指定资源组，资源版本即可操作k8s中的任务资源，包括CRD和内置资源；</li>
+<li>DynamicClient使用嵌套的<code>map[string]interface&#123;&#125;</code>结构来存储k8s apiserver的返回资源结构，通过反射机制，在运行时进行数据绑定；</li>
+</ul>
+<h3 id="DiscoveryClient"><a href="#DiscoveryClient" class="headerlink" title="DiscoveryClient"></a>DiscoveryClient</h3><ul>
+<li>与前面三种client不同，该client不是用于管理k8s资源对象的，该client是用于查询k8s支持的GVR资源类型的，与<code>kubectl api-versions</code>和<code>kubectl api-resources</code>返回的资源内容相关；</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="Informer"><a href="#Informer" class="headerlink" title="Informer"></a>Informer</h2><h3 id="Reflector-and-List-Watch"><a href="#Reflector-and-List-Watch" class="headerlink" title="Reflector and List-Watch"></a>Reflector and List-Watch</h3><ul>
+<li><p>资料：<a target="_blank" rel="noopener" href="https://xiaorui.cc/archives/7361">https://xiaorui.cc/archives/7361</a></p>
+</li>
+<li><p>List: 通过k8s apiserver Restful API获取全量数据列表，并同步到本地缓存中，该操作基于HTTP短连接实现；</p>
+</li>
+<li><p>Watch负责监听资源变化，并调用相应事件处理函数进行处理，如更新本地缓存，使本地缓存与ETCD保持一致，该操作基于HTTP长连接实现；</p>
+</li>
+<li><p>Reflector是client-go中用于监听指定资源的组件，当资源发生变化时，会以事件的形式存储到本地队列，然后触发后续的相应处理函数；</p>
+</li>
+<li><p>Reflector核心逻辑有三部分：</p>
+<ul>
+<li>List: 全量同步指定资源；</li>
+<li>Watch: 监听资源的变更；</li>
+<li>定时同步：定时更触发同步机制，定时更新缓存数据，可配置定时同步的周期；</li>
+</ul>
+</li>
+<li><p>当Watch断开时，Reflector会重新走List-Watch流程；</p>
+</li>
+<li><p>第一次执行List操作时，由于<code>resourceVersion</code>为空，拉取的是全是数据；</p>
+</li>
+<li><p>当list-wathc出现异常重试时，List会根据本地存储的最新的<code>resourceVersion</code>拉取其之后的所有新数据；</p>
+</li>
+</ul>
+<h3 id="DeltaFIFO"><a href="#DeltaFIFO" class="headerlink" title="DeltaFIFO"></a>DeltaFIFO</h3><ul>
+<li>增量的本地阶段，记录了资源的变化过程；</li>
+<li>FIFO即为先入先出的本地队列；</li>
+<li>Delta为资源的变化事件，存储的数据结构<code>Deltas</code>有两个属性：<code>Type</code>, <code>Object</code>，分别表示事件类型（增删改），资源类型；</li>
+<li>FIFO负责接收来自Reflector的事件，将按顺序存储，多个相同事件只会被处理一次；</li>
+</ul>
+<h3 id="Indexer"><a href="#Indexer" class="headerlink" title="Indexer"></a>Indexer</h3><ul>
+<li>本身是一个本地存储，并扩展了一定的索引能力；</li>
+<li>Reflector通过DeltaFIFO的操作后，数据会被存储到Indexer中；</li>
+<li>Indexer中的数据与ETCD完全一致；</li>
+</ul>
+<p><strong>几个重要概念</strong></p>
+<ul>
+<li><code>IndexFunc</code>: 索引函数，用于计算一个资源对象的索引值列表，可以根据需要自定义，如通过label, annotation来生成索引列表；</li>
+<li><code>Index</code>：存储数据，如要查找某个ns下的pod，就要让pod按ns空间进行索引，对应的Index类型即为<code>map[ns]pods</code>；</li>
+<li><code>Indexers</code>：存储索引器，key为索引器名称，value为索引器实现函数（IndexFunc），如<code>map[ns]XXXIndexFunc</code><blockquote>
+<p>即存储索引的存储器</p>
+</blockquote>
+</li>
+<li><code>Indices</code>：存储缓存器，key为索引器名称，value为缓存的数据（Index），如<code>map[ns]map[ns]sets.pod</code><blockquote>
+<p>即存储缓存数据的存储器</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">index := cache.NewIndexer(</span><br><span class="line">    cache.MetaNamespaceKeyFunc,  <span class="comment">// 资源key生成函数</span></span><br><span class="line">    cache.Indexers&#123;  <span class="comment">// 索引存储器名 =&gt; 索引生成函数</span></span><br><span class="line">        <span class="string">&quot;namespace&quot;</span>: XXXNsIndexFunc, </span><br><span class="line">        <span class="string">&quot;nodeName&quot;</span>: XXNodeNameIndexFunc,</span><br><span class="line">    &#125;)</span><br><span class="line">pod1 := &amp;v1.Pod&#123;...&#125;</span><br><span class="line">pod2 := &amp;v1.Pod&#123;...&#125;</span><br><span class="line">pod3 := &amp;v1.Pod&#123;...&#125;</span><br><span class="line"></span><br><span class="line">_ = index.Add(pod1)</span><br><span class="line">_ = index.Add(pod2)</span><br><span class="line">_ = index.Add(pod3)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询</span></span><br><span class="line">pods, err := index.ByIndex(<span class="string">&quot;namespace&quot;</span>, <span class="string">&quot;xxx&quot;</span>)</span><br><span class="line">pods, err = index.ByIndex(<span class="string">&quot;nodeName&quot;</span>, <span class="string">&quot;xxx&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="SharedInformer"><a href="#SharedInformer" class="headerlink" title="SharedInformer"></a>SharedInformer</h2><ul>
+<li>通过<code>SharedInformer</code>为多个Controller提供缓存资源对象的informer共享，避免重复缓存；</li>
+<li><code>SharedInformer</code>一般是使用<code>SharedInformerFactory</code>来管理控制器需要的资源对象的informer，使用map结构来存储资源对象的informer；</li>
+</ul>
+<h2 id="SharedIndexInformer"><a href="#SharedIndexInformer" class="headerlink" title="SharedIndexInformer"></a>SharedIndexInformer</h2><ul>
+<li>继承了<code>SharedInformer</code>，并扩展了添加和获取Indexers的能力；</li>
+</ul>
+<h2 id="SharedInformerFactory"><a href="#SharedInformerFactory" class="headerlink" title="SharedInformerFactory"></a>SharedInformerFactory</h2><ul>
+<li><code>SharedInformerFactory</code>为所有已知GVR提供共享的informer；</li>
+<li>其有一个<code>Start</code>方法，用于启动所有Reflector的Informer；</li>
+<li>其<code>WaitForCacheSync</code>函数会不断调用factory持有的informer的<code>HasSynced</code>方案直接全部返回true，表示所有informer关注的资源对象已经全部缓存到了本地；</li>
+<li><code>InformerFor</code>方法，是用于返回<code>SharedInformerFactory</code>中指定资源类型所对应的informer，如果不存在则会先创建；</li>
+<li>k8s client-go已经提供了内置的常用informer，如<code>PodInforer</code>, <code>ServiceInformer</code>等；</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">sharedInformerFactory := informers.NewSharedInformerFactory(clientSet, <span class="number">0</span>)</span><br><span class="line">podInformer := sharedInformerFactory.Core().V1().Pods()</span><br><span class="line"><span class="comment">// 生成一个indexer便于查询数据</span></span><br><span class="line">indexer := podInformer.Lister()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动informer</span></span><br><span class="line">sharedInformerFactory.Start(<span class="literal">nil</span>)</span><br><span class="line">sharedInformerFactory.WaitForCacheSync(<span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询pod</span></span><br><span class="line">pods, err := indexer.List(labels.Everything())</span><br></pre></td></tr></table></figure>
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>so2bin
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://so2bin.github.io/2024/02/19/k8s/client-go/" title="k8s client-go">https://so2bin.github.io/2024/02/19/k8s/client-go/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/k8s/" rel="tag"># k8s</a>
+              <a href="/tags/client-go/" rel="tag"># client-go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/02/19/raft/" rel="prev" title="raft">
+                  <i class="fa fa-angle-left"></i> raft
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/02/20/k8s/probe/" rel="next" title="probe">
+                  probe <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">so2bin</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

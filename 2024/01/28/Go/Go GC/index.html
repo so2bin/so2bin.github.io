@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"so2bin.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Go1.5 标记删除(Mark and Sweep)原理 进入STW(Stop The World)阶段 遍历整个heap，排查未被引用的对象，并标记； 暂停STW 执行Sweep清除  缺点 STW会让Go程序暂停，程序出现卡顿 标记需要扫描整个heap 清除数据会产生heap碎片  Go1.8 三色标记法 + 写入屏障三色标记法原理 维护三个标记表：白色，灰色，黑色 程序初始时，所有对象标记为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go GC">
+<meta property="og:url" content="https://so2bin.github.io/2024/01/28/Go/Go%20GC/index.html">
+<meta property="og:site_name" content="so2bin">
+<meta property="og:description" content="Go1.5 标记删除(Mark and Sweep)原理 进入STW(Stop The World)阶段 遍历整个heap，排查未被引用的对象，并标记； 暂停STW 执行Sweep清除  缺点 STW会让Go程序暂停，程序出现卡顿 标记需要扫描整个heap 清除数据会产生heap碎片  Go1.8 三色标记法 + 写入屏障三色标记法原理 维护三个标记表：白色，灰色，黑色 程序初始时，所有对象标记为">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-28T09:00:47.000Z">
+<meta property="article:modified_time" content="2024-01-28T10:58:19.124Z">
+<meta property="article:author" content="so2bin">
+<meta property="article:tag" content="GC">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://so2bin.github.io/2024/01/28/Go/Go%20GC/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://so2bin.github.io/2024/01/28/Go/Go%20GC/","path":"2024/01/28/Go/Go GC/","title":"Go GC"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Go GC | so2bin</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="so2bin" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">so2bin</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">青山一道同云雨，明月何曾是两乡</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go1-5-%E6%A0%87%E8%AE%B0%E5%88%A0%E9%99%A4-Mark-and-Sweep"><span class="nav-number">1.</span> <span class="nav-text">Go1.5 标记删除(Mark and Sweep)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go1-8-%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95-%E5%86%99%E5%85%A5%E5%B1%8F%E9%9A%9C"><span class="nav-number">2.</span> <span class="nav-text">Go1.8 三色标记法 + 写入屏障</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">三色标记法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E7%90%86-1"><span class="nav-number">2.1.1.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%85%A5%E5%B1%8F%E9%9A%9C"><span class="nav-number">2.2.</span> <span class="nav-text">写入屏障</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E7%90%86-2"><span class="nav-number">2.2.1.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E5%86%99%E5%B1%8F%E9%9A%9C"><span class="nav-number">2.3.</span> <span class="nav-text">插入写屏障</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E5%B1%8F%E9%9A%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.3.1.</span> <span class="nav-text">插入屏障原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%B1%8F%E9%9A%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.3.2.</span> <span class="nav-text">删除屏障原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E5%86%99%E5%B1%8F%E9%9A%9C"><span class="nav-number">2.4.</span> <span class="nav-text">混合写屏障</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E7%90%86-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">原理</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="so2bin"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">so2bin</p>
+  <div class="site-description" itemprop="description">专注于AI框架、平台、架构、k8s、Go、Python领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/so2bin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;so2bin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/bbhe_work@163.com" title="E-Mail → bbhe_work@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/28/Go/Go%20GC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Go GC | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go GC
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-01-28 17:00:47 / 修改时间：18:58:19" itemprop="dateCreated datePublished" datetime="2024-01-28T17:00:47+08:00">2024-01-28</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>999</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Go1-5-标记删除-Mark-and-Sweep"><a href="#Go1-5-标记删除-Mark-and-Sweep" class="headerlink" title="Go1.5 标记删除(Mark and Sweep)"></a>Go1.5 标记删除(Mark and Sweep)</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
+<li>进入STW(Stop The World)阶段</li>
+<li>遍历整个heap，排查未被引用的对象，并标记；</li>
+<li>暂停STW</li>
+<li>执行Sweep清除</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>STW会让Go程序暂停，程序出现卡顿</li>
+<li>标记需要扫描整个heap</li>
+<li>清除数据会产生heap碎片</li>
+</ul>
+<h2 id="Go1-8-三色标记法-写入屏障"><a href="#Go1-8-三色标记法-写入屏障" class="headerlink" title="Go1.8 三色标记法 + 写入屏障"></a>Go1.8 三色标记法 + 写入屏障</h2><h3 id="三色标记法"><a href="#三色标记法" class="headerlink" title="三色标记法"></a>三色标记法</h3><h4 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h4><ul>
+<li>维护三个标记表：<code>白色</code>，<code>灰色</code>，<code>黑色</code></li>
+<li>程序初始时，所有对象标记为白色</li>
+<li>从Root Set开发，每次只遍历一层，标记该层的对象为<code>灰色</code>（对象从<code>白色</code>表中移到<code>灰色</code>表）</li>
+<li>然后，以<code>灰色</code>标记表开始，遍历该表中的对象，将从这些对象开始的可达到对象（走一步），标记为<code>灰色</code>，同时<code>灰色</code>表中已经遍历过的对象，标记为<code>黑色</code>（对象从<code>灰色</code>表中移到<code>黑色</code>表）</li>
+<li>循环上一步，继续遍历<code>灰色</code>表，直到<code>灰色</code>表中无任何对象</li>
+<li>剩下的白色即为需要删除的对象</li>
+</ul>
+<blockquote>
+<p>上述过程，仍然需要STW，否则会出现并发导致的引用关系错乱，导致资源被错误的GC删除</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="写入屏障"><a href="#写入屏障" class="headerlink" title="写入屏障"></a>写入屏障</h3><h4 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h4><ul>
+<li><p>三色标记被破坏的情况有两种：</p>
+<ol>
+<li>一个白色对象被黑色对象引用</li>
+<li>灰色对象与它的可达白色对象关系遭到破坏（灰色同时丢失了该白色）</li>
+</ol>
+</li>
+<li><p>谷歌提出了两个三色不变色：</p>
+<ol>
+<li>强三色不变性：强制性不允许黑色引用白色</li>
+<li>弱三色不变性：黑色可以引用白色，但白色对像存在其它灰色（可非直接上级节点）引用该白色对象</li>
+</ol>
+</li>
+<li><p>只要三色不变色满足上述条件之一，即可解决三色标记必须使用STW问题</p>
+</li>
+</ul>
+<h3 id="插入写屏障"><a href="#插入写屏障" class="headerlink" title="插入写屏障"></a>插入写屏障</h3><h4 id="插入屏障原理"><a href="#插入屏障原理" class="headerlink" title="插入屏障原理"></a>插入屏障原理</h4><ul>
+<li>对堆对象，在对象被引用时触发，A引用B时，B对象标记为<code>灰色</code></li>
+<li>对栈对象，对象被引用时，不触发该过程以避免该标记过程对程序性能的影响；</li>
+<li>此时在GC过程，遍历<code>灰色</code>表的过程，不需要STW，直到<code>灰色</code>表为空结束</li>
+<li>而此时栈上<code>黑色</code>对象可能引用<code>白色</code>对象，为解决这个问题，需要在上一步<code>灰色</code>表为空时，执行一些STW，并将栈上所有对象都标记为白色，并对这些对象重新执行一遍扫描；</li>
+</ul>
+<blockquote>
+<p>缺点：在结束时，还需要额外扫描一次栈上的对象引用链，这会引入10-100ms；</p>
+</blockquote>
+<h4 id="删除屏障原理"><a href="#删除屏障原理" class="headerlink" title="删除屏障原理"></a>删除屏障原理</h4><ul>
+<li>被删除对象，如果自身为<code>灰色</code>或<code>白色</code>，则会被标记为<code>灰色</code>；</li>
+<li>该过程是满足弱三色不变式，保证<code>灰色</code>对象到<code>白色</code>对象的路径不会断；</li>
+</ul>
+<blockquote>
+<p>缺点：被删除对象，当前这一轮GC不会被删掉（因为会被转换成黑色），但会在下轮GC中删掉；</p>
+</blockquote>
+<h3 id="混合写屏障"><a href="#混合写屏障" class="headerlink" title="混合写屏障"></a>混合写屏障</h3><h4 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a>原理</h4><ul>
+<li>GC开始时，扫描栈上的可达对象全部标记为<code>黑色</code>（期间不需要STW）</li>
+<li>GC期间，任何在栈上创建的新对象，均为<code>黑色</code></li>
+<li>被删除对象，被标记为<code>灰色</code></li>
+<li>被添加的对象标记为<code>灰色</code></li>
+</ul>
+<blockquote>
+<p>满足变形的弱三色不变色，混合了插入，删除写屏障的优点</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>so2bin
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://so2bin.github.io/2024/01/28/Go/Go%20GC/" title="Go GC">https://so2bin.github.io/2024/01/28/Go/Go GC/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/GC/" rel="tag"># GC</a>
+              <a href="/tags/Go/" rel="tag"># Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/28/Go/mem/" rel="prev" title="Go 内存模型">
+                  <i class="fa fa-angle-left"></i> Go 内存模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/01/28/Python/Python%20GC/" rel="next" title="Python GC">
+                  Python GC <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">so2bin</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

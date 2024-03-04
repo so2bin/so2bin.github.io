@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"so2bin.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="资料 Toward Next Generation Container Image   这项目名字取的好，按阿里武侠的风格，应该翻译为技能：飞龙在天  价值 提供集群内的P2P文件分发能力，可以用于加速文件分发和镜像分发，源支持OSS, S3等云存储类型，也支持OCI镜像仓库； 组件间通信协议为GRPC； 可以与nydus结合，作为containerd与nydus的中间层，为集群提供nydus镜像">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dragonfly">
+<meta property="og:url" content="https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/index.html">
+<meta property="og:site_name" content="so2bin">
+<meta property="og:description" content="资料 Toward Next Generation Container Image   这项目名字取的好，按阿里武侠的风格，应该翻译为技能：飞龙在天  价值 提供集群内的P2P文件分发能力，可以用于加速文件分发和镜像分发，源支持OSS, S3等云存储类型，也支持OCI镜像仓库； 组件间通信协议为GRPC； 可以与nydus结合，作为containerd与nydus的中间层，为集群提供nydus镜像">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/df-nydus-arch.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/df-arch.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/df-flow.png">
+<meta property="article:published_time" content="2024-01-13T06:39:59.000Z">
+<meta property="article:modified_time" content="2024-01-17T16:02:33.748Z">
+<meta property="article:author" content="so2bin">
+<meta property="article:tag" content="Python, Go, AI框架, AI部署, 平台, 架构, k8s, tritonserver, Pytorch, NVIDIA, GPU, NPUm HPC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/df-nydus-arch.png">
+
+
+<link rel="canonical" href="https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/","path":"2024/01/13/cloud-native/dragonfly/","title":"dragonfly"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>dragonfly | so2bin</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="so2bin" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">so2bin</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">青山一道同云雨，明月何曾是两乡</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%96%99"><span class="nav-number">1.</span> <span class="nav-text">资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">价值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E9%80%9F%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8"><span class="nav-number">4.</span> <span class="nav-text">加速对象存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dfdaemon"><span class="nav-number">5.</span> <span class="nav-text">Dfdaemon</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="so2bin"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">so2bin</p>
+  <div class="site-description" itemprop="description">专注于AI框架、平台、架构、k8s、Go、Python领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/so2bin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;so2bin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/bbhe_work@163.com" title="E-Mail → bbhe_work@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="dragonfly | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          dragonfly
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-13 14:39:59" itemprop="dateCreated datePublished" datetime="2024-01-13T14:39:59+08:00">2024-01-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-18 00:02:33" itemprop="dateModified" datetime="2024-01-18T00:02:33+08:00">2024-01-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1LRfLUkNxShxxWU7SKjc_50U0N9ZnGIdV/view?pli=1">Toward Next Generation Container Image</a></li>
+</ul>
+<blockquote>
+<p>这项目名字取的好，按阿里武侠的风格，应该翻译为技能：飞龙在天</p>
+</blockquote>
+<h2 id="价值"><a href="#价值" class="headerlink" title="价值"></a>价值</h2><ul>
+<li>提供集群内的P2P文件分发能力，可以用于加速文件分发和镜像分发，源支持OSS, S3等云存储类型，也支持OCI镜像仓库；</li>
+<li>组件间通信协议为GRPC；</li>
+<li>可以与nydus结合，作为containerd与nydus的中间层，为集群提供nydus镜像格式的文件加速分发和加速镜像启动，如下图所示：</li>
+</ul>
+<p><img src="/2024/01/13/cloud-native/dragonfly/df-nydus-arch.png" alt="(df-nydus-arch"></p>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><ul>
+<li>如下图所示，为其架构图：<br><img src="/2024/01/13/cloud-native/dragonfly/df-arch.png" alt="df arch"></li>
+<li>dragonfly包含的核心三部分：Manager, Schduler, Seed Peer以及Peer组成的P2P下载网络，Dfdaemon可以作为Seed Peer和Peer；</li>
+<li>Manager：维护P2P集群的关联关系，动态配置，用户态以及权限管理；</li>
+<li>Scheduler：为下载节点选择最优下载父节点，异常情况控制Dfaaemon回源；</li>
+<li>Seed Peer：Dfdaemon开启Seed Peer模式可以作为P2P集群中回源节点，即整个下载的根节点，与后端存储&#x2F;镜像仓库交互；</li>
+<li>Peer：通过Dfdaemon部署，基于C&#x2F;S架构，提供dfget命令行下载工具和dfget daemon运行守护进程，提供任务下载能力；<br><img src="/2024/01/13/cloud-native/dragonfly/df-flow.png" alt="df-flow"></li>
+</ul>
+<h2 id="加速对象存储"><a href="#加速对象存储" class="headerlink" title="加速对象存储"></a>加速对象存储</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://d7y.io/zh/docs/concepts/terminology/dfstore">https://d7y.io/zh/docs/concepts/terminology/dfstore</a></li>
+</ul>
+<h2 id="Dfdaemon"><a href="#Dfdaemon" class="headerlink" title="Dfdaemon"></a>Dfdaemon</h2><p>代码入口：</p>
+<ol>
+<li><code>Makefile</code> docker-build-dfdaemon</li>
+<li><code>build/images/dfdaemon/Dockerfile</code></li>
+<li><figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="language-bash"> make build-dfget &amp;&amp; make install-dfget</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="keyword">if</span> [ <span class="string">&quot;<span class="subst">$(uname -m)</span>&quot;</span> = <span class="string">&quot;ppc64le&quot;</span> ]; <span class="keyword">then</span> \</span></span><br><span class="line"><span class="language-bash">    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/<span class="variable">$&#123;GRPC_HEALTH_PROBE_VERSION&#125;</span>/grpc_health_probe-linux-ppc64le; \</span></span><br><span class="line"><span class="language-bash">    <span class="keyword">elif</span> [ <span class="string">&quot;<span class="subst">$(uname -m)</span>&quot;</span> = <span class="string">&quot;aarch64&quot;</span> ]; <span class="keyword">then</span> \</span></span><br><span class="line"><span class="language-bash">    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/<span class="variable">$&#123;GRPC_HEALTH_PROBE_VERSION&#125;</span>/grpc_health_probe-linux-arm64; \</span></span><br><span class="line"><span class="language-bash">    <span class="keyword">else</span> \</span></span><br><span class="line"><span class="language-bash">    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/<span class="variable">$&#123;GRPC_HEALTH_PROBE_VERSION&#125;</span>/grpc_health_probe-linux-amd64; \</span></span><br><span class="line"><span class="language-bash">    <span class="keyword">fi</span> &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">    <span class="built_in">chmod</span> +x /bin/grpc_health_probe</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=builder /opt/dragonfly/bin/dfget /opt/dragonfly/bin/dfget</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=health /bin/grpc_health_probe /bin/grpc_health_probe</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">65001</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;/opt/dragonfly/bin/dfget&quot;</span>, <span class="string">&quot;daemon&quot;</span>]</span></span><br></pre></td></tr></table></figure></li>
+<li><code>cmd/dfget/cmd/daemon.go</code></li>
+<li><code>client/daemon/daemon.go</code>的<code>cd.ProxyManager.IsEnabled()</code></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>so2bin
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/" title="dragonfly">https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/07/cloud-native/istio/" rel="prev" title="istio">
+                  <i class="fa fa-angle-left"></i> istio
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/01/13/cloud-native/nydus/" rel="next" title="Nydus">
+                  Nydus <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">so2bin</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

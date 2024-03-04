@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"so2bin.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="资料 官方技术博客介绍 容器技术之容器镜像篇 Dragonfly 发布 Nydus 容器镜像加速服务 Toward Next Generation Container Image  特点 镜像lazy加载，按需下载镜像blob数据，容器启动速度更快； blobs级别的镜像数据去重，节省空间； 提供用户态文件系统Fuse，兼容OCI分发标准，和artifacts标准（lazy加载就是基于该fuse实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nydus">
+<meta property="og:url" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/index.html">
+<meta property="og:site_name" content="so2bin">
+<meta property="og:description" content="资料 官方技术博客介绍 容器技术之容器镜像篇 Dragonfly 发布 Nydus 容器镜像加速服务 Toward Next Generation Container Image  特点 镜像lazy加载，按需下载镜像blob数据，容器启动速度更快； blobs级别的镜像数据去重，节省空间； 提供用户态文件系统Fuse，兼容OCI分发标准，和artifacts标准（lazy加载就是基于该fuse实">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/arch.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/rafs-vs-oci.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/nydus-on-erofs.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/fscache-nydus.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/MT.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/metadata.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/nydus-vs-other.png">
+<meta property="article:published_time" content="2024-01-13T06:40:04.000Z">
+<meta property="article:modified_time" content="2024-01-17T16:02:33.768Z">
+<meta property="article:author" content="so2bin">
+<meta property="article:tag" content="Cloud Native">
+<meta property="article:tag" content="Nydus">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://so2bin.github.io/2024/01/13/cloud-native/nydus/arch.png">
+
+
+<link rel="canonical" href="https://so2bin.github.io/2024/01/13/cloud-native/nydus/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://so2bin.github.io/2024/01/13/cloud-native/nydus/","path":"2024/01/13/cloud-native/nydus/","title":"Nydus"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nydus | so2bin</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="so2bin" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">so2bin</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">青山一道同云雨，明月何曾是两乡</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%96%99"><span class="nav-number">1.</span> <span class="nav-text">资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nydus-Rafs-vs-OCIv1%E9%95%9C%E5%83%8F%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">nydus Rafs vs OCIv1镜像格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rafs%E7%94%A8%E6%88%B7%E6%80%81FUSE%E7%BC%BA%E9%99%B7%E5%92%8C%E8%A7%A3%E5%86%B3"><span class="nav-number">3.2.</span> <span class="nav-text">Rafs用户态FUSE缺陷和解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rafs%E9%95%9C%E5%83%8F%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.3.</span> <span class="nav-text">Rafs镜像格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Merkle-Tree"><span class="nav-number">3.3.1.</span> <span class="nav-text">Merkle Tree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nydus%E9%95%9C%E5%83%8F%E5%85%83%E6%95%B0%E6%8D%AE"><span class="nav-number">3.3.2.</span> <span class="nav-text">nydus镜像元数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nydus-blobs%E9%95%9C%E5%83%8F%E6%95%B0%E6%8D%AE"><span class="nav-number">3.3.3.</span> <span class="nav-text">nydus blobs镜像数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">3.4.</span> <span class="nav-text">对比</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="so2bin"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">so2bin</p>
+  <div class="site-description" itemprop="description">专注于AI框架、平台、架构、k8s、Go、Python领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/so2bin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;so2bin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/bbhe_work@163.com" title="E-Mail → bbhe_work@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/13/cloud-native/nydus/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Nydus | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nydus
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-13 14:40:04" itemprop="dateCreated datePublished" datetime="2024-01-13T14:40:04+08:00">2024-01-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-18 00:02:33" itemprop="dateModified" datetime="2024-01-18T00:02:33+08:00">2024-01-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/979419">官方技术博客介绍</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?spm=a2c6h.12873639.article-detail.7.71813892qT8cYh&__biz=MzUxNjE3MTcwMg==&mid=2247485160&idx=1&sn=289581225c168e86c5ed3e6819f2a719&chksm=f9aa3431ceddbd277ae447934fbe3fa7bf773158976c5f2b95dcf516ab87e1a32871692683dd&scene=21#wechat_redirect">容器技术之容器镜像篇</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?spm=a2c6h.12873639.article-detail.8.71813892qT8cYh&__biz=MzUxNjE3MTcwMg==&mid=2247484853&idx=1&sn=4ef7232be5e32a479987f073e3c6bd20&chksm=f9aa376cceddbe7ab678e11a1b6baa89a338a7d6dd7fd2de7734fb50a4bc3963d850fdb5f991&scene=21#wechat_redirect">Dragonfly 发布 Nydus 容器镜像加速服务</a></li>
+<li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1LRfLUkNxShxxWU7SKjc_50U0N9ZnGIdV/view?pli=1">Toward Next Generation Container Image</a></li>
+</ul>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ul>
+<li>镜像lazy加载，按需下载镜像blob数据，容器启动速度更快；</li>
+<li>blobs级别的镜像数据去重，节省空间；</li>
+<li>提供用户态文件系统Fuse，兼容OCI分发标准，和artifacts标准（lazy加载就是基于该fuse实现）；</li>
+<li>支持镜像存储backend，镜像数据可以放registry或对象存储上；</li>
+<li>与Dragonfly P2P系统集成；<span id="more"></span></li>
+</ul>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><ul>
+<li>主要包括一种新的镜像格式和一个负责解析容器镜像的FUSE用户态文件系统进程；<img src="/2024/01/13/cloud-native/nydus/arch.png" width="70%" height="70%" style="margin: 0 auto;"></li>
+<li>nydus可以配置一个本地缓存（local cache）用来缓存镜像数据，避免每次都从远端数据源拉取数据；</li>
+</ul>
+<h3 id="nydus-Rafs-vs-OCIv1镜像格式"><a href="#nydus-Rafs-vs-OCIv1镜像格式" class="headerlink" title="nydus Rafs vs OCIv1镜像格式"></a>nydus Rafs vs OCIv1镜像格式</h3><ul>
+<li>如下图所示，Rafs镜像格式是分了两块：元数据(bootstrap)、镜像数据块(blobs)；</li>
+<li>OCI下的镜像层文件tar.gz变成了只存储文件数据块，文件以chunk为粒度进行切割和去重；<br><img src="/2024/01/13/cloud-native/nydus/rafs-vs-oci.png" alt="Rafs vs OCI"></li>
+</ul>
+<h3 id="Rafs用户态FUSE缺陷和解决"><a href="#Rafs用户态FUSE缺陷和解决" class="headerlink" title="Rafs用户态FUSE缺陷和解决"></a>Rafs用户态FUSE缺陷和解决</h3><ul>
+<li>用户太的FUSE会存在大量的系统开销，当容器中存在大量文件时，会产生大量的fuse请求，生成内核态和用户态之间的频繁切换，造成性能瓶颈；</li>
+<li>nydus为了解决该问题，在开发Rafs v6镜像格式，该功能依托于EROFS文件系统，用于实现真正的内核态的容器镜像格式；</li>
+<li>该Rafs v6的按需加载技术，将由EROFS over Fscache技术完成，阿里为此改造了linux fscache文件的缓存内核模块，以于合并到linux 5.19内核版本主线；<blockquote>
+<p>fscache是linux系统中成熟的文件缓存方案，广泛用于网络文件系统，如NFS, Ceph等，阿里对该模块进行了增强，使用支持本地文件系统（如erofs）的按需加载特性，因此该方案中，fscache接管了本地缓存管理的工作（即前面的local cache）；</p>
+</blockquote>
+</li>
+<li>改造后的视图变为：<br><img src="/2024/01/13/cloud-native/nydus/nydus-on-erofs.png" alt="nydus-on-erofs"></li>
+<li>下图为pod使用fscache与nydus交互的过程：<br><img src="/2024/01/13/cloud-native/nydus/fscache-nydus.png" alt="fscache+nydus"></li>
+<li>官方使用教程：<a target="_blank" rel="noopener" href="https://github.com/dragonflyoss/nydus/blob/master/docs/nydus-fscache.md">https://github.com/dragonflyoss/nydus/blob/master/docs/nydus-fscache.md</a></li>
+</ul>
+<h3 id="Rafs镜像格式"><a href="#Rafs镜像格式" class="headerlink" title="Rafs镜像格式"></a>Rafs镜像格式</h3><blockquote>
+<p>Rafs: Registry Acceleration File System</p>
+</blockquote>
+<h4 id="Merkle-Tree"><a href="#Merkle-Tree" class="headerlink" title="Merkle Tree"></a>Merkle Tree</h4><blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/842854">镜像元数据核心算法：merkle tree</a></p>
+</blockquote>
+<ul>
+<li>nydus实现了一种新的镜像格式（docker原生的OCI镜像格式可以参考我之前的文章”OCI镜像规范”），该格式是将镜像文件拆分成元数据和数据blobs两层，其中的元数据就是一颗以文件&#x2F;目录为树节点的Merkle Tree；</li>
+<li>该数据结构的特点有：<ul>
+<li>MT树可以是二叉树也可以为多叉树，这里nydus是后者；</li>
+<li>MT树叶子节点的value是数据集合的单元数据或单元数据的HASH；</li>
+<li>MT树的非叶子节点的value是根据所有子节点的值计算出来的HASH值；</li>
+</ul>
+</li>
+<li>该数据结构的优势有：<ul>
+<li>对比两颗MT的root节点能直接对比出该树的数据是否一样，如这里的nydus可以通过root的HASH值直接判断出下载的镜像是否与原始镜像一样；</li>
+<li>如数据不一样，能够快速分辨出哪一个子节点不同，递归后即可快速找出异常的叶子节点，因此可以仅重新下载该叶子节点的数据即可；</li>
+<li>blobs的HASH列表可以看成一颗调度为2的MT树；</li>
+<li>检索数据块的时间复杂度为<code>Log(N)</code></li>
+</ul>
+</li>
+<li>该数据结构被广泛应用于P2P网络中，用于确保从其它节点接受的数据没有损坏或被人为替换；<img src="/2024/01/13/cloud-native/nydus/MT.png" width="70%" height="50%" style="margin: 0 auto;"></li>
+</ul>
+<h4 id="nydus镜像元数据"><a href="#nydus镜像元数据" class="headerlink" title="nydus镜像元数据"></a>nydus镜像元数据</h4><ul>
+<li>如下图所示，nydus的元数据是以文件&#x2F;目录为节点组件的MT树，所有叶子节点为文件，value由文件内容的HASH决定，非叶子节点为目录，HASH由目录下的子节点HASH确定：<img src="/2024/01/13/cloud-native/nydus/metadata.png" width="80%" style="margin: 0 auto;"></li>
+</ul>
+<h4 id="nydus-blobs镜像数据"><a href="#nydus-blobs镜像数据" class="headerlink" title="nydus blobs镜像数据"></a>nydus blobs镜像数据</h4><ul>
+<li>镜像数据是被分成固定大小的blobs数据块，大小为4MB；</li>
+<li>blobs可以用于多镜像共享；</li>
+<li>传统OCI镜像是以gzip从仓库拉到本地并进行解压的，解压前会有数据校验，但解压后并不会再进行校验，这里可能就存在漏洞，而nydus的数据不需要解压到本地，且对每一次数据访问均会进行校验，因此提供了blobs级的安全校验；</li>
+</ul>
+<h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><ul>
+<li>如下图，是官方给出的nydus与之前的镜像加速方案的对比图，如Slacker, dragonfly方案:<br><img src="/2024/01/13/cloud-native/nydus/nydus-vs-other.png" alt="nydus-vs-other"></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>so2bin
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://so2bin.github.io/2024/01/13/cloud-native/nydus/" title="Nydus">https://so2bin.github.io/2024/01/13/cloud-native/nydus/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Cloud-Native/" rel="tag"># Cloud Native</a>
+              <a href="/tags/Nydus/" rel="tag"># Nydus</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/13/cloud-native/dragonfly/" rel="prev" title="dragonfly">
+                  <i class="fa fa-angle-left"></i> dragonfly
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/01/14/cloud-native/oci/" rel="next" title="OCI规范">
+                  OCI规范 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">so2bin</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

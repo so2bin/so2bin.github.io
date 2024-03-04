@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"so2bin.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="OCI镜像规范资料 https:&#x2F;&#x2F;arkingc.github.io&#x2F;2017&#x2F;05&#x2F;05&#x2F;2017-05-05-docker-filesystem-overlay&#x2F; https:&#x2F;&#x2F;docs.docker.com&#x2F;storage&#x2F;storagedriver&#x2F;overlayfs-driver&#x2F; https:&#x2F;&#x2F;github.com&#x2F;containers&#x2F;skopeo&#x2F;blob&#x2F;main&#x2F;inst">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCI规范">
+<meta property="og:url" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/index.html">
+<meta property="og:site_name" content="so2bin">
+<meta property="og:description" content="OCI镜像规范资料 https:&#x2F;&#x2F;arkingc.github.io&#x2F;2017&#x2F;05&#x2F;05&#x2F;2017-05-05-docker-filesystem-overlay&#x2F; https:&#x2F;&#x2F;docs.docker.com&#x2F;storage&#x2F;storagedriver&#x2F;overlayfs-driver&#x2F; https:&#x2F;&#x2F;github.com&#x2F;containers&#x2F;skopeo&#x2F;blob&#x2F;main&#x2F;inst">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/oci-image.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/container-image.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/manifest-index.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/image-contents.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/oci-push.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/overlay2.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/overlay-view.png">
+<meta property="article:published_time" content="2024-01-14T08:01:07.000Z">
+<meta property="article:modified_time" content="2024-01-17T16:02:33.778Z">
+<meta property="article:author" content="so2bin">
+<meta property="article:tag" content="Cloud Native">
+<meta property="article:tag" content="OCI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://so2bin.github.io/2024/01/14/cloud-native/oci/oci-image.png">
+
+
+<link rel="canonical" href="https://so2bin.github.io/2024/01/14/cloud-native/oci/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://so2bin.github.io/2024/01/14/cloud-native/oci/","path":"2024/01/14/cloud-native/oci/","title":"OCI规范"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>OCI规范 | so2bin</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="so2bin" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">so2bin</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">青山一道同云雨，明月何曾是两乡</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OCI%E9%95%9C%E5%83%8F%E8%A7%84%E8%8C%83"><span class="nav-number">1.</span> <span class="nav-text">OCI镜像规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%96%99"><span class="nav-number">1.1.</span> <span class="nav-text">资料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OCI%E9%95%9C%E5%83%8F%E6%A0%BC%E5%BC%8F%E6%A0%87%E5%87%86"><span class="nav-number">1.2.</span> <span class="nav-text">OCI镜像格式标准</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-oci-layout"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. oci-layout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-blobs"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. blobs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-index-json"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. index.json</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#manifest%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">manifest文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#config%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">config文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OCI%E9%95%9C%E5%83%8F%E5%88%86%E5%8F%91%E6%A0%87%E5%87%86"><span class="nav-number">1.3.</span> <span class="nav-text">OCI镜像分发标准</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pull"><span class="nav-number">1.3.1.</span> <span class="nav-text">Pull</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Push"><span class="nav-number">1.3.2.</span> <span class="nav-text">Push</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#overlay2"><span class="nav-number">1.4.</span> <span class="nav-text">overlay2</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="so2bin"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">so2bin</p>
+  <div class="site-description" itemprop="description">专注于AI框架、平台、架构、k8s、Go、Python领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/so2bin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;so2bin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/bbhe_work@163.com" title="E-Mail → bbhe_work@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/14/cloud-native/oci/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="OCI规范 | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OCI规范
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-14 16:01:07" itemprop="dateCreated datePublished" datetime="2024-01-14T16:01:07+08:00">2024-01-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-18 00:02:33" itemprop="dateModified" datetime="2024-01-18T00:02:33+08:00">2024-01-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="OCI镜像规范"><a href="#OCI镜像规范" class="headerlink" title="OCI镜像规范"></a>OCI镜像规范</h2><h3 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/">https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/storage/storagedriver/overlayfs-driver/">https://docs.docker.com/storage/storagedriver/overlayfs-driver/</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/containers/skopeo/blob/main/install.md">https://github.com/containers/skopeo/blob/main/install.md</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.rectcircle.cn/posts/oci-image-spec/">https://www.rectcircle.cn/posts/oci-image-spec/</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/opencontainers/distribution-spec">https://github.com/opencontainers/distribution-spec</a></li>
+</ul>
+<h3 id="OCI镜像格式标准"><a href="#OCI镜像格式标准" class="headerlink" title="OCI镜像格式标准"></a>OCI镜像格式标准</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.rectcircle.cn/posts/oci-image-spec/">https://www.rectcircle.cn/posts/oci-image-spec/</a><br><a target="_blank" rel="noopener" href="https://github.com/opencontainers/image-spec">https://github.com/opencontainers/image-spec</a></p>
+</blockquote>
+<ul>
+<li>OCI定义了镜像的格式规范：即镜像的文件和目录结构，相关的配置协议格式等；</li>
+<li>如下图为一demo示图：<br><img src="/2024/01/14/cloud-native/oci/oci-image.png" alt="OCI Image"></li>
+</ul>
+<span id="more"></span>
+
+<ul>
+<li><p>下图为容器层和镜像层的关系图：</p>
+<img src="/2024/01/14/cloud-native/oci/container-image.png" width="50%" style="margin: 0 auto;">
+</li>
+<li><p>可以通过<code>skopeo</code>工具将docker镜像导出为OCI标准目录；</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如该命令为利用skopeo镜像完成将nginx镜像导出OCI标准目录</span></span><br><span class="line">docker run --<span class="built_in">rm</span> -v ./:/data  quay.io/skopeo/stable:latest copy docker://nginx:latest oci:/data/nginx</span><br></pre></td></tr></table></figure>
+<p>如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hbb@hbb:~/tmp/oci$ tree nginx/</span><br><span class="line">nginx/</span><br><span class="line">├── blobs</span><br><span class="line">│   └── sha256</span><br><span class="line">│       ├── 161ef4b1bf7effb350a2a9625cb2b59f69d54ec6059a8a155a1438d0439c593c</span><br><span class="line">│       ├── 2d455521f76cee8b8b2e21457075cc500c60373d70acb217f12838818fc3da90</span><br><span class="line">│       ├── 2f44b7a888fa005d07c031d3cfad2a1c0344207def2ab9dbb97712425ff812c1</span><br><span class="line">│       ├── 35497dd96569b9139cd388fd7107df32ccdc1449b205536bce0968b2dec3e7dc</span><br><span class="line">│       ├── 36664b6ce66b304efa7ba48eb960133a085c2ec800a9f8887df94a82679334c1</span><br><span class="line">│       ├── 8056d2bcf3b682573ee5b0c176c1209df285d5be0df98ec6ae08bf7421179b74</span><br><span class="line">│       ├── 8b7dd3ed1dc34cc1caba38bbbf22bceda5bd2e7c4e1b3c11ca64cda2ed186a2c</span><br><span class="line">│       ├── a8758716bb6aa4d90071160d27028fe4eaee7ce8166221a97d30440c8eac2be6</span><br><span class="line">│       └── dc9c4fdb83d69ef5986ec344c6b75606b3a417c7434268cb6995962be5312f14</span><br><span class="line">├── index.json</span><br><span class="line">└── oci-layout</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>可以看到OCI镜像由以下内容组成：</p>
+<h4 id="1-oci-layout"><a href="#1-oci-layout" class="headerlink" title="1. oci-layout"></a>1. oci-layout</h4><ul>
+<li>该文件为镜像布局版本号</li>
+</ul>
+<h4 id="2-blobs"><a href="#2-blobs" class="headerlink" title="2. blobs"></a>2. blobs</h4><ul>
+<li>存储镜像的所有文件，包括manifest, config，也包括layers文件，以sha256为文件&#x2F;目录名；</li>
+</ul>
+<h4 id="3-index-json"><a href="#3-index-json" class="headerlink" title="3. index.json"></a>3. index.json</h4><ul>
+<li>其内容如下，该文件即为镜像的索引文件，可以理解为其入口：<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;schemaVersion&quot;</span><span class="punctuation">:</span><span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;manifests&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span><span class="string">&quot;application/vnd.oci.image.manifest.v1+json&quot;</span><span class="punctuation">,</span>     </span><br><span class="line">            <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span><span class="string">&quot;sha256:161ef4b1bf7effb350a2a9625cb2b59f69d54ec6059a8a155a1438d0439c593c&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span><span class="number">1989</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>该文件中指定了其manifest文件列表，其中的<code>mediaType</code>为OCI的文件类型，其定义了几种文件类型，以代表如json, tar.gz等文件格式；</li>
+<li>menifests中的<code>digest</code>为该manifest文件的sha256值，可以通过该值在<code>blobs/sha256</code>目录中找到该json文件的内容；</li>
+</ul>
+<h5 id="manifest文件"><a href="#manifest文件" class="headerlink" title="manifest文件"></a>manifest文件</h5><ul>
+<li>manifest文件为JSON格式文件，包含：镜像配置文件的引用和文件系统层文件（镜像layers）的引用；<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;schemaVersion&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.manifest.v1+json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;config&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.config.v1+json&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:a8758716bb6aa4d90071160d27028fe4eaee7ce8166221a97d30440c8eac2be6&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">7016</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;layers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:2f44b7a888fa005d07c031d3cfad2a1c0344207def2ab9dbb97712425ff812c1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">29125921</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:8b7dd3ed1dc34cc1caba38bbbf22bceda5bd2e7c4e1b3c11ca64cda2ed186a2c&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">41373256</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:35497dd96569b9139cd388fd7107df32ccdc1449b205536bce0968b2dec3e7dc&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">628</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:36664b6ce66b304efa7ba48eb960133a085c2ec800a9f8887df94a82679334c1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">955</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:2d455521f76cee8b8b2e21457075cc500c60373d70acb217f12838818fc3da90&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">366</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:dc9c4fdb83d69ef5986ec344c6b75606b3a417c7434268cb6995962be5312f14&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">1207</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:8056d2bcf3b682573ee5b0c176c1209df285d5be0df98ec6ae08bf7421179b74&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">1398</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;annotations&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;org.opencontainers.image.revision&quot;</span><span class="punctuation">:</span> <span class="string">&quot;4bf0763f4977fff7e9648add59e0540088f3ca9f&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;org.opencontainers.image.source&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://github.com/nginxinc/docker-nginx.git#4bf0763f4977fff7e9648add59e0540088f3ca9f:mainline/debian&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;org.opencontainers.image.url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://hub.docker.com/_/nginx&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;org.opencontainers.image.version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.25.3&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="config文件"><a href="#config文件" class="headerlink" title="config文件"></a>config文件</h5><ul>
+<li>在manifest文件中有一段config内容，引用了该config文件的sha256值，通过该值可以读取到该文件的内容，如下述mainfest文件的config为：<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="attr">&quot;config&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.config.v1+json&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:a8758716bb6aa4d90071160d27028fe4eaee7ce8166221a97d30440c8eac2be6&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">7016</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>读取该config json文件的内容如下示例所示，可以看到该文件给出了整个镜像的所有信息，包括其rootfs和config，这些配置是<strong>容器运行时标准</strong><code>runC</code>运行的基本必要前提配置；<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;architecture&quot;</span><span class="punctuation">:</span> <span class="string">&quot;amd64&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;config&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;ExposedPorts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;80/tcp&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">		<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;Env&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="string">&quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="string">&quot;NGINX_VERSION=1.25.3&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="string">&quot;NJS_VERSION=0.8.2&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="string">&quot;PKG_RELEASE=1~bookworm&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;Entrypoint&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;/docker-entrypoint.sh&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;Cmd&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;nginx&quot;</span><span class="punctuation">,</span> <span class="string">&quot;-g&quot;</span><span class="punctuation">,</span> <span class="string">&quot;daemon off;&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;Labels&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;maintainer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e&quot;</span></span><br><span class="line">		<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;StopSignal&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SIGQUIT&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;ArgsEscaped&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;OnBuild&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">	<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;os&quot;</span><span class="punctuation">:</span><span class="string">&quot;linux&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;rootfs&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span><span class="string">&quot;layers&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;diff_ids&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">            <span class="string">&quot;sha256:571ade696b261f0ff46e3cdac4635afc009c4ed3429950cb95cd7e5f70ba0a07&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;sha256:b6c2a8d6f0ac89ef77e161532f3d9d0dc5dfe0a5f20042e0afc0ad14288405eb&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;sha256:b61d4b2cd2daf06047984c5876a35338c2beb5ae3f6bef479d25f05772a6a482&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;sha256:eddcd06e5ef9b91677526f6c55fa01a7d6963c435d5cf2bfb488d91aaa72d4a8&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;sha256:b4ad478450363f0a8020bb5552641fe6077e78fca48da4d77a979724a3ad2a72&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;sha256:fbcc9bc44d3e165e7e4f56fb189a05ea5c562a733985ec00d5e3fad309eb63cc&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;sha256:009507b8560964795eab5126f6363cb2b7403596adf370c9e95d4648c43e771f&quot;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2023-10-24T22:44:45Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;history&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2023-10-24T22:44:45Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;created_by&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/bin/sh -c #(nop) ADD file:9deb26e1dbc258df47629e6f8fbcea4e4b54e7673537cc925db16af858d9cc8d in / &quot;</span></span><br><span class="line">		<span class="punctuation">&#125;</span><span class="punctuation">,</span> </span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2023-10-24T22:44:45Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;created_by&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/bin/sh -c #(nop)  CMD [\&quot;bash\&quot;]&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;empty_layer&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">		<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="comment">// ... 删掉了后续很多记录</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+<li>综合上述理解，再看下图的镜像组成结构即能很好理解：<br><img src="/2024/01/14/cloud-native/oci/manifest-index.png" alt="image组成"></li>
+</ul>
+<h3 id="OCI镜像分发标准"><a href="#OCI镜像分发标准" class="headerlink" title="OCI镜像分发标准"></a>OCI镜像分发标准</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/opencontainers/distribution-spec">https://github.com/opencontainers/distribution-spec</a></p>
+</blockquote>
+<ul>
+<li><p>该标准定义了一套HTTP API 协议，以促进和标准化镜像内容的分发；</p>
+</li>
+<li><p>该标准定义镜像仓库应该实现的接口协议以及镜像分发过程的交互逻辑，如Pull, Push, Content Discovery, Content Management等；</p>
+</li>
+<li><p>所有的镜像仓库都必须最小实例Pull的所有API协议；</p>
+</li>
+<li><p>镜像在镜像仓库中的组成：<br><img src="/2024/01/14/cloud-native/oci/image-contents.png" alt="image组成"></p>
+</li>
+</ul>
+<h4 id="Pull"><a href="#Pull" class="headerlink" title="Pull"></a>Pull</h4><ul>
+<li>pull镜像分两块：manifest的拉取和blobs文件（可能多个）的拉取；</li>
+<li>一般是先pull manifest，再pull blobs；</li>
+<li>pull manifest API:<figure class="highlight http"><table><tr><td class="code"><pre><span class="line">GET /v2/&lt;name&gt;/manifests/&lt;reference&gt;</span><br></pre></td></tr></table></figure></li>
+<li>pull blobs API:<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /v2/&lt;name&gt;/blobs/&lt;digest&gt;</span><br></pre></td></tr></table></figure></li>
+<li>检查内容存在：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HEAD /v2/&lt;name&gt;/manifests/&lt;reference&gt;</span><br><span class="line">or </span><br><span class="line">HEAD /v2/&lt;name&gt;/blobs/&lt;digest&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Push"><a href="#Push" class="headerlink" title="Push"></a>Push</h4><ul>
+<li>上传的顺序是blobs先上传，manifest后上传；<blockquote>
+<p>It follows that during an upload, we need to upload layers before the config file, and we need to upload the config file before the manifest.</p>
+</blockquote>
+</li>
+<li>可在下面文档中查看上传的过程：<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/google/go-containerregistry/tree/d7f8d06c87ed209507dd5f2d723267fe35b38a9f/pkg/v1/remote#anatomy-of-an-image-upload">https://github.com/google/go-containerregistry/tree/d7f8d06c87ed209507dd5f2d723267fe35b38a9f/pkg/v1/remote#anatomy-of-an-image-upload</a></p>
+</blockquote>
+</li>
+</ul>
+<img src="/2024/01/14/cloud-native/oci/oci-push.png" width="60%" height="60%" style="margin: 0 auto;">
+
+<h3 id="overlay2"><a href="#overlay2" class="headerlink" title="overlay2"></a>overlay2</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/#overlay2">https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/#overlay2</a><br><a target="_blank" rel="noopener" href="https://arkingc.github.io/2018/01/15/2018-01-15-docker-storage-overlay2/#%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F">https://arkingc.github.io/2018/01/15/2018-01-15-docker-storage-overlay2/#%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F</a></p>
+</blockquote>
+<ul>
+<li><p>docker镜像的层包含容器层和镜像层，所谓容器层就是在容器运行起来后的层，如下图所示；</p>
+<img src="/2024/01/14/cloud-native/oci/overlay2.png" width="60%" height="60%" style="margin: 0 auto;"></li>
+<li><p>overlay驱动实现了对多层进行联合挂载的机制来为容器提供可见的文件系统；</p>
+<img src="/2024/01/14/cloud-native/oci/overlay-view.png" width="90%" height="90%" style="margin: 0 auto;">
+</li>
+<li><p>当前docker默认使用的存储驱动是<code>overlay2</code>，该驱动天然支持多层（最多128层）；</p>
+</li>
+<li><p>每层的目录由多个文件夹组成：<code>diff</code>, <code>lower</code>, <code>work</code>, <code>merged</code>, <code>link</code>，其中:</p>
+<ul>
+<li><code>link</code>是文件，保存了当前层的软连接信息，软连接是用于避免mount时因128层导致数据过大超出page限制；</li>
+<li><code>lower</code>是文件，保存了父层的信息；</li>
+<li><code>diff</code>是当前层相对于父层的不同文件&#x2F;目录；</li>
+<li><code>merged</code>仅在容器层有，是在容器运行时，由overlay2驱动将所有diff进行合并后挂载起来的，提供给容器看到的文件夹，所以只有最上层的目录才有内容；</li>
+<li><code>work</code>目录用于copy-up操作；</li>
+</ul>
+</li>
+<li><p>镜像最底层不包含<code>lower</code>文件夹；</p>
+</li>
+<li><p>容器挂载阶段，在docker Driver的源码实现中，本质就是调用了overlay2驱动的mount命令：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d *Driver)</span></span> Get(id <span class="type">string</span>, mountLabel <span class="type">string</span>) (s <span class="type">string</span>, err <span class="type">error</span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="comment">//挂载命令的参数字符串</span></span><br><span class="line">	opts := fmt.Sprintf(<span class="string">&quot;lowerdir=%s,upperdir=%s,workdir=%s&quot;</span>, strings.Join(absLowers, <span class="string">&quot;:&quot;</span>), path.Join(dir, <span class="string">&quot;diff&quot;</span>), path.Join(dir, <span class="string">&quot;work&quot;</span>))</span><br><span class="line">	<span class="comment">//挂载命令的数据</span></span><br><span class="line">	mountData := label.FormatMountLabel(opts, mountLabel)</span><br><span class="line">	<span class="comment">//挂载函数</span></span><br><span class="line">	mount := syscall.Mount</span><br><span class="line">	<span class="comment">//挂载目标目录</span></span><br><span class="line">	mountTarget := mergedDir</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">if</span> err := mount(<span class="string">&quot;overlay&quot;</span>, mountTarget, <span class="string">&quot;overlay&quot;</span>, <span class="number">0</span>, mountData); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, fmt.Errorf(<span class="string">&quot;error creating overlay mount to %s: %v&quot;</span>, mergedDir, err)</span><br><span class="line">	&#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>删除&#x2F;停止容器时，overlay2驱动仅仅做的是卸载<code>merged</code>目录的挂载：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d *Driver)</span></span> Put(id <span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">	d.locker.Lock(id)</span><br><span class="line">	<span class="keyword">defer</span> d.locker.Unlock(id)</span><br><span class="line">	<span class="comment">//获取该层路径</span></span><br><span class="line">	dir := d.dir(id)</span><br><span class="line">	<span class="comment">//读取lower文件，获取lower层信息</span></span><br><span class="line">	_, err := ioutil.ReadFile(path.Join(dir, lowerFile))</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// If no lower, no mount happened and just return directly</span></span><br><span class="line">		<span class="comment">// ....</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//获取挂载点路径，即merged目录的路径</span></span><br><span class="line">	mountpoint := path.Join(dir, <span class="string">&quot;merged&quot;</span>)</span><br><span class="line">	<span class="comment">//挂载时增加了引用计数，卸载时减少</span></span><br><span class="line">	<span class="keyword">if</span> count := d.ctr.Decrement(mountpoint); count &gt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//卸载</span></span><br><span class="line">	<span class="keyword">if</span> err := syscall.Unmount(mountpoint, <span class="number">0</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		logrus.Debugf(<span class="string">&quot;Failed to unmount %s overlay: %s - %v&quot;</span>, id, mountpoint, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>so2bin
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://so2bin.github.io/2024/01/14/cloud-native/oci/" title="OCI规范">https://so2bin.github.io/2024/01/14/cloud-native/oci/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Cloud-Native/" rel="tag"># Cloud Native</a>
+              <a href="/tags/OCI/" rel="tag"># OCI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/13/cloud-native/nydus/" rel="prev" title="Nydus">
+                  <i class="fa fa-angle-left"></i> Nydus
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/01/16/papers/lazy-docker/" rel="next" title="Lazy Docker Containers">
+                  Lazy Docker Containers <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">so2bin</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

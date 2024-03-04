@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"so2bin.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="概念分布式服务治理 服务治理：对服务不断增长的复杂度的管理与管理 服务拓扑变化，网络，安全 API网关，服务发现，服务容错，部署，调用，追踪">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Envoy">
+<meta property="og:url" content="https://so2bin.github.io/2024/01/06/cloud-native/envoy/index.html">
+<meta property="og:site_name" content="so2bin">
+<meta property="og:description" content="概念分布式服务治理 服务治理：对服务不断增长的复杂度的管理与管理 服务拓扑变化，网络，安全 API网关，服务发现，服务容错，部署，调用，追踪">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/06/cloud-native/envoy/sm-base.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/06/cloud-native/envoy/envoy-top.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/06/cloud-native/envoy/envoy-threads.png">
+<meta property="og:image" content="https://so2bin.github.io/http-filters.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/01/06/cloud-native/envoy/clusters.png">
+<meta property="article:published_time" content="2024-01-06T08:52:44.000Z">
+<meta property="article:modified_time" content="2024-01-17T16:02:33.748Z">
+<meta property="article:author" content="so2bin">
+<meta property="article:tag" content="Python, Go, AI框架, AI部署, 平台, 架构, k8s, tritonserver, Pytorch, NVIDIA, GPU, NPUm HPC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://so2bin.github.io/2024/01/06/cloud-native/envoy/sm-base.png">
+
+
+<link rel="canonical" href="https://so2bin.github.io/2024/01/06/cloud-native/envoy/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://so2bin.github.io/2024/01/06/cloud-native/envoy/","path":"2024/01/06/cloud-native/envoy/","title":"Envoy"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Envoy | so2bin</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="so2bin" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">so2bin</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">青山一道同云雨，明月何曾是两乡</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">分布式服务治理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service-Mesh"><span class="nav-number">1.2.</span> <span class="nav-text">Service Mesh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Envoy"><span class="nav-number">1.3.</span> <span class="nav-text">Envoy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7"><span class="nav-number">1.3.2.</span> <span class="nav-text">高级特性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Envoy%E5%8E%9F%E7%90%86%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">Envoy原理与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cluster"><span class="nav-number">2.1.1.</span> <span class="nav-text">cluster</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xDS"><span class="nav-number">2.2.</span> <span class="nav-text">xDS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Envoy%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">Envoy线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Envoy%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F"><span class="nav-number">2.4.</span> <span class="nav-text">Envoy配置方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-2"><span class="nav-number">2.4.1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Bootstrap%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.4.1.1.</span> <span class="nav-text">Bootstrap启动配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Listeners"><span class="nav-number">2.4.2.</span> <span class="nav-text">Listeners</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Network-L3-4-filters"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">Network(L3&#x2F;4) filters</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#HTTP-connection-manager"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">HTTP connection manager</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#clusters-CDS-and-EDS"><span class="nav-number">2.4.3.</span> <span class="nav-text">clusters CDS and EDS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-number">2.5.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#admin%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.6.</span> <span class="nav-text">admin接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#clusters%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0"><span class="nav-number">2.6.1.</span> <span class="nav-text">&#x2F;clusters相关参数</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="so2bin"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">so2bin</p>
+  <div class="site-description" itemprop="description">专注于AI框架、平台、架构、k8s、Go、Python领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/so2bin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;so2bin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/bbhe_work@163.com" title="E-Mail → bbhe_work@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/06/cloud-native/envoy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Envoy | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Envoy
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-06 16:52:44" itemprop="dateCreated datePublished" datetime="2024-01-06T16:52:44+08:00">2024-01-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-18 00:02:33" itemprop="dateModified" datetime="2024-01-18T00:02:33+08:00">2024-01-18</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="分布式服务治理"><a href="#分布式服务治理" class="headerlink" title="分布式服务治理"></a>分布式服务治理</h3><ul>
+<li>服务治理：对服务不断增长的复杂度的管理与管理</li>
+<li>服务拓扑变化，网络，安全</li>
+<li>API网关，服务发现，服务容错，部署，调用，追踪</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="Service-Mesh"><a href="#Service-Mesh" class="headerlink" title="Service Mesh"></a>Service Mesh</h3><ul>
+<li>Linkerd, Envoy, Istio</li>
+<li>起源于：”What’s a service mesh? And do I need one?”</li>
+<li>指专注于服务之间通信的基础设施，负责在现代云原生应用的复杂网络拓扑中可靠的传递请求；</li>
+<li>除了基本网络通信的基础功能外，还需要包括分布式应用程序之间通信应该具备的功能，如熔断，限流，trace, metrics, 服务发现，负载均衡；<img src="/2024/01/06/cloud-native/envoy/sm-base.png" width="80%"></li>
+<li>即微服务业务程序独立于网络通信proxy组件运行，proxy提供服务间的通信，以及熔断、限流、trace, metrcis, 服务发现，安全，LB，超时，mirror，认证和授权等功能，这就是Service Mesh；</li>
+<li>数据平面 + 控制平面</li>
+<li>数据平面：䚣及系统中的每个数据包或请求，完成网络相关功能；</li>
+<li>控制平面：为网络中的数据平台提供策略和配置，其不接触系统中的数据包或请求；</li>
+<li>开启Service Mesh后的服务通信逻辑：</li>
+<li>微服务间不直接通信，则proxy代理</li>
+<li>Service Mesh内置流量治理相关高级功能；</li>
+<li>Service Mesh与编程语言无关；</li>
+<li>服务间的局部故障可由Mesh自动处理；</li>
+<li>数据平面 + 控制平面；</li>
+<li>容器编排平台中，proxy以容器sidecar模式运行；</li>
+<li>常见实现方案：</li>
+<li>数据平面：Linkerd, Nignx, Envoy等</li>
+<li>控制平面：Istio, Nelson等</li>
+</ul>
+<h3 id="Envoy"><a href="#Envoy" class="headerlink" title="Envoy"></a>Envoy</h3><ul>
+<li>数据平台的实现</li>
+<li>2016年Lyft公司创建并开源</li>
+<li>Istio 2017年开发</li>
+</ul>
+<h4 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h4><ul>
+<li>Envoy is an L7 proxy and communication bus designed for large modern service oriented architectures.</li>
+</ul>
+<h4 id="高级特性"><a href="#高级特性" class="headerlink" title="高级特性"></a>高级特性</h4><ul>
+<li><p>进程外架构</p>
+</li>
+<li><p>基于C++11代码实现，高并发</p>
+</li>
+<li><p>高性能：单进程非阻塞</p>
+</li>
+<li><p>L3&#x2F;L4 filter架构</p>
+</li>
+<li><p>HTTP L7 filter架构</p>
+</li>
+<li><p>HTTP&#x2F;2支持</p>
+</li>
+<li><p>HTTP L7路由</p>
+</li>
+<li><p>GRPC支持</p>
+</li>
+<li><p>服务发现，动态配置（xDS）</p>
+</li>
+<li><p>健康检测</p>
+</li>
+<li><p>高级负载均衡</p>
+</li>
+<li><p>可观测性</p>
+</li>
+<li><p>显著特性：高性能、可扩展性、动态配置性</p>
+</li>
+</ul>
+<h2 id="Envoy原理与使用"><a href="#Envoy原理与使用" class="headerlink" title="Envoy原理与使用"></a>Envoy原理与使用</h2><h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><ul>
+<li>Listeners: 面向请求输出的一端</li>
+<li>Cluster: 面向上游后端</li>
+<li>Filter Chains: 中间的过滤链，如Router<img src="/2024/01/06/cloud-native/envoy/envoy-top.png" width="80%"></li>
+</ul>
+<h4 id="cluster"><a href="#cluster" class="headerlink" title="cluster"></a>cluster</h4><ul>
+<li>cluster可以静态配置，也可以通过Cluster Discovery Server（CDS）动态发现</li>
+<li>cluster后端服务为Endpoint，后端服务也有对应的动态发现服务Endpoint Discovery server(EDS)</li>
+</ul>
+<h3 id="xDS"><a href="#xDS" class="headerlink" title="xDS"></a>xDS</h3><ul>
+<li>Cluster: cluster是Envoy连接到的一组逻辑上相似的endpoint集合，通过 CDS提供集群配置；</li>
+<li>位置Locality: 上游endpoint运行的区域拓扑，包括地域，区域，子区域等；</li>
+<li>地域Region：locality所属的地理位置</li>
+<li>区域Zone：AWS中的可用区AZ</li>
+<li>子区域：Envoy实例或端点运行的区域内的位置，用于支持区域内的多个负载均衡目标</li>
+<li>xDS: 一系列管理API的统称，如CDS, EDS, RDS等</li>
+</ul>
+<h3 id="Envoy线程模型"><a href="#Envoy线程模型" class="headerlink" title="Envoy线程模型"></a>Envoy线程模型</h3><ul>
+<li>单进程，多线程架构，主线程Main负责管理，Worker线程负责执行监听，过滤，转发等代理服务的核心功能；</li>
+<li>Main线程：启动、关闭，xDS API的调用处理，动态配置，健康检测，集群管理等，所有事件均以异步非阻塞模式完成</li>
+<li>Worker线程：默认根据当前CPU核数创建同等数量的工作线程，也可通过<code>--concurrency</code>来指定线程数；每个线程都会启动一个非阻塞事件循环，为每个连接初始休一个过滤器栈并处理此连接的整个生命周期的所有事件；每个线程都会监听所有用户配置的socket，对于某次连接请求，是由系统kernel负责将请求派发给一个工作线程处理；</li>
+<li>文件刷新线程：专用的独立写文件线程<img src="/2024/01/06/cloud-native/envoy/envoy-threads.png" width="70%" title="envoy线程模型"></li>
+</ul>
+<h3 id="Envoy配置方式"><a href="#Envoy配置方式" class="headerlink" title="Envoy配置方式"></a>Envoy配置方式</h3><ul>
+<li>支持非常灵活的配置方式，且各内部组件的配置均可支持静态与动态配置；</li>
+<li>在云原生生态中，istio采用的是全动态配置，即EDS, CDS, LDS, SDS等均通过xDS实现动态配置</li>
+</ul>
+<h4 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h4><h5 id="Bootstrap启动配置"><a href="#Bootstrap启动配置" class="headerlink" title="Bootstrap启动配置"></a>Bootstrap启动配置</h5><ul>
+<li>node: 节点标识，代表envoy实例</li>
+<li>static_resources: 静态配置</li>
+<li>dynamic_resources: 动态配置，基于xDS API获取配置信息，如listener, cluster等<blockquote>
+<p>启动全动态配置后，极少数场景需要重启Envoy进程，支持热重启</p>
+</blockquote>
+</li>
+<li>admin: 管理接口</li>
+<li>tracing: 分布式追踪</li>
+<li>layed_runtime: 一些关键特性，通过K&#x2F;V数据保存，支持多层 覆盖配置</li>
+<li>hds_config: health check配置</li>
+<li>overload_manager: 过载管理器</li>
+<li>stats_sinks: 统计信息接收器</li>
+</ul>
+<h4 id="Listeners"><a href="#Listeners" class="headerlink" title="Listeners"></a>Listeners</h4><ul>
+<li>One Envoy configuration supports any number of listeners with a single process.</li>
+<li>Each listener is independently configured with some number of network(L3&#x2F;L4) filters.<blockquote>
+<p>TCP，不支持UDP</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="Network-L3-4-filters"><a href="#Network-L3-4-filters" class="headerlink" title="Network(L3&#x2F;4) filters"></a>Network(L3&#x2F;4) filters</h5><ul>
+<li>存在三种类型的network filters，处理L4层上的TCP报文</li>
+<li>Read filters  处理入栈报文</li>
+<li>Write filters  处理出栈报文</li>
+<li>Read&#x2F;Write filters  同时处理出入栈报文</li>
+<li>Envoy内置了很多过滤器：</li>
+<li>代理类：TCP Proxy, HTTP connection manager, Mysql Proxy, Redis Proxy等</li>
+<li>其它：Rate Limit, Upstream Cluster from SNI等</li>
+</ul>
+<h5 id="HTTP-connection-manager"><a href="#HTTP-connection-manager" class="headerlink" title="HTTP connection manager"></a>HTTP connection manager</h5><ul>
+<li>该filter本身是L3&#x2F;L4 filter，能够将原始数据转换为HTTP级别消息和事件，拿到L7的数据，如headers，body等</li>
+<li>其处理了所有HTTP连接和请求共有的功能，如访问日志，trace，header&#x2F;body操作，路由管理，统计信息等；</li>
+<li>在该管理器中，还支持使用L7层HTTP过滤器：Router，Rate limit, Health check, Gzip, Fault Injection等；<br><img src="/http-filters.png" alt="HTTP Filters"></li>
+</ul>
+<h4 id="clusters-CDS-and-EDS"><a href="#clusters-CDS-and-EDS" class="headerlink" title="clusters CDS and EDS"></a>clusters CDS and EDS</h4><ul>
+<li>Envoy可配置任意数量的upstream clusters，并使用Cluster Manager进行管理</li>
+<li>cluster可由用户静态配置也可由CDS API动态获取</li>
+<li>cluster中的Endpoints同样可由静态配置或EDS、DNS来动态发现：</li>
+<li>Static</li>
+<li>Strict DNS: 严格DNS,既将DNS的解析的每个IP视为cluster endpoint</li>
+<li>Logical DNS: 逻辑DNS,仅使用在需要启动新连接时返回的第一个IP作为一个endpoint，这适用于大规模web服务集群，因该类服务的DNS IP可能会智能变化</li>
+<li>Original destination</li>
+<li>EDS: 一种基于GRPC或REST-JSON API的xDS API服务发现方式</li>
+<li>Custom cluster: 自定义集群发现机制</li>
+</ul>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">envoy -c /etc/envoy/envoy.yaml</span><br></pre></td></tr></table></figure>
+<h3 id="admin接口"><a href="#admin接口" class="headerlink" title="admin接口"></a>admin接口</h3><ul>
+<li>Envoy内置了一个管理服务，支持修改、查询操作，可能会暴露私有数据，如统计数据，集群名，证书等，因此有必要做好其权限控制机制（envoy本身没对admin接口有权限机制）；</li>
+<li>可以限制其监听address到127.0.0.1（istio中统一为该地址）以保证安全；</li>
+<li><code>/help</code> 返回admin支持的所有接口</li>
+<li><code>/listeners</code> 列出所有listener</li>
+<li><code>/clusters</code> 列出所有clusters以及状态</li>
+<li><code>/ready</code></li>
+<li><code>/config_dump</code> 返回整个envoy生效的配置信息</li>
+<li><code>/healthcheck/fail</code> POST，强制设计HTTP健康状态为失败</li>
+<li><code>/logging</code></li>
+<li><code>/quitquitquit</code> exit server</li>
+<li><code>/stats</code> envoy格式的指标数据</li>
+<li><code>/stats/prometheus</code> prometheus格式的指标数据</li>
+</ul>
+<h4 id="clusters相关参数"><a href="#clusters相关参数" class="headerlink" title="&#x2F;clusters相关参数"></a>&#x2F;clusters相关参数</h4><p><img src="/2024/01/06/cloud-native/envoy/clusters.png" alt="/clusters"></p>
+<ul>
+<li><code>region::</code> 位置，一般指机房</li>
+<li><code>zone::</code> 机房中的区域</li>
+<li><code>sub_zone::</code> 区域中的子区域，如节点</li>
+<li><code>priority::</code> 影响优先级流量的调度</li>
+<li><code>cx_total</code> total connections</li>
+<li><code>cx_active</code> total active connections</li>
+<li><code>rq_total</code> total requests</li>
+<li><code>rq_timoue</code> total timeout requests</li>
+<li><code>rq_success</code> total request with non-5xx responses</li>
+<li><code>rq_error</code> total 5xx responses</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>so2bin
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://so2bin.github.io/2024/01/06/cloud-native/envoy/" title="Envoy">https://so2bin.github.io/2024/01/06/cloud-native/envoy/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/01/07/cloud-native/istio/" rel="next" title="istio">
+                  istio <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">so2bin</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

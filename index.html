@@ -2,9 +2,10 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.0.0">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -13,39 +14,35 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"so2bin.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-  <meta name="description" content="专注于AI框架、部署、平台、k8s、Go、Python等领域">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"so2bin.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
 <meta property="og:type" content="website">
 <meta property="og:title" content="so2bin">
 <meta property="og:url" content="https://so2bin.github.io/index.html">
 <meta property="og:site_name" content="so2bin">
-<meta property="og:description" content="专注于AI框架、部署、平台、k8s、Go、Python等领域">
+<meta property="og:description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="so2bin">
 <meta property="article:tag" content="Python, Go, AI框架, AI部署, 平台, 架构, k8s, tritonserver, Pytorch, NVIDIA, GPU, NPUm HPC">
 <meta name="twitter:card" content="summary">
 
+
 <link rel="canonical" href="https://so2bin.github.io/">
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : true,
-    isPost : false,
-    lang   : 'zh-CN'
-  };
-</script>
 
-  <title>so2bin</title>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>so2bin</title>
   
+
+
 
 
 
@@ -53,738 +50,81 @@
 
 
   <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="so2bin" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
   <div class="site-meta">
 
     <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
+      <i class="logo-line"></i>
       <h1 class="site-title">so2bin</h1>
-      <span class="logo-line-after"><i></i></span>
+      <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">关于AI、k8s、架构、编程的分享之地</p>
+      <p class="site-subtitle" itemprop="description">青山一道同云雨，明月何曾是两乡</p>
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
 
 
 
-
 <nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
-
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
 </div>
-    </header>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
 
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
+    </div>
   </div>
 
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content index posts-expand">
-            
-      
+</header>
+        
   
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/14/%E4%BA%91%E5%8E%9F%E7%94%9F/oci/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="so2bin">
-      <meta itemprop="description" content="专注于AI框架、部署、平台、k8s、Go、Python等领域">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="so2bin">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/14/%E4%BA%91%E5%8E%9F%E7%94%9F/oci/" class="post-title-link" itemprop="url">oci</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-01-14 16:01:07 / 修改时间：16:43:30" itemprop="dateCreated datePublished" datetime="2024-01-14T16:01:07+08:00">2024-01-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="OCI镜像规范"><a href="#OCI镜像规范" class="headerlink" title="OCI镜像规范"></a>OCI镜像规范</h2><h3 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/">https://arkingc.github.io/2017/05/05/2017-05-05-docker-filesystem-overlay/</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.docker.com/storage/storagedriver/overlayfs-driver/">https://docs.docker.com/storage/storagedriver/overlayfs-driver/</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/containers/skopeo/blob/main/install.md">https://github.com/containers/skopeo/blob/main/install.md</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.rectcircle.cn/posts/oci-image-spec/">https://www.rectcircle.cn/posts/oci-image-spec/</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/opencontainers/distribution-spec">https://github.com/opencontainers/distribution-spec</a></li>
-</ul>
-<h3 id="OCI镜像格式标准"><a href="#OCI镜像格式标准" class="headerlink" title="OCI镜像格式标准"></a>OCI镜像格式标准</h3><blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/opencontainers/image-spec">https://github.com/opencontainers/image-spec</a></p>
-</blockquote>
-<ul>
-<li>OCI定义了镜像的格式规范：即镜像的文件和目录结构，相关的配置协议格式等；</li>
-<li>可以通过<code>skopeo</code>工具将docker镜像导出为OCI标准目录；<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 如该命令为利用skopeo镜像完成将nginx镜像导出OCI标准目录</span><br><span class="line">docker run --rm -v ./:/data  quay.io/skopeo/stable:latest copy docker://nginx:latest oci:/data/nginx</span><br></pre></td></tr></table></figure>
-如下所示：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">hbb@hbb:~/tmp/oci$ tree nginx/</span><br><span class="line">nginx/</span><br><span class="line">├── blobs</span><br><span class="line">│   └── sha256</span><br><span class="line">│       ├── 161ef4b1bf7effb350a2a9625cb2b59f69d54ec6059a8a155a1438d0439c593c</span><br><span class="line">│       ├── 2d455521f76cee8b8b2e21457075cc500c60373d70acb217f12838818fc3da90</span><br><span class="line">│       ├── 2f44b7a888fa005d07c031d3cfad2a1c0344207def2ab9dbb97712425ff812c1</span><br><span class="line">│       ├── 35497dd96569b9139cd388fd7107df32ccdc1449b205536bce0968b2dec3e7dc</span><br><span class="line">│       ├── 36664b6ce66b304efa7ba48eb960133a085c2ec800a9f8887df94a82679334c1</span><br><span class="line">│       ├── 8056d2bcf3b682573ee5b0c176c1209df285d5be0df98ec6ae08bf7421179b74</span><br><span class="line">│       ├── 8b7dd3ed1dc34cc1caba38bbbf22bceda5bd2e7c4e1b3c11ca64cda2ed186a2c</span><br><span class="line">│       ├── a8758716bb6aa4d90071160d27028fe4eaee7ce8166221a97d30440c8eac2be6</span><br><span class="line">│       └── dc9c4fdb83d69ef5986ec344c6b75606b3a417c7434268cb6995962be5312f14</span><br><span class="line">├── index.json</span><br><span class="line">└── oci-layout</span><br></pre></td></tr></table></figure>
-可以看到OCI镜像由以下内容组成：</li>
-</ul>
-<h4 id="1-oci-layout"><a href="#1-oci-layout" class="headerlink" title="1. oci-layout"></a>1. oci-layout</h4><ul>
-<li>该文件为镜像布局版本号</li>
-</ul>
-<h4 id="2-blobs"><a href="#2-blobs" class="headerlink" title="2. blobs"></a>2. blobs</h4><ul>
-<li>存储镜像的所有文件，包括manifest, config，也包括layers文件，以sha256为文件&#x2F;目录名；</li>
-</ul>
-<h4 id="3-index-json"><a href="#3-index-json" class="headerlink" title="3. index.json"></a>3. index.json</h4><ul>
-<li>其内容如下，该文件即为镜像的索引文件，可以理解为其入口：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;schemaVersion&quot;</span><span class="punctuation">:</span><span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;manifests&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span><span class="string">&quot;application/vnd.oci.image.manifest.v1+json&quot;</span><span class="punctuation">,</span>     </span><br><span class="line">            <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span><span class="string">&quot;sha256:161ef4b1bf7effb350a2a9625cb2b59f69d54ec6059a8a155a1438d0439c593c&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span><span class="number">1989</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
-<li>该文件中指定了其manifest文件列表，其中的<code>mediaType</code>为OCI的文件类型，其定义了几种文件类型，以代表如json, tar.gz等文件格式；</li>
-<li>menifests中的<code>digest</code>为该manifest文件的sha256值，可以通过该值在<code>blobs/sha256</code>目录中找到该json文件的内容；</li>
-</ul>
-<h5 id="manifest文件"><a href="#manifest文件" class="headerlink" title="manifest文件"></a>manifest文件</h5><ul>
-<li>manifest文件为JSON格式文件，包含：镜像配置文件的引用和文件系统层文件（镜像layers）的引用；</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;schemaVersion&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.manifest.v1+json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;config&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.config.v1+json&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:a8758716bb6aa4d90071160d27028fe4eaee7ce8166221a97d30440c8eac2be6&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">7016</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;layers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:2f44b7a888fa005d07c031d3cfad2a1c0344207def2ab9dbb97712425ff812c1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">29125921</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:8b7dd3ed1dc34cc1caba38bbbf22bceda5bd2e7c4e1b3c11ca64cda2ed186a2c&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">41373256</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:35497dd96569b9139cd388fd7107df32ccdc1449b205536bce0968b2dec3e7dc&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">628</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:36664b6ce66b304efa7ba48eb960133a085c2ec800a9f8887df94a82679334c1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">955</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:2d455521f76cee8b8b2e21457075cc500c60373d70acb217f12838818fc3da90&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">366</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:dc9c4fdb83d69ef5986ec344c6b75606b3a417c7434268cb6995962be5312f14&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">1207</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;mediaType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/vnd.oci.image.layer.v1.tar+gzip&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;digest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:8056d2bcf3b682573ee5b0c176c1209df285d5be0df98ec6ae08bf7421179b74&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">1398</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;annotations&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;org.opencontainers.image.revision&quot;</span><span class="punctuation">:</span> <span class="string">&quot;4bf0763f4977fff7e9648add59e0540088f3ca9f&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;org.opencontainers.image.source&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://github.com/nginxinc/docker-nginx.git#4bf0763f4977fff7e9648add59e0540088f3ca9f:mainline/debian&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;org.opencontainers.image.url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://hub.docker.com/_/nginx&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;org.opencontainers.image.version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.25.3&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="config文件"><a href="#config文件" class="headerlink" title="config文件"></a>config文件</h5><ul>
-<li>在manifest文件中有一段config内容，引用了该config文件的sha256值，通过该值可以读取到该文件的内容，如下述mainfest文件的config为：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;config&quot;: &#123;</span><br><span class="line">    &quot;mediaType&quot;: &quot;application/vnd.oci.image.config.v1+json&quot;,</span><br><span class="line">    &quot;digest&quot;: &quot;sha256:a8758716bb6aa4d90071160d27028fe4eaee7ce8166221a97d30440c8eac2be6&quot;,</span><br><span class="line">    &quot;size&quot;: 7016</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
-<li>读取该config json文件的内容如下示例所示，可以看到该文件给出了整个镜像的所有信息，包括其rootfs和config，这些配置是<strong>容器运行时标准</strong><code>runC</code>运行的基本必要前提配置；<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;architecture&quot;</span><span class="punctuation">:</span> <span class="string">&quot;amd64&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;config&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;ExposedPorts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;80/tcp&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">		<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;Env&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="string">&quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="string">&quot;NGINX_VERSION=1.25.3&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="string">&quot;NJS_VERSION=0.8.2&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="string">&quot;PKG_RELEASE=1~bookworm&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;Entrypoint&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;/docker-entrypoint.sh&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;Cmd&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;nginx&quot;</span><span class="punctuation">,</span> <span class="string">&quot;-g&quot;</span><span class="punctuation">,</span> <span class="string">&quot;daemon off;&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;Labels&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;maintainer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e&quot;</span></span><br><span class="line">		<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;StopSignal&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SIGQUIT&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;ArgsEscaped&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;OnBuild&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">	<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;os&quot;</span><span class="punctuation">:</span><span class="string">&quot;linux&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;rootfs&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span><span class="string">&quot;layers&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;diff_ids&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">            <span class="string">&quot;sha256:571ade696b261f0ff46e3cdac4635afc009c4ed3429950cb95cd7e5f70ba0a07&quot;</span><span class="punctuation">,</span><span class="string">&quot;sha256:b6c2a8d6f0ac89ef77e161532f3d9d0dc5dfe0a5f20042e0afc0ad14288405eb&quot;</span><span class="punctuation">,</span><span class="string">&quot;sha256:b61d4b2cd2daf06047984c5876a35338c2beb5ae3f6bef479d25f05772a6a482&quot;</span><span class="punctuation">,</span><span class="string">&quot;sha256:eddcd06e5ef9b91677526f6c55fa01a7d6963c435d5cf2bfb488d91aaa72d4a8&quot;</span><span class="punctuation">,</span><span class="string">&quot;sha256:b4ad478450363f0a8020bb5552641fe6077e78fca48da4d77a979724a3ad2a72&quot;</span><span class="punctuation">,</span><span class="string">&quot;sha256:fbcc9bc44d3e165e7e4f56fb189a05ea5c562a733985ec00d5e3fad309eb63cc&quot;</span><span class="punctuation">,</span><span class="string">&quot;sha256:009507b8560964795eab5126f6363cb2b7403596adf370c9e95d4648c43e771f&quot;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2023-10-24T22:44:45Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;history&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2023-10-24T22:44:45Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;created_by&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/bin/sh -c #(nop) ADD file:9deb26e1dbc258df47629e6f8fbcea4e4b54e7673537cc925db16af858d9cc8d in / &quot;</span></span><br><span class="line">		<span class="punctuation">&#125;</span><span class="punctuation">,</span> </span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">			<span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2023-10-24T22:44:45Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;created_by&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/bin/sh -c #(nop)  CMD [\&quot;bash\&quot;]&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;empty_layer&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">		<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="comment">// ... 删掉了后续很多记录</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
-<li>综合上述理解，再看下图的镜像组成结构即能很好理解：<br><img src="/image.png" alt="image组成"></li>
-</ul>
-<h3 id="OCI镜像分发标准"><a href="#OCI镜像分发标准" class="headerlink" title="OCI镜像分发标准"></a>OCI镜像分发标准</h3><blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/opencontainers/distribution-spec">https://github.com/opencontainers/distribution-spec</a></p>
-</blockquote>
-<ul>
-<li>该标准定义了一个 API 协议，以促进和标准化镜像内容的分发；</li>
-</ul>
-<h3 id="overlay2"><a href="#overlay2" class="headerlink" title="overlay2"></a>overlay2</h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/13/%E4%BA%91%E5%8E%9F%E7%94%9F/nydus/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="so2bin">
-      <meta itemprop="description" content="专注于AI框架、部署、平台、k8s、Go、Python等领域">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="so2bin">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/13/%E4%BA%91%E5%8E%9F%E7%94%9F/nydus/" class="post-title-link" itemprop="url">nydus</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-13 14:40:04" itemprop="dateCreated datePublished" datetime="2024-01-13T14:40:04+08:00">2024-01-13</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/13/%E4%BA%91%E5%8E%9F%E7%94%9F/dragonfly/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="so2bin">
-      <meta itemprop="description" content="专注于AI框架、部署、平台、k8s、Go、Python等领域">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="so2bin">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/13/%E4%BA%91%E5%8E%9F%E7%94%9F/dragonfly/" class="post-title-link" itemprop="url">dragonfly</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-13 14:39:59" itemprop="dateCreated datePublished" datetime="2024-01-13T14:39:59+08:00">2024-01-13</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/13/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="so2bin">
-      <meta itemprop="description" content="专注于AI框架、部署、平台、k8s、Go、Python等领域">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="so2bin">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/13/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-13 14:08:03" itemprop="dateCreated datePublished" datetime="2024-01-13T14:08:03+08:00">2024-01-13</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/07/%E4%BA%91%E5%8E%9F%E7%94%9F/istio/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="so2bin">
-      <meta itemprop="description" content="专注于AI框架、部署、平台、k8s、Go、Python等领域">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="so2bin">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/07/%E4%BA%91%E5%8E%9F%E7%94%9F/istio/" class="post-title-link" itemprop="url">istio</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-07 07:25:24" itemprop="dateCreated datePublished" datetime="2024-01-07T07:25:24+08:00">2024-01-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-13 14:08:03" itemprop="dateModified" datetime="2024-01-13T14:08:03+08:00">2024-01-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
-<li>云原生拓荒者-Netflix: 性能Performance，扩容Scalability，可用性Availability</li>
-<li>提升可用性（反脆弱性），可通过 弹性处理局部故障：</li>
-<li>快速失败(fail fast)与故障转移(failover)：超时并重新请求，将流量调度到其它副本</li>
-<li>优雅降级：所有副本都出现故障时，熔断上游服务，当前应用以降级形式继续提供服务</li>
-<li>金丝雀发布：变更是导致脆弱性的重要原因，任何形式的上线新版本都应该基于灰度部署</li>
-<li>将服务治理下沉到基础设施中：service mesh</li>
-</ul>
-<h2 id="Service-Mesh技术标准"><a href="#Service-Mesh技术标准" class="headerlink" title="Service Mesh技术标准"></a>Service Mesh技术标准</h2><ul>
-<li>UDPA(Universal Data Plane API) 统一数据平台API, Envoy就是该标准的实现</li>
-<li>SMI(Service Mesh Interface) 控制平面规范，如docker, LINKERD<br><img src="/./image-8.png" alt="SMI vs UDPA"></li>
-</ul>
-<h2 id="Istio发展历程"><a href="#Istio发展历程" class="headerlink" title="Istio发展历程"></a>Istio发展历程</h2><ul>
-<li>2017年5月随Linkerd1.0后，5月发布了Istio 0.1版本</li>
-<li>2018年Envoy稳定版发布，同时期，7月Istio 1.0发布，</li>
-<li>2019年，Istio 1.1发布，该版本为完全分布式实现，但存在严重的性能问题</li>
-<li>2020年，Istio发布1.5版本，控制平台重新回归单体架构，解决性能问题</li>
-</ul>
-<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><h3 id="部署模式"><a href="#部署模式" class="headerlink" title="部署模式"></a>部署模式</h3><ul>
-<li>sidecar</li>
-<li>host级别，即每个主机共享一个</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/06/%E4%BA%91%E5%8E%9F%E7%94%9F/envoy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="so2bin">
-      <meta itemprop="description" content="专注于AI框架、部署、平台、k8s、Go、Python等领域">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="so2bin">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/06/%E4%BA%91%E5%8E%9F%E7%94%9F/envoy/" class="post-title-link" itemprop="url">云原生-Service Mesh-Envoy组件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-01-06 16:52:44" itemprop="dateCreated datePublished" datetime="2024-01-06T16:52:44+08:00">2024-01-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-13 14:08:03" itemprop="dateModified" datetime="2024-01-13T14:08:03+08:00">2024-01-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="分布式服务治理"><a href="#分布式服务治理" class="headerlink" title="分布式服务治理"></a>分布式服务治理</h3><ul>
-<li>服务治理：对服务不断增长的复杂度的管理与管理</li>
-<li>服务拓扑变化，网络，安全</li>
-<li>API网关，服务发现，服务容错，部署，调用，追踪</li>
-</ul>
-<h3 id="Service-Mesh"><a href="#Service-Mesh" class="headerlink" title="Service Mesh"></a>Service Mesh</h3><ul>
-<li>Linkerd, Envoy, Istio<br><img src="/image.png" alt="Alt text"></li>
-<li>起源于：”What’s a service mesh? And do I need one?”</li>
-<li>指专注于服务之间通信的基础设施，负责在现代云原生应用的复杂网络拓扑中可靠的传递请求；</li>
-<li>除了基本网络通信的基础功能外，还需要包括分布式应用程序之间通信应该具备的功能，如熔断，限流，trace, metrics, 服务发现，负载均衡；<br><img src="/image-1.png" alt="Alt text"></li>
-<li>即微服务业务程序独立于网络通信proxy组件运行，proxy提供服务间的通信，以及熔断、限流、trace, metrcis, 服务发现，安全，LB，超时，mirror，认证和授权等功能，这就是Service Mesh；</li>
-<li>数据平面 + 控制平面</li>
-<li>数据平面：䚣及系统中的每个数据包或请求，完成网络相关功能；</li>
-<li>控制平面：为网络中的数据平台提供策略和配置，其不接触系统中的数据包或请求；</li>
-<li>开启Service Mesh后的服务通信逻辑：</li>
-<li>微服务间不直接通信，则proxy代理</li>
-<li>Service Mesh内置流量治理相关高级功能；</li>
-<li>Service Mesh与编程语言无关；</li>
-<li>服务间的局部故障可由Mesh自动处理；</li>
-<li>数据平面 + 控制平面；</li>
-<li>容器编排平台中，proxy以容器sidecar模式运行；</li>
-<li>常见实现方案：</li>
-<li>数据平面：Linkerd, Nignx, Envoy等</li>
-<li>控制平面：Istio, Nelson等</li>
-</ul>
-<h3 id="Envoy"><a href="#Envoy" class="headerlink" title="Envoy"></a>Envoy</h3><ul>
-<li>数据平台的实现</li>
-<li>2016年Lyft公司创建并开源</li>
-<li>Istio 2017年开发</li>
-</ul>
-<h4 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h4><ul>
-<li>Envoy is an L7 proxy and communication bus designed for large modern service oriented architectures.</li>
-</ul>
-<h4 id="高级特性"><a href="#高级特性" class="headerlink" title="高级特性"></a>高级特性</h4><ul>
-<li><p>进程外架构</p>
-</li>
-<li><p>基于C++11代码实现，高并发</p>
-</li>
-<li><p>高性能：单进程非阻塞</p>
-</li>
-<li><p>L3&#x2F;L4 filter架构</p>
-</li>
-<li><p>HTTP L7 filter架构</p>
-</li>
-<li><p>HTTP&#x2F;2支持</p>
-</li>
-<li><p>HTTP L7路由</p>
-</li>
-<li><p>GRPC支持</p>
-</li>
-<li><p>服务发现，动态配置（xDS）</p>
-</li>
-<li><p>健康检测</p>
-</li>
-<li><p>高级负载均衡</p>
-</li>
-<li><p>可观测性</p>
-</li>
-<li><p>显著特性：高性能、可扩展性、动态配置性</p>
-</li>
-</ul>
-<h2 id="Envoy原理与使用"><a href="#Envoy原理与使用" class="headerlink" title="Envoy原理与使用"></a>Envoy原理与使用</h2><h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><ul>
-<li>Listeners: 面向请求输出的一端</li>
-<li>Cluster: 面向上游后端</li>
-<li>Filter Chains: 中间的过滤链，如Router<br><img src="/image-2.png" alt="envoy拓扑"><br><img src="/image-3.png" alt="envoy拓扑2"></li>
-</ul>
-<h4 id="cluster"><a href="#cluster" class="headerlink" title="cluster"></a>cluster</h4><ul>
-<li>cluster可以静态配置，也可以通过Cluster Discovery Server（CDS）动态发现</li>
-<li>cluster后端服务为Endpoint，后端服务也有对应的动态发现服务Endpoint Discovery server(EDS)</li>
-</ul>
-<h3 id="xDS"><a href="#xDS" class="headerlink" title="xDS"></a>xDS</h3><ul>
-<li>Cluster: cluster是Envoy连接到的一组逻辑上相似的endpoint集合，通过 CDS提供集群配置；</li>
-<li>位置Locality: 上游endpoint运行的区域拓扑，包括地域，区域，子区域等；</li>
-<li>地域Region：locality所属的地理位置</li>
-<li>区域Zone：AWS中的可用区AZ</li>
-<li>子区域：Envoy实例或端点运行的区域内的位置，用于支持区域内的多个负载均衡目标</li>
-<li>xDS: 一系列管理API的统称，如CDS, EDS, RDS等</li>
-</ul>
-<h3 id="Envoy线程模型"><a href="#Envoy线程模型" class="headerlink" title="Envoy线程模型"></a>Envoy线程模型</h3><ul>
-<li>单进程，多线程架构，主线程Main负责管理，Worker线程负责执行监听，过滤，转发等代理服务的核心功能；</li>
-<li>Main线程：启动、关闭，xDS API的调用处理，动态配置，健康检测，集群管理等，所有事件均以异步非阻塞模式完成</li>
-<li>Worker线程：默认根据当前CPU核数创建同等数量的工作线程，也可通过<code>--concurrency</code>来指定线程数；每个线程都会启动一个非阻塞事件循环，为每个连接初始休一个过滤器栈并处理此连接的整个生命周期的所有事件；每个线程都会监听所有用户配置的socket，对于某次连接请求，是由系统kernel负责将请求派发给一个工作线程处理；</li>
-<li>文件刷新线程：专用的独立写文件线程<br><img src="/image-4.png" alt="Alt text"></li>
-</ul>
-<h3 id="Envoy配置方式"><a href="#Envoy配置方式" class="headerlink" title="Envoy配置方式"></a>Envoy配置方式</h3><ul>
-<li>支持非常灵活的配置方式，且各内部组件的配置均可支持静态与动态配置；</li>
-<li>在云原生生态中，istio采用的是全动态配置，即EDS, CDS, LDS, SDS等均通过xDS实现动态配置</li>
-</ul>
-<h4 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h4><h5 id="Bootstrap启动配置"><a href="#Bootstrap启动配置" class="headerlink" title="Bootstrap启动配置"></a>Bootstrap启动配置</h5><ul>
-<li>node: 节点标识，代表envoy实例</li>
-<li>static_resources: 静态配置</li>
-<li>dynamic_resources: 动态配置，基于xDS API获取配置信息，如listener, cluster等<blockquote>
-<p>启动全动态配置后，极少数场景需要重启Envoy进程，支持热重启</p>
-</blockquote>
-</li>
-<li>admin: 管理接口</li>
-<li>tracing: 分布式追踪</li>
-<li>layed_runtime: 一些关键特性，通过K&#x2F;V数据保存，支持多层 覆盖配置</li>
-<li>hds_config: health check配置</li>
-<li>overload_manager: 过载管理器</li>
-<li>stats_sinks: 统计信息接收器</li>
-</ul>
-<h4 id="Listeners"><a href="#Listeners" class="headerlink" title="Listeners"></a>Listeners</h4><ul>
-<li>One Envoy configuration supports any number of listeners with a single process.</li>
-<li>Each listener is independently configured with some number of network(L3&#x2F;L4) filters.<blockquote>
-<p>TCP，不支持UDP</p>
-</blockquote>
-</li>
-</ul>
-<h5 id="Network-L3-4-filters"><a href="#Network-L3-4-filters" class="headerlink" title="Network(L3&#x2F;4) filters"></a>Network(L3&#x2F;4) filters</h5><ul>
-<li>存在三种类型的network filters，处理L4层上的TCP报文</li>
-<li>Read filters  处理入栈报文</li>
-<li>Write filters  处理出栈报文</li>
-<li>Read&#x2F;Write filters  同时处理出入栈报文</li>
-<li>Envoy内置了很多过滤器：</li>
-<li>代理类：TCP Proxy, HTTP connection manager, Mysql Proxy, Redis Proxy等</li>
-<li>其它：Rate Limit, Upstream Cluster from SNI等</li>
-</ul>
-<h5 id="HTTP-connection-manager"><a href="#HTTP-connection-manager" class="headerlink" title="HTTP connection manager"></a>HTTP connection manager</h5><ul>
-<li>该filter本身是L3&#x2F;L4 filter，能够将原始数据转换为HTTP级别消息和事件，拿到L7的数据，如headers，body等</li>
-<li>其处理了所有HTTP连接和请求共有的功能，如访问日志，trace，header&#x2F;body操作，路由管理，统计信息等；</li>
-<li>在该管理器中，还支持使用L7层HTTP过滤器：Router，Rate limit, Health check, Gzip, Fault Injection等；<br><img src="/image-6.png" alt="Alt text"></li>
-</ul>
-<h4 id="clusters-CDS-and-EDS"><a href="#clusters-CDS-and-EDS" class="headerlink" title="clusters CDS and EDS"></a>clusters CDS and EDS</h4><ul>
-<li>Envoy可配置任意数量的upstream clusters，并使用Cluster Manager进行管理</li>
-<li>cluster可由用户静态配置也可由CDS API动态获取</li>
-<li>cluster中的Endpoints同样可由静态配置或EDS、DNS来动态发现：</li>
-<li>Static</li>
-<li>Strict DNS: 严格DNS,既将DNS的解析的每个IP视为cluster endpoint</li>
-<li>Logical DNS: 逻辑DNS,仅使用在需要启动新连接时返回的第一个IP作为一个endpoint，这适用于大规模web服务集群，因该类服务的DNS IP可能会智能变化</li>
-<li>Original destination</li>
-<li>EDS: 一种基于GRPC或REST-JSON API的xDS API服务发现方式</li>
-<li>Custom cluster: 自定义集群发现机制</li>
-</ul>
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">envoy -c /etc/envoy/envoy.yaml</span><br></pre></td></tr></table></figure>
-<h3 id="admin接口"><a href="#admin接口" class="headerlink" title="admin接口"></a>admin接口</h3><ul>
-<li>Envoy内置了一个管理服务，支持修改、查询操作，可能会暴露私有数据，如统计数据，集群名，证书等，因此有必要做好其权限控制机制（envoy本身没对admin接口有权限机制）；</li>
-<li>可以限制其监听address到127.0.0.1（istio中统一为该地址）以保证安全；</li>
-<li><code>/help</code> 返回admin支持的所有接口</li>
-<li><code>/listeners</code> 列出所有listener</li>
-<li><code>/clusters</code> 列出所有clusters以及状态</li>
-<li><code>/ready</code></li>
-<li><code>/config_dump</code> 返回整个envoy生效的配置信息</li>
-<li><code>/healthcheck/fail</code> POST，强制设计HTTP健康状态为失败</li>
-<li><code>/logging</code></li>
-<li><code>/quitquitquit</code> exit server</li>
-<li><code>/stats</code> envoy格式的指标数据</li>
-<li><code>/stats/prometheus</code> prometheus格式的指标数据</li>
-</ul>
-<h4 id="clusters相关参数"><a href="#clusters相关参数" class="headerlink" title="&#x2F;clusters相关参数"></a>&#x2F;clusters相关参数</h4><p><img src="/image-7.png" alt="Alt text"></p>
-<ul>
-<li><code>region::</code> 位置，一般指机房</li>
-<li><code>zone::</code> 机房中的区域</li>
-<li><code>sub_zone::</code> 区域中的子区域，如节点</li>
-<li><code>priority::</code> 影响优先级流量的调度</li>
-<li><code>cx_total</code> total connections</li>
-<li><code>cx_active</code> total active connections</li>
-<li><code>rq_total</code> total requests</li>
-<li><code>rq_timoue</code> total timeout requests</li>
-<li><code>rq_success</code> total request with non-5xx responses</li>
-<li><code>rq_error</code> total 5xx responses</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
   <aside class="sidebar">
-    <div class="sidebar-inner">
 
-      <ul class="sidebar-nav motion-element">
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
         </li>
@@ -793,108 +133,2227 @@
         </li>
       </ul>
 
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-      </div>
-      <!--/noindex-->
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
 
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="so2bin"
+      src="/images/avatar.png">
   <p class="site-author-name" itemprop="name">so2bin</p>
-  <div class="site-description" itemprop="description">专注于AI框架、部署、平台、k8s、Go、Python等领域</div>
+  <div class="site-description" itemprop="description">专注于AI框架、平台、架构、k8s、Go、Python领域</div>
 </div>
-<div class="site-state-wrap motion-element">
+<div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">6</span>
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
   </nav>
 </div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/so2bin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;so2bin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/bbhe_work@163.com" title="E-Mail → bbhe_work@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
 
-
-
+        </div>
       </div>
+    </div>
+
+    
+  </aside>
+
 
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
+
+    <div class="main-inner index posts-expand">
+
+    
 
 
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
+<div class="post-block">
   
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">so2bin</span>
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/03/03/cloud-native/k8s-scheduler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/03/03/cloud-native/k8s-scheduler/" class="post-title-link" itemprop="url">k8s scheduler</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-03-03 11:06:37 / 修改时间：15:31:31" itemprop="dateCreated datePublished" datetime="2024-03-03T11:06:37+08:00">2024-03-03</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>87</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
-  </div>
 
-        
+        </div>
+      </header>
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/rfyiamcool/notes/blob/main/kubernetes_scheduler_code.md">https://github.com/rfyiamcool/notes/blob/main/kubernetes_scheduler_code.md</a></li>
+</ul>
+<h2 id="scheduler原理"><a href="#scheduler原理" class="headerlink" title="scheduler原理"></a>scheduler原理</h2>
+      
+    </div>
 
+    
+    
+    
 
-
-
-
-
-
-      </div>
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
     </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/03/03/AI-Infer/Tritonserver/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/03/03/AI-Infer/Tritonserver/" class="post-title-link" itemprop="url">Tritonserver</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-03-03 11:02:05 / 修改时间：11:02:40" itemprop="dateCreated datePublished" datetime="2024-03-03T11:02:05+08:00">2024-03-03</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>0</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/03/02/cloud-native/device-plugin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/03/02/cloud-native/device-plugin/" class="post-title-link" itemprop="url">k8s device-plugin</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-03-02 00:10:11" itemprop="dateCreated datePublished" datetime="2024-03-02T00:10:11+08:00">2024-03-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-03 13:06:26" itemprop="dateModified" datetime="2024-03-03T13:06:26+08:00">2024-03-03</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="k8s-device-plugin机制"><a href="#k8s-device-plugin机制" class="headerlink" title="k8s device-plugin机制"></a>k8s device-plugin机制</h2><h3 id="docker运行GPU容器"><a href="#docker运行GPU容器" class="headerlink" title="docker运行GPU容器"></a>docker运行GPU容器</h3><ul>
+<li>nvidia的GPU容器镜像原理是：NVIDIA驱动相对更稳定，因此容器中使用容器封装的CUDA&#x2F;SDK库，共用宿主机的NVIDIA驱动；</li>
+<li>docker运行GPU容器时，需要将NVIDIA驱动映射到容器内：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以下的命令与nvidia-docker同样的作用原理</span></span><br><span class="line">docker run --it --volume=navidia_driver_xxx.xx:/usr/local/nvidia:ro \</span><br><span class="line">    --device=/dev/nvidiactl \</span><br><span class="line">    --device=/dev/nvidia-uvm \</span><br><span class="line">    --device=/dev/nvidia-uvm-tools \</span><br><span class="line">    --device=/dev/nvidia0 \</span><br><span class="line">    nvidia/cuda nvidia-smi</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="k8s-运行GPU容器"><a href="#k8s-运行GPU容器" class="headerlink" title="k8s 运行GPU容器"></a>k8s 运行GPU容器</h3><ol>
+<li>安装NVIDIA驱动；</li>
+<li>安装NVIDIA Dcoker：<code>nvidia-docker2</code></li>
+<li>部署NVIDIA Device Plugin：<code>device-nvidia-plugin</code></li>
+</ol>
+<h3 id="k8s-GPU资源插件原理"><a href="#k8s-GPU资源插件原理" class="headerlink" title="k8s GPU资源插件原理"></a>k8s GPU资源插件原理</h3><p>利用了两种技术：</p>
+<ol>
+<li>Extended Resources，允许用用户自定义资源扩展，如这里的扩展：<code>nvidia.com/gpu: 2</code>, 也可用于如RDMA, AMD GPU, FPGA等；</li>
+<li>Device Plugin Framework，允许第三方设备提供商以插件外置的方式对设置的调度和全生命周期管理；</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/03/02/cloud-native/device-plugin/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/29/Go/Go-Knowledge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/29/Go/Go-Knowledge/" class="post-title-link" itemprop="url">Go Knowledge</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-29 20:56:05" itemprop="dateCreated datePublished" datetime="2024-02-29T20:56:05+08:00">2024-02-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-04 20:46:27" itemprop="dateModified" datetime="2024-03-04T20:46:27+08:00">2024-03-04</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>211</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Go-init"><a href="#Go-init" class="headerlink" title="Go init"></a>Go init</h2><h3 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2138066">https://cloud.tencent.com/developer/article/2138066</a></li>
+</ul>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><ul>
+<li><p>Go的总体初始化过程如下图所示：</p>
+<img src="/2024/02/29/Go/Go-Knowledge/go-init-order.png" width="75%" style="margin: 0 auto;">
+</li>
+<li><p>同模块中，优先级：const常量 &gt; var变量 &gt; <code>init()</code></p>
+</li>
+<li><p>同模块中，前后<code>init()</code>的优先级，为从上到下顺序执行</p>
+</li>
+<li><p>同包中，不同模块的<code>init()</code>优先级：按文件名排序依次执行不同模块的<code>init()</code></p>
+</li>
+<li><p>import导入包<code>init()</code>顺序：被导入包的<code>init()</code>先执行</p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/29/Go/Go-Knowledge/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/22/k8s/etcd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/22/k8s/etcd/" class="post-title-link" itemprop="url">etcd</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-22 15:15:13" itemprop="dateCreated datePublished" datetime="2024-02-22T15:15:13+08:00">2024-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-02 00:09:42" itemprop="dateModified" datetime="2024-03-02T00:09:42+08:00">2024-03-02</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>57</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li>ETCD事件推送：<a target="_blank" rel="noopener" href="https://www.lixueduan.com/posts/etcd/05-watch/">https://www.lixueduan.com/posts/etcd/05-watch/</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/22/k8s/pod/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/22/k8s/pod/" class="post-title-link" itemprop="url">pod</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-22 11:59:09" itemprop="dateCreated datePublished" datetime="2024-02-22T11:59:09+08:00">2024-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-02 00:09:42" itemprop="dateModified" datetime="2024-03-02T00:09:42+08:00">2024-03-02</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>718</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="pod内容器共享空间"><a href="#pod内容器共享空间" class="headerlink" title="pod内容器共享空间"></a>pod内容器共享空间</h2><p><strong>资料</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/rexcheny/p/11017146.html">https://www.cnblogs.com/rexcheny/p/11017146.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://linchpiner.github.io/k8s-multi-container-pods.html">https://linchpiner.github.io/k8s-multi-container-pods.html</a></li>
+</ul>
+<p><strong>问题</strong></p>
+<p>k8s的pod内可以同时容纳多个容器，那这些容器之间有哪些资源（命名空间）是可以共享的？</p>
+<p><strong>答案</strong></p>
+<p><img src="/2024/02/22/k8s/pod/pod-isolation.png" alt="pod share"></p>
+<ul>
+<li><p>容器的隔离技术是通过cgroup和namespace隔离实现，linux支持namespace有：</p>
+<ul>
+<li>UTS名称空间，保存内核版本，主机名，域名</li>
+<li>NET空间，通过逻辑网络栈实现网络空间的隔离</li>
+<li>进程PID空间，通过fork时指定的一个参数控制，不同空间间的PID是隔离了，看不到彼此的PID，子空间看不到父空间的内容，但父空间可以管理子空间，如发送信息</li>
+<li>IPC空间，即进程间通信的隔离，不同容器之间无法通过如信号量，队列，共享内存（System V IPC和POSIX消息队列），来实现进程间通信</li>
+<li>USER空间，实现用户，组相关功能的隔离</li>
+<li>MNT空间，即磁盘挂载点和文件系统的隔离能力，同一主机上的不同进程访问相同的路径能看到相同的内容，是因为他们共享本机的磁盘和文件系统</li>
+<li>文件系统：不同容器都有自己的一个snapshotter目录，文件系统是隔离的</li>
+</ul>
+</li>
+<li><p>pod内的不同容器之间的共享稍有不同：</p>
+<ul>
+<li>UTS名称空间，是共享的</li>
+<li>USER空间，共享的</li>
+<li>NET空间，是共享的，因此不同容器启相同端口会冲突</li>
+<li>PID空间，默认是关闭的，可以通过<code>shareProcessNamespace: true</code>打开</li>
+<li>IPC空间，是共享的<br>  <img src="/2024/02/22/k8s/pod/pod-c-share-IPC.png" alt="pod-c-share-IPC"></li>
+<li>MNT空间，隔离的，但可以通过挂载同一个pod volume来共享挂载的内容，实现不同容器间的共享挂载，但不同容器之间的文件系统是隔离的<br>  <img src="/2024/02/22/k8s/pod/pod-c-share-volume.png" alt="pod-c-share-volume"></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/20/k8s/probe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/20/k8s/probe/" class="post-title-link" itemprop="url">probe</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-20 09:49:46" itemprop="dateCreated datePublished" datetime="2024-02-20T09:49:46+08:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-21 19:02:07" itemprop="dateModified" datetime="2024-02-21T19:02:07+08:00">2024-02-21</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Readiness-Liveness-StartupProbe"><a href="#Readiness-Liveness-StartupProbe" class="headerlink" title="Readiness, Liveness, StartupProbe"></a>Readiness, Liveness, StartupProbe</h2><h3 id="执行原理"><a href="#执行原理" class="headerlink" title="执行原理"></a>执行原理</h3><ul>
+<li>均支持三种检测探针：TCP, HTTP, Exec Shell</li>
+<li>探针的执行均由kubelet组件执行；</li>
+</ul>
+<h4 id="Exec探针执行"><a href="#Exec探针执行" class="headerlink" title="Exec探针执行"></a>Exec探针执行</h4><ul>
+<li>由kubelet组件调用CRI接口的ExecSync接口，在对应的容器内执对应的cmd命令，获取其返回值；</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/20/k8s/probe/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/19/k8s/client-go/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/19/k8s/client-go/" class="post-title-link" itemprop="url">k8s client-go</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-19 22:01:07" itemprop="dateCreated datePublished" datetime="2024-02-19T22:01:07+08:00">2024-02-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-02 00:09:42" itemprop="dateModified" datetime="2024-03-02T00:09:42+08:00">2024-03-02</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><ul>
+<li>k8s client-go提供4个client：<code>RESTClient</code>, <code>ClientSet</code>, <code>DynamicClient</code>, <code>DiscoveryClient</code></li>
+</ul>
+<h3 id="RESTClient"><a href="#RESTClient" class="headerlink" title="RESTClient"></a>RESTClient</h3><ul>
+<li>作为另外三类client的基类，提供与k8s apiserver的底层API请求构造与请求；</li>
+</ul>
+<h3 id="ClientSet"><a href="#ClientSet" class="headerlink" title="ClientSet"></a>ClientSet</h3><ul>
+<li>用于方便访问k8s内置api group资源的client，如deployment, pod等；</li>
+</ul>
+<h3 id="DynamicClient"><a href="#DynamicClient" class="headerlink" title="DynamicClient"></a>DynamicClient</h3><ul>
+<li>通过指定资源组，资源版本即可操作k8s中的任务资源，包括CRD和内置资源；</li>
+<li>DynamicClient使用嵌套的<code>map[string]interface&#123;&#125;</code>结构来存储k8s apiserver的返回资源结构，通过反射机制，在运行时进行数据绑定；</li>
+</ul>
+<h3 id="DiscoveryClient"><a href="#DiscoveryClient" class="headerlink" title="DiscoveryClient"></a>DiscoveryClient</h3><ul>
+<li>与前面三种client不同，该client不是用于管理k8s资源对象的，该client是用于查询k8s支持的GVR资源类型的，与<code>kubectl api-versions</code>和<code>kubectl api-resources</code>返回的资源内容相关；</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/19/k8s/client-go/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/19/raft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/19/raft/" class="post-title-link" itemprop="url">raft</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-19 20:36:37" itemprop="dateCreated datePublished" datetime="2024-02-19T20:36:37+08:00">2024-02-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-21 19:02:07" itemprop="dateModified" datetime="2024-02-21T19:02:07+08:00">2024-02-21</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>215</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://raft.github.io/">https://raft.github.io/</a></li>
+</ul>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li><p>随机超时：避免同时发起选举请求</p>
+<img src="/2024/02/19/raft/raft-random-timeout.png" width="30%" alt="raft random timeout">
+</li>
+<li><p>任期Term：用于标记选举任期，可用于让故障回复后的leader变成follower，任期小的选举请求会被拒绝；</p>
+</li>
+<li><p>角色：leader, follower, candidate</p>
+</li>
+<li><p>leader选择出来后，leader会定时向follower发起心跳，如心跳超时，则最先timeout的节点会发起选举请求，此时该节点会从follower转变成cadidate；</p>
+</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/19/raft/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/18/cloud-native/cni/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/18/cloud-native/cni/" class="post-title-link" itemprop="url">cni</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-18 22:15:43" itemprop="dateCreated datePublished" datetime="2024-02-18T22:15:43+08:00">2024-02-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-19 00:11:48" itemprop="dateModified" datetime="2024-02-19T00:11:48+08:00">2024-02-19</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="容器网络"><a href="#容器网络" class="headerlink" title="容器网络"></a>容器网络</h2><blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/364886965">https://zhuanlan.zhihu.com/p/364886965</a></li>
+</ul>
+</blockquote>
+<h3 id="docker网络模式"><a href="#docker网络模式" class="headerlink" title="docker网络模式"></a>docker网络模式</h3><ul>
+<li>默认创建如下三种：bridge, host, none<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hbb@hbb:~$ docker network <span class="built_in">ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">3c92bea4cc95   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">3d964312d0b5   host      host      <span class="built_in">local</span></span><br><span class="line">07d5e640e74f   none      null      <span class="built_in">local</span></span><br></pre></td></tr></table></figure></li>
+<li>默认容器均采用bridge网桥模式，所有容器均会创建一对虚拟网络接口，容器内一个eth0，容器外一个vethXXX，vethXXX属于docker0，通过docker0实现对外网的访问；</li>
+<li><code>host</code>模式即与主机共享网络空间，不使用私有的容器网络空间；</li>
+<li><code>none</code>模式即容器内没有eth0网口，因此无法与容器外通信；</li>
+</ul>
+<h3 id="network-namespace-veth-pair-bridge"><a href="#network-namespace-veth-pair-bridge" class="headerlink" title="network namespace, veth pair, bridge"></a>network namespace, veth pair, bridge</h3><ul>
+<li>下图所示为相关概念：<br><img src="/2024/02/18/cloud-native/cni/basic-concepts.png" alt="network namespace vs veth pair vs bridge"></li>
+</ul>
+<h4 id="bridge"><a href="#bridge" class="headerlink" title="bridge"></a><code>bridge</code></h4><ul>
+<li>docker0 bridge即纯软件实现的虚拟交换机，可实现与物理交换机同样的功能，如二层交换，ARP寻找MAC地址；</li>
+</ul>
+<h4 id="network-namespace"><a href="#network-namespace" class="headerlink" title="network namespace"></a><code>network namespace</code></h4><ul>
+<li>即将一个物理的网络协议栈进行逻辑隔离，形成网络空间，不同的拷贝协议栈有自己独立的网络接口，ip，route tables, iptables等，而进程可以设置使用不同的network namespace，多个进程也可以属于同一个ns，一个pod有一个独立的ns，pod内的容器属于同一个ns；</li>
+</ul>
+<h3 id="容器网络通信模型"><a href="#容器网络通信模型" class="headerlink" title="容器网络通信模型"></a>容器网络通信模型</h3><ul>
+<li>pod内容器属于同一个网络空间，所以可直接相互访问；</li>
+<li>同机不同容器之间，通过虚拟以太网veth network互联，docker安装后，会默认创建一个docker0作为虚拟以太网的bridge网桥，在容器创建时会在容器内外创建一对虚拟网络接口，容器内为eth0，容器外即主机上会对应创建一个vethXXX名的接口名，如下图所示：<ul>
+<li>该图为docker容器内eth0，与docker0属于同一网段：<br><img src="/2024/02/18/cloud-native/cni/vethInC.png" alt="veth in C"></li>
+<li>该图为上面容器在主机上对应的veth网口，其master为docker0：<br><img src="/2024/02/18/cloud-native/cni/vethOnHost.png" alt="veth on host"></li>
+</ul>
+</li>
+<li>在主机上通过<code>docker inspect network bridge</code>命令可查看docker列出的当前docker默认bridge网桥docker0下的容器网络信息：<br><img src="/2024/02/18/cloud-native/cni/docker-bridge.png" alt="docker bridge"></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/18/cloud-native/cni/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/28/Go/channel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/28/Go/channel/" class="post-title-link" itemprop="url">Go Channel</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-01-28 20:01:26 / 修改时间：20:15:58" itemprop="dateCreated datePublished" datetime="2024-01-28T20:01:26+08:00">2024-01-28</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>341</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>本质上，channel是一个包含：发送Go队列，接收Go队列，由循环数组实现的缓存数据队列，锁这几个元素组成的结构体实现；</li>
+<li><code>sendmsg</code>阶段：<ul>
+<li>如果接收Go队列有值，则直接进行值元素的内存拷贝，并唤醒接收队列；</li>
+<li>如有缓冲队列且未满，则将值复制到循环队列中；</li>
+<li>如果有缓冲队列且满了或无缓冲队列，将协程放到channel的<code>sendqueue</code>中；</li>
+</ul>
+</li>
+<li><code>recvmsg</code>阶段：<ul>
+<li>如果缓冲，且无数据，则进入<code>recvqueue</code>中，协程挂起(<code>gopack</code>)；</li>
+<li>如果缓冲队列中数据，由从队列中将值拷贝给当前接收者；</li>
+<li>如果<code>sendqueue</code>有协程，则说明缓冲队列已满，则从缓冲队列中取值，并将<code>sendqueue</code>中取一个协程，将其值拷贝到缓冲循环数组中；</li>
+</ul>
+</li>
+<li>上述操作是在mutex锁下进行，所以channel是协程安全的；</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/28/Go/channel/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/28/Go/GMP%20and%20Scheduler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/28/Go/GMP%20and%20Scheduler/" class="post-title-link" itemprop="url">Go GMP and Scheduler</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-28 19:58:17" itemprop="dateCreated datePublished" datetime="2024-01-28T19:58:17+08:00">2024-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-04 16:52:51" itemprop="dateModified" datetime="2024-02-04T16:52:51+08:00">2024-02-04</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>704</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@sanilkhurana7/understanding-the-go-scheduler-and-looking-at">https://medium.com/@sanilkhurana7/understanding-the-go-scheduler-and-looking-at</a>   1-how-it-works-e431a6daacf</li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000041860912/en">https://segmentfault.com/a/1190000041860912/en</a></li>
+</ul>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li>G：协程，P：processor，M：系统线程，M绑定一个P才能执行G；</li>
+<li>P的数据是控制着Go的并发能力，由环境变量<code>GOMAXPROCESS</code>控制数量，线程数一般不配置，但也有一个底层的函数可设置（<code>SetMaxThreads</code>），M默认上限是10000；</li>
+<li>P的存在是为了实现G的调度和M&#x2F;G之间M:N的关系；</li>
+<li>P有一个local queue，无锁，当P的local queue无G时，会从Global queue取，此时需要用锁，而如果Global queue也无G时，会走work stealing，尝试从其它P的local queue上找G运行；</li>
+<li>G的抢占调度是基于时间片，即如果G长时间连续运行超过10ms，则会通过系统信号SIGURG强制调度该协程；</li>
+<li>当G发生阻塞，如系统调用IO操作时，会创建一个新的线程或利用一个空闲的线程来绑定当前P，以继续执行P上的G，而旧线程进入阻塞睡眠状态；</li>
+<li>P的local queue放的G的数量上限为256；</li>
+<li>当因IO阻塞进入idle状态的线程，在G系统调用结束时，因此时M上没有P了，而G的执行一定需要P，所以会尝试先去获取一个idle的P来执行，如找到了，则会将该G放到该P的local queue中，如果没有，则M会进入idle线程队列，G会放到Global queue中；</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/28/Go/GMP%20and%20Scheduler/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/28/Python/Python%20GC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/28/Python/Python%20GC/" class="post-title-link" itemprop="url">Python GC</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-01-28 17:01:31 / 修改时间：17:01:44" itemprop="dateCreated datePublished" datetime="2024-01-28T17:01:31+08:00">2024-01-28</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>0</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/28/Go/Go%20GC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/28/Go/Go%20GC/" class="post-title-link" itemprop="url">Go GC</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-01-28 17:00:47 / 修改时间：18:58:19" itemprop="dateCreated datePublished" datetime="2024-01-28T17:00:47+08:00">2024-01-28</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>999</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Go1-5-标记删除-Mark-and-Sweep"><a href="#Go1-5-标记删除-Mark-and-Sweep" class="headerlink" title="Go1.5 标记删除(Mark and Sweep)"></a>Go1.5 标记删除(Mark and Sweep)</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
+<li>进入STW(Stop The World)阶段</li>
+<li>遍历整个heap，排查未被引用的对象，并标记；</li>
+<li>暂停STW</li>
+<li>执行Sweep清除</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>STW会让Go程序暂停，程序出现卡顿</li>
+<li>标记需要扫描整个heap</li>
+<li>清除数据会产生heap碎片</li>
+</ul>
+<h2 id="Go1-8-三色标记法-写入屏障"><a href="#Go1-8-三色标记法-写入屏障" class="headerlink" title="Go1.8 三色标记法 + 写入屏障"></a>Go1.8 三色标记法 + 写入屏障</h2><h3 id="三色标记法"><a href="#三色标记法" class="headerlink" title="三色标记法"></a>三色标记法</h3><h4 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h4><ul>
+<li>维护三个标记表：<code>白色</code>，<code>灰色</code>，<code>黑色</code></li>
+<li>程序初始时，所有对象标记为白色</li>
+<li>从Root Set开发，每次只遍历一层，标记该层的对象为<code>灰色</code>（对象从<code>白色</code>表中移到<code>灰色</code>表）</li>
+<li>然后，以<code>灰色</code>标记表开始，遍历该表中的对象，将从这些对象开始的可达到对象（走一步），标记为<code>灰色</code>，同时<code>灰色</code>表中已经遍历过的对象，标记为<code>黑色</code>（对象从<code>灰色</code>表中移到<code>黑色</code>表）</li>
+<li>循环上一步，继续遍历<code>灰色</code>表，直到<code>灰色</code>表中无任何对象</li>
+<li>剩下的白色即为需要删除的对象</li>
+</ul>
+<blockquote>
+<p>上述过程，仍然需要STW，否则会出现并发导致的引用关系错乱，导致资源被错误的GC删除</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/28/Go/Go%20GC/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/28/Go/mem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/28/Go/mem/" class="post-title-link" itemprop="url">Go 内存模型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-28 17:00:47" itemprop="dateCreated datePublished" datetime="2024-01-28T17:00:47+08:00">2024-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-21 19:02:07" itemprop="dateModified" datetime="2024-02-21T19:02:07+08:00">2024-02-21</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>351</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><h3 id="分层架构"><a href="#分层架构" class="headerlink" title="分层架构"></a>分层架构</h3><ul>
+<li>Go的页单元大小 ：8KB，linux操作系统：4KB；</li>
+<li>如下图所示，分了三层来管理<ul>
+<li>mcache: 每个P一个，为每个mspan额外缓存了一个，无锁；</li>
+<li>mcentral: 分了67个span，从8B-32B，细粒度锁；</li>
+<li>mheap: 全局唯一；<img src="/2024/01/28/Go/mem/go-mem-arch.png" width="60%" height="60%" style="margin: 0 auto;" alt="go-mem-arch"></li></ul></li></ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/28/Go/mem/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/26/cloud-native/CNCF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/26/cloud-native/CNCF/" class="post-title-link" itemprop="url">CNCF视频清单</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-01-26 11:00:48 / 修改时间：11:01:40" itemprop="dateCreated datePublished" datetime="2024-01-26T11:00:48+08:00">2024-01-26</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>259</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="CNCF视频清单"><a href="#CNCF视频清单" class="headerlink" title="CNCF视频清单"></a>CNCF视频清单</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/22W1yrEJjtQ?si=6B8RvYzrPlZZPlEg">FederaHPA on Karmada</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/IHnRH_hWAxM?si=KH7AP5myug0K7fFw">Serverless AIGC平台</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/OO7zpyf7fgs?si=9RKYqqCg9fnviDRp">Vocalno with AI workload</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/vJTSJYc0vSc?si=hrTcd9DIQPi6mX6a">Dragonfly for AI model Distribution</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/mLsIcZyop5o?si=Gom34Aq8GFTeJwF6">SIG kube-scheduler</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/4Bs9Pgn4z2w?si=EYNBj2PIcAsnFFuf">controller-runtime新特性</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/t3YFv20Ulnc?si=vzsWl1H8neD6natV">Prometheus Deep Dive</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/gwV7bFL91fQ?si=xD_Fptga9fE1hWd9">containerd</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/7pQZyYEz1l4?si=k7Dc9XZ1-HP2oXwp">Prometheus高性能远程存储</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/e4GA5e-C7n0?si=8dAbgg5hzbU4jwjM">多集群流量调度based on eBPF</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/oMz1sbCd6-Q?si=p_brZ49YRmZ1Olyb">服务网格负载均衡</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/hHZxjH8u84s?si=0aFnDTnGXVCTY50l">k8s + RoCEv2构建AI训练集群</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/U6Jg06JeCKM?si=02r86xmRZisADhJ6">基于WASM部署轻量级AI服务</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/JOio7Nps_II?si=4HLeqKJGOloJfZtt">CubeFS with AI</a></li>
+<li><a target="_blank" rel="noopener" href="https://youtu.be/rL199Ee55cU?si=BD61mCApi_NyBiAX">new with GRPC</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/24/tutorials/kubeadm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/24/tutorials/kubeadm/" class="post-title-link" itemprop="url">kubeadm初始化k8s</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-24 11:26:41" itemprop="dateCreated datePublished" datetime="2024-01-24T11:26:41+08:00">2024-01-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-26 10:33:19" itemprop="dateModified" datetime="2024-01-26T10:33:19+08:00">2024-01-26</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="init"><a href="#init" class="headerlink" title="init"></a>init</h2><h3 id="节点环境准备"><a href="#节点环境准备" class="headerlink" title="节点环境准备"></a>节点环境准备</h3><ul>
+<li>关闭swap<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看</span></span><br><span class="line">sudo swapon --show</span><br><span class="line"><span class="comment"># 关闭</span></span><br><span class="line">sudo swapoff -a</span><br></pre></td></tr></table></figure></li>
+<li>配置其它：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># sudo vim /etc/sysctl.d/k8s.conf</span></span><br><span class="line"><span class="comment"># 添加： </span></span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导出配置</span></span><br><span class="line">containerd config default &gt; /etc/containerd/config.toml</span><br><span class="line"><span class="comment"># 修改配置</span></span><br><span class="line">[plugins.<span class="string">&quot;io.containerd.grpc.v1.cri&quot;</span>.containerd.runtimes.runc]</span><br><span class="line">  ...</span><br><span class="line">  [plugins.<span class="string">&quot;io.containerd.grpc.v1.cri&quot;</span>.containerd.runtimes.runc.options]</span><br><span class="line">    SystemdCgroup = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行命令</span></span><br><span class="line">sudo modprobe br_netfilter</span><br><span class="line">sudo systemctl restart containerd</span><br></pre></td></tr></table></figure></li>
+<li>按正常流程安装完docker, containerd组件</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/24/tutorials/kubeadm/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/18/cloud-native/karmada/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/18/cloud-native/karmada/" class="post-title-link" itemprop="url">Karmada</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-18 20:07:37" itemprop="dateCreated datePublished" datetime="2024-01-18T20:07:37+08:00">2024-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-04 20:46:27" itemprop="dateModified" datetime="2024-03-04T20:46:27+08:00">2024-03-04</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1804669">kubefed v2</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzNTU1MjIxMQ==&amp;mid=2247483886&amp;idx=1&amp;sn=d397c17088a6a5c2516d7a77acb961e6&amp;chksm=e8e42d52df93a44416c4f250c581158e15d44ba17bc11f5abcd310d59bf9c9fe5fef5aa0e4b8&amp;scene=21#wechat_redirect">Kubernetes 多集群管理：Kubefed</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/vivotech/p/17684105.html">vivo Karmada实践</a></li>
+</ul>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
+<li>karmada是由华为开源的云原生多集群容器编排平台，在kubernetes Federation v1, v2（<code>kubefed</code>）的基础上发展而来，吸取了其经验和教训，<code>kubefed</code>项目目前已经被放弃；</li>
+<li>其特点是在保存原有k8s资源定义API不变的情况下，通过添加与多云应用资源编排相关的一套新的API和控制面板组件，为用户提供多云&#x2F;多集群容器部署，实现扩展、高可用等目标；</li>
+<li>如下图所示为<code>kubefed</code> v2接入vs时需要定义的CRD，因此接入<code>kubefed</code>是需要对原始k8s资源进行改造，对用户不友好：<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">types.kubefed.io/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">FederatedVirtualService</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">service-route</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">placement:</span></span><br><span class="line">    <span class="attr">clusters:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">cluster1</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">cluster2</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">cluster3</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">service-route</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">gateways:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">service-gateway</span></span><br><span class="line">      <span class="attr">hosts:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line">      <span class="attr">http:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">match:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">uri:</span></span><br><span class="line">            <span class="attr">prefix:</span> <span class="string">/</span></span><br><span class="line">        <span class="attr">route:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">destination:</span></span><br><span class="line">            <span class="attr">host:</span> <span class="string">service-a-1</span></span><br><span class="line">            <span class="attr">port:</span></span><br><span class="line">              <span class="attr">number:</span> <span class="number">3000</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/18/cloud-native/karmada/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/16/cloud-native/containerd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/16/cloud-native/containerd/" class="post-title-link" itemprop="url">containerd</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-16 22:53:39" itemprop="dateCreated datePublished" datetime="2024-01-16T22:53:39+08:00">2024-01-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-26 10:33:19" itemprop="dateModified" datetime="2024-01-26T10:33:19+08:00">2024-01-26</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/containerd/containerd/blob/main/docs/historical/design/architecture.md">https://github.com/containerd/containerd/blob/main/docs/historical/design/architecture.md</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.frognew.com/2021/05/relearning-container-08.html">https://blog.frognew.com/2021/05/relearning-container-08.html</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.frognew.com/2021/06/relearning-container-09.html">https://blog.frognew.com/2021/06/relearning-container-09.html</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.mobyproject.org/where-are-containerds-graph-drivers-145fc9b7255">https://blog.mobyproject.org/where-are-containerds-graph-drivers-145fc9b7255</a></p>
+</li>
+<li><p>高层架构<br><img src="/2024/01/16/cloud-native/containerd/top-arch.png" alt="Top Arch"></p>
+</li>
+</ul>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="联合挂载"><a href="#联合挂载" class="headerlink" title="联合挂载"></a>联合挂载</h3><ul>
+<li>由overlay filesystem提供的能力，支持将多个文件系统层叠加在一起，且只显示最顶层的文件和目录，OverlayFS是其实现，docker当前默认存储驱动为overlay2，就是基于该文件系统；</li>
+<li>在contaierd中这个联合挂载的roofs视图是由snapshotter准备的snapshots；</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/16/cloud-native/containerd/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/01/16/papers/lazy-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/01/16/papers/lazy-docker/" class="post-title-link" itemprop="url">Lazy Docker Containers</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-01-16 14:55:45 / 修改时间：17:23:20" itemprop="dateCreated datePublished" datetime="2024-01-16T14:55:45+08:00">2024-01-16</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="论文粗读：Slacker-Fast-Distribution-with-Lazy-Docker-Containers"><a href="#论文粗读：Slacker-Fast-Distribution-with-Lazy-Docker-Containers" class="headerlink" title="论文粗读：Slacker: Fast Distribution with Lazy Docker Containers"></a>论文粗读：Slacker: Fast Distribution with Lazy Docker Containers</h1><h2 id="阅读目标"><a href="#阅读目标" class="headerlink" title="阅读目标"></a>阅读目标</h2><ul>
+<li>了解docker容器启动过程的数据特性，以及slacker的设计思路，不对该存储驱动做过细了解。</li>
+</ul>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
+<li>开发了名为<code>HelloBench</code>的工具来分析57个不同的容器应用，分析容器启动过程的IO数据特性和镜像可压缩性，得出结论：在容器的启动过程中，镜像的拉取占76%的时间，但仅读了6.4%的数据。</li>
+<li>基于这些发现，作者设计开发了一种新的docker存储驱动：Slacker，可以用于加速容器的启动速度。</li>
+<li>Slacker采用中心化存储思路，所有的docker workers和registries都共享这些数据。</li>
+<li>Container的启动主要慢在文件系统的瓶颈，相对而言，network, compute, memory资源更快且简单，容器应用需要一个完整的初始化文件系统，包括应用binary，完整的linux系统和依赖包；</li>
+<li>在谷歌的研究论文中，容器应用启动延时变化秀大，中间值一般为25s，且package installation占了80%，其中的一个瓶颈为并发写磁盘的过程；</li>
+<li>提供快启动的好处：<ul>
+<li>应用能快速扩容以应对突发事件（flash-crowd events）；</li>
+<li>集群调度器能以最少的代价频繁执行rebalance nodes；</li>
+<li>应用更新或bug修复能快速发布；</li>
+<li>开发者可以交互式构建和测试分发应用；</li></ul></li></ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/01/16/papers/lazy-docker/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">so2bin</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
+    </div>
+  </footer>
 
   
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
 
   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+
 
   
+
+
+
+
 
 </body>
 </html>

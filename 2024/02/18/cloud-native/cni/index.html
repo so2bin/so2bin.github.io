@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"so2bin.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="容器网络  https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;364886965   docker网络模式 默认创建如下三种：bridge, host, nonehbb@hbb:~$ docker network lsNETWORK ID     NAME      DRIVER    SCOPE3c92bea4cc95   bridge    bridge    local3d96431">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cni">
+<meta property="og:url" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/index.html">
+<meta property="og:site_name" content="so2bin">
+<meta property="og:description" content="容器网络  https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;364886965   docker网络模式 默认创建如下三种：bridge, host, nonehbb@hbb:~$ docker network lsNETWORK ID     NAME      DRIVER    SCOPE3c92bea4cc95   bridge    bridge    local3d96431">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/basic-concepts.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/vethInC.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/vethOnHost.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/docker-bridge.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/k8s-network.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/pod-network.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/vxlan.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/calico.png">
+<meta property="og:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/calico-communicate.png">
+<meta property="article:published_time" content="2024-02-18T14:15:43.000Z">
+<meta property="article:modified_time" content="2024-02-18T16:11:48.137Z">
+<meta property="article:author" content="so2bin">
+<meta property="article:tag" content="k8s">
+<meta property="article:tag" content="CNI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://so2bin.github.io/2024/02/18/cloud-native/cni/basic-concepts.png">
+
+
+<link rel="canonical" href="https://so2bin.github.io/2024/02/18/cloud-native/cni/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://so2bin.github.io/2024/02/18/cloud-native/cni/","path":"2024/02/18/cloud-native/cni/","title":"cni"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>cni | so2bin</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="so2bin" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">so2bin</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">青山一道同云雨，明月何曾是两乡</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C"><span class="nav-number">1.</span> <span class="nav-text">容器网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">docker网络模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#network-namespace-veth-pair-bridge"><span class="nav-number">1.2.</span> <span class="nav-text">network namespace, veth pair, bridge</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bridge"><span class="nav-number">1.2.1.</span> <span class="nav-text">bridge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#network-namespace"><span class="nav-number">1.2.2.</span> <span class="nav-text">network namespace</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">容器网络通信模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pod%E7%BD%91%E7%BB%9C%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="nav-number">1.4.</span> <span class="nav-text">pod网络创建过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vxlan%E7%BD%91%E7%BB%9C%E4%B8%8Eflannel-CNI"><span class="nav-number">1.5.</span> <span class="nav-text">vxlan网络与flannel CNI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#calico-CNI"><span class="nav-number">1.6.</span> <span class="nav-text">calico CNI</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E7%BD%91%E7%BB%9C"><span class="nav-number">2.</span> <span class="nav-text">集群网络</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="so2bin"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">so2bin</p>
+  <div class="site-description" itemprop="description">专注于AI框架、平台、架构、k8s、Go、Python领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/so2bin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;so2bin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/bbhe_work@163.com" title="E-Mail → bbhe_work@163.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://so2bin.github.io/2024/02/18/cloud-native/cni/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="so2bin">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="so2bin">
+      <meta itemprop="description" content="专注于AI框架、平台、架构、k8s、Go、Python领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="cni | so2bin">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          cni
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-18 22:15:43" itemprop="dateCreated datePublished" datetime="2024-02-18T22:15:43+08:00">2024-02-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-19 00:11:48" itemprop="dateModified" datetime="2024-02-19T00:11:48+08:00">2024-02-19</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="容器网络"><a href="#容器网络" class="headerlink" title="容器网络"></a>容器网络</h2><blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/364886965">https://zhuanlan.zhihu.com/p/364886965</a></li>
+</ul>
+</blockquote>
+<h3 id="docker网络模式"><a href="#docker网络模式" class="headerlink" title="docker网络模式"></a>docker网络模式</h3><ul>
+<li>默认创建如下三种：bridge, host, none<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hbb@hbb:~$ docker network <span class="built_in">ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">3c92bea4cc95   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">3d964312d0b5   host      host      <span class="built_in">local</span></span><br><span class="line">07d5e640e74f   none      null      <span class="built_in">local</span></span><br></pre></td></tr></table></figure></li>
+<li>默认容器均采用bridge网桥模式，所有容器均会创建一对虚拟网络接口，容器内一个eth0，容器外一个vethXXX，vethXXX属于docker0，通过docker0实现对外网的访问；</li>
+<li><code>host</code>模式即与主机共享网络空间，不使用私有的容器网络空间；</li>
+<li><code>none</code>模式即容器内没有eth0网口，因此无法与容器外通信；</li>
+</ul>
+<h3 id="network-namespace-veth-pair-bridge"><a href="#network-namespace-veth-pair-bridge" class="headerlink" title="network namespace, veth pair, bridge"></a>network namespace, veth pair, bridge</h3><ul>
+<li>下图所示为相关概念：<br><img src="/2024/02/18/cloud-native/cni/basic-concepts.png" alt="network namespace vs veth pair vs bridge"></li>
+</ul>
+<h4 id="bridge"><a href="#bridge" class="headerlink" title="bridge"></a><code>bridge</code></h4><ul>
+<li>docker0 bridge即纯软件实现的虚拟交换机，可实现与物理交换机同样的功能，如二层交换，ARP寻找MAC地址；</li>
+</ul>
+<h4 id="network-namespace"><a href="#network-namespace" class="headerlink" title="network namespace"></a><code>network namespace</code></h4><ul>
+<li>即将一个物理的网络协议栈进行逻辑隔离，形成网络空间，不同的拷贝协议栈有自己独立的网络接口，ip，route tables, iptables等，而进程可以设置使用不同的network namespace，多个进程也可以属于同一个ns，一个pod有一个独立的ns，pod内的容器属于同一个ns；</li>
+</ul>
+<h3 id="容器网络通信模型"><a href="#容器网络通信模型" class="headerlink" title="容器网络通信模型"></a>容器网络通信模型</h3><ul>
+<li>pod内容器属于同一个网络空间，所以可直接相互访问；</li>
+<li>同机不同容器之间，通过虚拟以太网veth network互联，docker安装后，会默认创建一个docker0作为虚拟以太网的bridge网桥，在容器创建时会在容器内外创建一对虚拟网络接口，容器内为eth0，容器外即主机上会对应创建一个vethXXX名的接口名，如下图所示：<ul>
+<li>该图为docker容器内eth0，与docker0属于同一网段：<br><img src="/2024/02/18/cloud-native/cni/vethInC.png" alt="veth in C"></li>
+<li>该图为上面容器在主机上对应的veth网口，其master为docker0：<br><img src="/2024/02/18/cloud-native/cni/vethOnHost.png" alt="veth on host"></li>
+</ul>
+</li>
+<li>在主机上通过<code>docker inspect network bridge</code>命令可查看docker列出的当前docker默认bridge网桥docker0下的容器网络信息：<br><img src="/2024/02/18/cloud-native/cni/docker-bridge.png" alt="docker bridge"></li>
+</ul>
+<span id="more"></span>
+<ul>
+<li>因此，同主机上的容器之间是通过网桥来实现互联，其为2层网络通信；</li>
+<li>k8s跨节点的网络通信，需要对应的CNI插件来创建和维护，其原理是通过IP包路由来实现；</li>
+<li>因为k8s的容器编排会导致pod频繁变化，对应的IP也会频繁变化，因此实现更新对应的网络信息是需要对应的CNI插件来实现，不同插件实现的跨节点的网络通信方式不一样，如通过TUN隧道等；<br><img src="/2024/02/18/cloud-native/cni/k8s-network.png" alt="k8s network"></li>
+</ul>
+<h3 id="pod网络创建过程"><a href="#pod网络创建过程" class="headerlink" title="pod网络创建过程"></a>pod网络创建过程</h3><ul>
+<li>kubelet -&gt; CRI plugin -&gt; pod net ns, pause sandox -&gt; CNI plugin</li>
+<li>如下图所示：<br><img src="/2024/02/18/cloud-native/cni/pod-network.png" alt="pod network"></li>
+</ul>
+<h3 id="vxlan网络与flannel-CNI"><a href="#vxlan网络与flannel-CNI" class="headerlink" title="vxlan网络与flannel CNI"></a>vxlan网络与flannel CNI</h3><ul>
+<li><p>如图所示，为vxlan原理：<br><img src="/2024/02/18/cloud-native/cni/vxlan.png" alt="vxlan"></p>
+</li>
+<li><p>flannel CNI插件会为每个node分配一个子网IP段，上面的pod会从该网段范围取一个IP；</p>
+</li>
+<li><p>默认，flannel跨节点通信是通过<code>vxlan</code>实现，即通过隧道技术<code>L2 Oery UDP</code>；</p>
+</li>
+</ul>
+<h3 id="calico-CNI"><a href="#calico-CNI" class="headerlink" title="calico CNI"></a>calico CNI</h3><ul>
+<li><p>calico是一个运行在纯三层的组件，基于BGP协议和Linux自身的路由转发机制，容器通信也不依赖iptables NAT或Tunnel 等技术，因此相对于flannel会少一些封包与拆包的过程，效率更高：<br><img src="/2024/02/18/cloud-native/cni/calico.png" alt="calico"></p>
+</li>
+<li><p>其跨主机的通信模型如下所示：<br><img src="/2024/02/18/cloud-native/cni/calico-communicate.png" alt="calico communicate"></p>
+</li>
+<li><p>当容器创建时，calico为容器生成veth pair，一端作为容器网卡加入到容器的网络命名空间，并设置IP和掩码，一端直接暴露在宿主机上，并通过设置路由规则，将容器IP暴露到宿主机的通信路由上。于此同时，calico为每个主机分配了一段子网作为容器可分配的IP范围，这样就可以根据子网的CIDR为每个主机生成比较固定的路由规则。</p>
+</li>
+<li><p>当容器需要跨主机通信时，主要经过下面的简单步骤：</p>
+<ul>
+<li>容器流量通过veth pair到达宿主机的网络命名空间上。</li>
+<li>根据容器要访问的IP所在的子网CIDR和主机上的路由规则，找到下一跳要到达的宿主机IP。</li>
+<li>流量到达下一跳的宿主机后，根据当前宿主机上的路由规则，直接到达对端容器的veth pair插在宿主机的一端，最终进入容器。</li>
+</ul>
+</li>
+</ul>
+<h2 id="集群网络"><a href="#集群网络" class="headerlink" title="集群网络"></a>集群网络</h2><ul>
+<li>通过service来维护pod IP的抽象，管理与负载均衡；</li>
+<li>通过环境变量或DNS来实现服务发现；</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>so2bin
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://so2bin.github.io/2024/02/18/cloud-native/cni/" title="cni">https://so2bin.github.io/2024/02/18/cloud-native/cni/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/k8s/" rel="tag"># k8s</a>
+              <a href="/tags/CNI/" rel="tag"># CNI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/28/Go/channel/" rel="prev" title="Go Channel">
+                  <i class="fa fa-angle-left"></i> Go Channel
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/02/19/raft/" rel="next" title="raft">
+                  raft <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">so2bin</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

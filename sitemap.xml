@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/18/cloud-native/karmada/</loc>
+    
+    <lastmod>2024-03-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/02/29/Go/Go-Knowledge/</loc>
+    
+    <lastmod>2024-03-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/03/03/cloud-native/k8s-scheduler/</loc>
+    
+    <lastmod>2024-03-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/03/02/cloud-native/device-plugin/</loc>
+    
+    <lastmod>2024-03-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/03/03/AI-Infer/Tritonserver/</loc>
+    
+    <lastmod>2024-03-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/02/22/k8s/etcd/</loc>
+    
+    <lastmod>2024-03-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/02/22/k8s/pod/</loc>
+    
+    <lastmod>2024-03-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/02/19/k8s/client-go/</loc>
+    
+    <lastmod>2024-03-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/02/19/raft/</loc>
+    
+    <lastmod>2024-02-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/28/Go/mem/</loc>
+    
+    <lastmod>2024-02-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/02/20/k8s/probe/</loc>
+    
+    <lastmod>2024-02-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/02/18/cloud-native/cni/</loc>
+    
+    <lastmod>2024-02-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/28/Go/GMP%20and%20Scheduler/</loc>
+    
+    <lastmod>2024-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/28/Go/channel/</loc>
+    
+    <lastmod>2024-01-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/28/Go/Go%20GC/</loc>
+    
+    <lastmod>2024-01-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/28/Python/Python%20GC/</loc>
+    
+    <lastmod>2024-01-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/26/cloud-native/CNCF/</loc>
+    
+    <lastmod>2024-01-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/16/cloud-native/containerd/</loc>
+    
+    <lastmod>2024-01-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/07/cloud-native/istio/</loc>
+    
+    <lastmod>2024-01-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/24/tutorials/kubeadm/</loc>
+    
+    <lastmod>2024-01-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/14/cloud-native/oci/</loc>
+    
+    <lastmod>2024-01-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/13/cloud-native/nydus/</loc>
+    
+    <lastmod>2024-01-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/13/cloud-native/dragonfly/</loc>
+    
+    <lastmod>2024-01-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/06/cloud-native/envoy/</loc>
+    
+    <lastmod>2024-01-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/2024/01/16/papers/lazy-docker/</loc>
+    
+    <lastmod>2024-01-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/categories/index.html</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/about/index.html</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/index.html</loc>
+    
+    <lastmod>2024-01-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+
+  <url>
+    <loc>https://so2bin.github.io/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/raft/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/GPU/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Tritonserver/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Python/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/GC/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Go/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/GMP/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Scheduler/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Channel/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/etcd/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/k8s/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/client-go/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/lazy-container/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/docker/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/CNCF/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/CNI/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Cloud-Native/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Containerd/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/device-plugin/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/scheduler/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Karmada/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/Nydus/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://so2bin.github.io/tags/OCI/</loc>
+    <lastmod>2024-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+
+  
+</urlset>
