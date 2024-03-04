@@ -153,4 +153,106 @@ kubectl --kubeconfig /etc/karmada/karmada-apiserver.config get clusters
 sudo rm -rf /var/lib/karmada-etcd
 ```
 
+### 特性
+* Karmada集群中，`Namespace`资源是会被自动分发到集群成员中，这个功能是由`Karmada-controller-manager`组件中的`namespace` controller负责，可以通过配置`Karmada`控制器来进行配置，配置后，用户可以通过`ClusterPropagationPolicy`资源指定`Namespace`资源的分发策略；([参考](https://karmada.io/zh/docs/faq/))
+
+
+## Resource Propagating
+> https://karmada.io/zh/docs/userguide/scheduling/resource-propagating
+
+### Propagation API
+* Karmada提供两种资源分发API：`PropagationPolicy`和`ClusterPropagationPolicy`
+* `PropagationPolicy`：只能作用于同一命名空间下资源的分发策略；
+* `ClusterPropagationPolicy`：可以作用于所有命名空间下资源的分发策略；
+* 更新`PropagationPolicy`的目标集群，会立刻对资源产生作用，如`PropagationPolicy`先将deployment分发到集群A，更新`PropagationPolicy`将deployment分发到集群B后，集群A的pod会被清理掉；
+* 删除`PropagationPolicy`不会自动删除分发出去的资源；
+
+### Cluster Selector
+* LabelSelector
+```yaml
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+spec:
+  placement:
+    clusterAffinity:
+      labelSelector:
+        matchLabels:
+          location: us
+
+---
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+spec:
+  placement:
+    clusterAffinity:
+      labelSelector:
+        matchExpressions:
+        - key: location
+          operator: In
+          values:
+          - us
+```
+
+* FieldSelector
+```yaml
+spec:
+  placement:
+    clusterAffinity:
+      fieldSelector:
+        matchExpressions:
+        - key: region
+          operator: NotIn
+          values:
+          - cn-south-1
+```
+
+* ClusterNames
+```yaml
+spec:
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
+        - member2
+```
+
+* ExcludeClusters
+```yaml
+spec:
+  placement:
+    clusterAffinity:
+      exclude:
+        - member1
+        - member3
+```
+
+* 也支持基于污点的集群调度；
+
+### Replicas调度策略
+* `.spec.placement.replicaScheduling`字段代表了处理带有`.replicas`属性的资源如`deployment`, `statefulsets`, `CRDs`的副本分发策略；（`CRDs`可以通过[自定义资源解释器](https://karmada.io/zh/docs/userguide/globalview/customizing-resource-interpreter/)来支持）
+
+#### 两种Replicas调度类型
+> 作用于`.spec.placement.replicaScheduling.replicaSchedulingType`
+
+1. `Duplicated`：候选集群中副本数一样，如`.replicas=3`，则每个集群都是3个副本；
+2. `Divided`：候选集群中副本数一起划分，划分策略通过`.spec.placement.replicaScheduling.replicaDivisionPreference`字段来决定；
+
+#### 副本划分策略`ReplicaDivisionPreference`
+> 仅在`.replicaSchedulingType: Divided`时生效
+
+1. `Aggregated`: 根据集群资源的情况，将尽可能少的副本数划分到集群中；
+2. `Weighted`: 根据`WeightPreference`策略，按比例划分副本数；
+
+**`WeightPreference`策略**
+
+1. `StaticWeightList`: 静态权重分配；
+2. `DynamicWeight `: 根据动态权重因子来动态决定副本数，当前支持的因子有：`AvailableReplicas`，即根据集群能运行的副本数量上限，按比例在集群间划分；
+
+### Propagation优先级
+* `PropagationPolicy`的优先级 > `ClusterPropagationPolicy`优先级；
+* 显式优先级：通过字段`.priority: 0`来指定；
+* 隐式优先级：参考文档，根据集群筛选的selector类型，分三种优先级；
+
+
+## 自定义资源解释器
 
