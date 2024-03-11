@@ -156,6 +156,17 @@ sudo rm -rf /var/lib/karmada-etcd
 ### 特性
 * Karmada集群中，`Namespace`资源是会被自动分发到集群成员中，这个功能是由`Karmada-controller-manager`组件中的`namespace` controller负责，可以通过配置`Karmada`控制器来进行配置，配置后，用户可以通过`ClusterPropagationPolicy`资源指定`Namespace`资源的分发策略；([参考](https://karmada.io/zh/docs/faq/))
 
+#### Karmada直接操作pod
+* 查询目标集群pod日志：
+```bash
+karmadactl  --kubeconfig ~/.kube/karmada-apiserver.config -C atms-01  logs -f  nginx-76d6c9b8c-th7qp
+```
+
+* exec进目标集群pod容器：
+```bash
+karmadactl  --kubeconfig ~/.kube/karmada-apiserver.config -C atms-01  exec -it  nginx-76d6c9b8c-th7qp bash
+```
+
 
 ## Resource Propagating
 > https://karmada.io/zh/docs/userguide/scheduling/resource-propagating
@@ -255,4 +266,159 @@ spec:
 
 
 ## 自定义资源解释器
+### Interpret Ops
+* `Retain`的理解：
+karmada控制面板会将资源状态同步到worker集群，而如果用户直接在worker集群修改了一些字段，如`.replicas`，则不会生效，因为还是会被karmada执行sync过程覆盖回去，如修改上述workload资源，改`.replicas`从2改为1，但过一会看，`.replicas`仍然还是2，而`Retain`机制，就是在karmada binding过程，让目标资源对象使用worker集群中的目标值，而不是karmada计算出来的值，这样就实现了资源值可由目标集群中的组件进行控制的目标；
+```go
+func (e *workloadInterpreter) responseWithExploreRetaining(desiredWorkload *workloadv1alpha1.Workload, req interpreter.Request) interpreter.Response {
+	if req.ObservedObject == nil {
+		err := fmt.Errorf("nil observedObject in exploreReview with operation type: %s", req.Operation)
+		return interpreter.Errored(http.StatusBadRequest, err)
+	}
+	observerWorkload := &workloadv1alpha1.Workload{}
+	err := e.decoder.DecodeRaw(*req.ObservedObject, observerWorkload)
+	if err != nil {
+		return interpreter.Errored(http.StatusBadRequest, err)
+	}
+
+	// Suppose we want to retain the `.spec.paused` field of the actual observed workload object in member cluster,
+	// and prevent from being overwritten by karmada controller-plane.
+	wantedWorkload := desiredWorkload.DeepCopy()
+	wantedWorkload.Spec.Paused = observerWorkload.Spec.Paused
+	marshaledBytes, err := json.Marshal(wantedWorkload)
+	if err != nil {
+		return interpreter.Errored(http.StatusInternalServerError, err)
+	}
+	return interpreter.PatchResponseFromRaw(req.Object.Raw, marshaledBytes)
+```
+
+* `ReviseReplica`机制：
+就是允许karmada修改CRD中的`.replicas`属性
+
+
+### Demo
+> https://github.com/karmada-io/karmada/tree/master/examples/customresourceinterpreter
+
+* interpreter webhook的实现可以直接在yaml `ResourceInterpreterWebhookConfiguration`中用lua脚本实现，也可以通过Go语言实现（参考：[`examples/customresourceinterpreter/webhook/app/webhook.go`](https://github.com/karmada-io/karmada/tree/master/examples/customresourceinterpreter/webhook)）
+
+1. 进入`karmada`项目目录，生成部署目录：`mkdir deploy`；
+2. 执行步骤
+```bash
+# 创建CRD
+kkm apply -f examples/customresourceinterpreter/apis/workload.example.io_workloads.yaml
+```
+2. 分发CRD，命令：`kkm apply -f deploy/workload-crd-cpp.yaml`
+```yaml
+# workload-crd-cpp.yaml
+apiVersion: policy.karmada.io/v1alpha1
+kind: ClusterPropagationPolicy
+metadata:
+  name: workload-crd-cpp
+spec:
+  resourceSelectors:
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: workloads.workload.example.io
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - atms-01
+        - member1
+```
+3. 在worker集群验证CRD：`kubectl get crds | grep workloads`
+4. 创建webhook服务：
+```bash
+# 1. 编辑配置
+cp examples/customresourceinterpreter/karmada-interpreter-webhook-example.yaml deploy/karmada-interpreter-webhook-example.yaml
+vim deploy/karmada-interpreter-webhook-example.yaml
+#    修改其Service的`.spec.type: ClusterIP`
+
+# 2. 创建资源
+# 注意：这里是在host k8s上创建
+kubectl apply -f deploy/karmada-interpreter-webhook-example.yaml 
+```
+5. 创建`ResourceInterpreterWebhookConfiguration`
+```bash
+# 准备karmada根证书，用于与karmada-apiserver通信
+export ca_string=$(cat /etc/karmada/pki/ca.crt | base64 | tr "\n" " "|sed s/[[:space:]]//g)
+# 更新deploy/webhook-configuration.yaml配置
+# 这里的target host直接使用上面创建的service: `karmada-interpreter-webhook-example.karmada-system.svc`
+# 证书已经支持了改域名：*.karmada-system.svc
+sed -i'' -e "s/{{caBundle}}/${ca_string}/g" -e "s/{{karmada-interpreter-webhook-example-svc-address}}/karmada-interpreter-webhook-example.karmada-system.svc/g" "deploy/webhook-configuration.yaml"
+# 创建与验证
+kkm apply -f deploy/webhook-configuration.yaml
+kkm get resourceinterpreterwebhookconfiguration  examples
+```
+6. 准备CRD `Workload`的分发策略配置：
+```yaml
+# vim deploy/workload-propagationpolicy.yaml
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: nginx-workload-propagation
+spec:
+  resourceSelectors:
+    - apiVersion: workload.example.io/v1alpha1
+      kind: Workload
+      name: nginx
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - atms-01
+        - member1
+    replicaScheduling:
+      replicaDivisionPreference: Weighted
+      replicaSchedulingType: Divided
+      weightPreference:
+        staticWeightList:
+          - targetCluster:
+              clusterNames:
+                - atms-01
+            weight: 2
+          - targetCluster:
+              clusterNames:
+                - member1
+            weight: 1
+```
+7. 创建`Workload`的分发策略配置：`kkm apply -f deploy/workload-propagationpolicy.yaml `
+8. 因默认karmada webhook secret没有创建，这里创建出来：
+```bash
+# artifacts/deploy/deploy-karmada.sh
+export CERT_DIR="/etc/karmada/pki"
+KARMADA_CRT=$(base64 < "${CERT_DIR}/karmada.crt" | tr -d '\r\n')
+KARMADA_KEY=$(base64 < "${CERT_DIR}/karmada.key" | tr -d '\r\n')
+
+cp artifacts/deploy/karmada-webhook-cert-secret.yaml deploy/
+sed -i'' -e "s/{{server_key}}/${KARMADA_KEY}/g" deploy/karmada-webhook-cert-secret.yaml
+sed -i'' -e "s/{{server_certificate}}/${KARMADA_CRT}/g" deploy/karmada-webhook-cert-secret.yaml
+
+kubectl apply -f deploy/karmada-webhook-cert-secret.yaml
+kubectl get secret -n karmada-system
+```
+9. 如karmada-host k8s的`karmada-system`下没有`kubeconfig` `secret`（默认是创建了的），则通过如下命令创建：
+```bash
+# 下面的secret默认已经存在于host k8s上，不用创建
+cp artifacts/deploy/secret.yaml  deploy/
+ROOT_CA_FILE=${CERT_DIR}/ca.crt
+ROOT_CA_KEY=${CERT_DIR}/ca.key
+KARMADA_CRT=$(base64 < "${CERT_DIR}/karmada.crt" | tr -d '\r\n')
+KARMADA_KEY=$(base64 < "${CERT_DIR}/karmada.key" | tr -d '\r\n')
+sed -i'' -e "s/{{client_crt}}/${KARMADA_CRT}/g" deploy/secret.yaml
+sed -i'' -e "s/{{client_key}}/${KARMADA_KEY}/g" deploy/secret.yaml
+kubectl apply -f deploy/secret.yaml
+```
+10. 等待webhook deployment起来，可以去karmada-host主机上查看：
+```bash
+wps@atms-01:~/karmada$ kubectl get pod -n karmada-system | grep karmada-interpreter-
+karmada-interpreter-webhook-example-5b4c6c455b-hrh9g   1/1     Running   0              66m
+```
+11. 接下来就是部署测试用例，并校验效果：
+```bash
+kkm apply -f deploy/workload-interpret-test.yaml
+kkm get workload nginx -o yaml  # 查看status
+kkm get rb  nginx-workload -o yaml  # 查看binding状态
+```
+
+### Go实现ResourceInterpreterWebhook逻辑
+* 参考：[`examples/customresourceinterpreter/webhook/app/webhook.go`](https://github.com/karmada-io/karmada/tree/master/examples/customresourceinterpreter/webhook)
 
