@@ -55,3 +55,9 @@ kubectl get nodes -o custom-columns="NAME:{.metadata.name},REGION:{.metadata.lab
 
 下图为重启pod后的流量分布：
 <img src="after-restart-distri.png" width="50%" alt="after-restart-distri">
+
+
+
+## DR集群权重
+![dr-weight](dr-weight.png)
+
