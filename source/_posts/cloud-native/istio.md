@@ -86,3 +86,10 @@ tags:
 
 * `outlier_detection.split_external_local_origin_errors: false`：此时该配置项无效
 * `outlier_detection.split_external_local_origin_errors: true`：仅考虑locally originated error，如TCP timeout, reset等，可同时用于http router, tcp proxy, redis proxy；
+
+## LB
+### 资源
+* https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing_policies
+* https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/load_balancing_policies/load_balancing_policies#envoy-v3-api-config-load-balancer-policies
+* https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancing
+
