@@ -163,7 +163,7 @@ func (d *ResourceDetector) removeResourceBindingsLabels(bindings *workv1alpha2.R
 
 
 ## resource处理流程
-### 新建CPP触发的正常resource流程
+### 新建resource触发的正常resource流程
 * 入口函数：`ResourceDetector.Reconcile`
 1. `propagateResource`，该函数有多个分支：
     - 资源label绑定了PP name
@@ -172,7 +172,8 @@ func (d *ResourceDetector) removeResourceBindingsLabels(bindings *workv1alpha2.R
     - 搜索当前匹配的CPP
 	- 如资源未匹配到CPP/PP，则会将对象加入到waitingList队列中
 
-这里我将介绍上述第4个分支。
+    这里我将介绍上述第4个分支。
+
 2. `clusterPolicy, err := d.LookForMatchedClusterPolicy(object, objectKey)`
 3. `d.ApplyClusterPolicy(object, objectKey, clusterPolicy)`：给当前resource应用CPP函数，其最核心的代码如下所示，主要是创建/同步rb资源对象：
 ```go 
