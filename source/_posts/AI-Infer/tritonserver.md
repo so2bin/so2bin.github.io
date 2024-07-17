@@ -11,6 +11,8 @@ tags: [GPU, Tritonserver]
 
 ## in-flight batching
 > `in-flight batching`在业内也被称为`continuous batching`, `iteration-level batching`
+> TRTLLM triton backend inflight batching使用：https://github.com/triton-inference-server/tensorrtllm_backend/blob/main/inflight_batcher_llm/README.md
+
 
 ### TRTLLM Batch Manager
 #### 资料
@@ -103,6 +105,153 @@ GptManager::GptManager(std::filesystem::path const& trtEnginePath, tb::TrtGptMod
     * `enableBlockReuse`，默认`false`，允许跨请求复用之前计算出的KVCache blocks，可以优化内存使用与计算；
 * `enableChunkedContext`，默认为`false`，是否开启context chunking，控制是否允许context chunking，该功能可以将大上下文拆分出很多小chunks，以更小的粒度来调度，以实现context与generation阶段的batching操作，提升系统吞吐；
 * `peftCacheManagerConfig` LoRA相关的参数，暂时不考虑；
+
+### GptManager流程设计
+* BatchManger被设计为与推理服务交互，如tritonserver这种带有模型执行线程池的结构；
+* 模型线程在一个loop iteration开始时会调用`GetInferenceRequestsCallback`接口用于读取新的请求；
+* 在loop iteration结束时调用`SendResponseCallback`发送响应数据，在流式模式下，允许一次响应单个token；
+* `PollStopSignalCallback`, `ReturnBatchManagerStatsCallback`也是在loop iteration结束时调用；
+* scheduler policy用于batch manager确定需要调度多少个请求来执行，在设置为`kMAX_UTILIZATION`时，其会深度最大化调度更多的请求，但这也会存在KVCache不足导致请求被pause，当然这些pased请求会被自动恢复重试，用户看到的是请求延迟会增加；
+
+
+### Multi-GPU execution
+* 当用TP/PP在多GPU上推理时，会在每个GPU上跑一个GptManger进程实例(rank)，可通过`CUDA_VISIBLE_DEVICES`环境变量来控制GPU的可见范围；
+* 在每个generation loop中，需要确保所有的ranks都看到同样的inputs，在TRTLLM triton backend中，是通过在`GetInferenceRequestsCallback`中调用MPI broadcast函数来确保所有的MPI rank看到同样的请求数据；
+
+### demo
+#### 资料
+> https://github.com/triton-inference-server/tensorrtllm_backend/blob/main/inflight_batcher_llm/README.md
+> https://github.com/NVIDIA/TensorRT-LLM/blob/main/examples/llama/README.md#llama
+
+#### CUDA计算架构
+* 查看各GPU型号的计算架构：https://developer.nvidia.com/cuda-gpus#compute
+* Compute Capability说明：https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability
+* 不同技术架构支持的特性：https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capabilities
+
+#### 手动编译trtllm wheel
+> https://github.com/NVIDIA/TensorRT-LLM/blob/release/0.5.0/docs/source/installation.md#build-tensorrt-llm-in-one-step
+
+1. 默认安装的有时候会有代码的冲突，需要手动安装
+```bash
+# 切换到对应的tag，同步submodule
+git checkout v0.10.0 
+git submodule update --init --recursive
+git lfs install
+git lfs pull
+
+# 89对应RTX 4090
+python3 ./scripts/build_wheel.py --trt_root /usr/local/tensorrt --cuda_architectures "89;89-real" -j 8 --clean  
+# --build_dir cpp/build
+```
+2. 安装
+```bash
+pip install ./build/tensorrt_llm*.whl
+# 验证
+trtllm-build --help
+```
+
+
+#### 步骤
+1. 下载HF模型
+```bash
+pip install -U huggingface_hub hf_transfer
+export HF_ENDPOINT=https://hf-mirror.com
+huggingface-cli download --resume-download gpt2 --local-dir gpt2
+```
+2. 转换权重
+> https://github.com/NVIDIA/TensorRT-LLM/blob/main/examples/llama/README.md#llama
+```bash
+# 切换到v0.10.0 tag，不能直接用main，因为main分布下的脚本可能与pip安装的不同
+git checkout v0.10.0 
+# 如果切换tag后submodule如3rdparty/cutlass出现commitid变更（如因网络问题导致同步错误等），可进入该submodule项目后手动切换到对应的commitid上：
+# cd 3rdparty/cutlass && git checkout 7d49e6c7e2f8896c47f586706e67e1fb215529dc
+# 转换到FP16 1GPU
+python TensorRT-LLM/examples/llama/convert_checkpoint.py --model_dir /mnt/models/source/ --output_dir /data/trtllm/output/trtllm-chpt-fp16 --dtype float16
+```
+
+4. 编译trt engin:
+```bash
+# 默认：max_batch_size=1, max_input_len=1024, max_output_len=1024, max_num_tokens=1024, use_paged_context_fmha=1024
+#      paged_kv_cache=true, gemm_plugin=false
+trtllm-build --checkpoint_dir  /data/trtllm/output/trtllm-chpt-fp16/ --output_dir  /data/trtllm/output/trtllm_engine_fp16 
+```
+
+3. 编译模型
+```bash
+# --workers 编译engine的线程数，可不与TP一致
+# 多卡并行时，要求：world_size == tp_size * pp_size
+trtllm-build --model_config $model_cfg --strongly_typed --output_dir $engine_dir --max_batch_size 2048 --max_input_len 2048 --max_output_len 4096 --workers $tp_size --max_num_tokens 2048 --use_paged_context_fmha enable --multiple_profiles enable
+```
+官方示例给出的Llama-3-8B配置文件：
+> https://nvidia.github.io/TensorRT-LLM/performance/perf-overview.html#network-configuration-files
+```json
+{
+    "architecture": "LlamaForCausalLM",
+    "num_hidden_layers": 32,
+    "num_attention_heads": 32,
+    "num_key_value_heads": 8,
+    "hidden_size": 4096,
+    "vocab_size": 128256,
+    "max_position_embeddings": 8192,
+    "hidden_act": "silu",
+    "norm_epsilon": 1e-05,
+    "dtype": "float16",
+    "position_embedding_type": "rope_gpt_neox",
+    "intermediate_size": 28672,
+    "rotary_base": 500000.0,
+    "rope_theta": 500000.0,
+    "rotary_scaling": null,
+    "mapping": {
+        "world_size": 1,
+        "tp_size": 1,
+        "pp_size": 1
+    },
+    "quantization": {
+        "quant_algo": "FP8",  // FP8仅在H100或更新的机器上支持，4090可以设置为null
+        "kv_cache_quant_algo": "FP8" // FP8仅在H100或更新的机器上支持，4090可以设置为null
+    },
+    "kv_dtype": "float16"
+}
+```
+
+4. summarize
+```bash
+# --check_accuracy 
+python examples/summarize.py --engine_dir /data/trtllm/output/trtllm_engine_fp16/ --batch_size 1 --test_trt_llm --hf_model_dir /mnt/models/source/ --data_type fp16 
+```
+
+4. 测试Dataset准备
+```bash
+benchmarks/cpp/prepare_dataset.py --output=$dataset_file --tokenizer=$model_name token-norm-dist --num-requests=2000 --input-mean=$isl --output-mean=$osl --input-stdev=0 --output-stdev=0
+```
+
+5. 运行Benchmark
+* 该命令将会运行`gptManagerBenchmark`二进制，会报告出吞吐和其它指标数据：
+```bash
+mpirun -n $tp_size --allow-run-as-root --oversubscribe cpp/build/benchmarks/gptManagerBenchmark --engine_dir $engine_dir --type IFB --dataset $dataset_file --scheduler_policy max_utilization --kv_cache_free_gpu_mem_fraction 0.9 --output_csv $results_csv --request_rate -1.0 --enable_chunked_context --streaming --warm_up 0
+```
+
+### benchmark
+> https://github.com/NVIDIA/TensorRT-LLM/tree/main/benchmarks/cpp
+
+#### 编译benchmark工具
+* 默认在编译TRTLLM时，不会编译benchmarks工具，需要在编译命令中带上如下参数：
+```bash
+python3 ./scripts/build_wheel.py --trt_root /usr/local/tensorrt --cuda_architectures "89;89-real" -j 12 \
+    --clean  --benchmarks --use_ccache --fast_build 
+```
+
+
+
+## TRTLLM调优
+> https://nvidia.github.io/TensorRT-LLM/performance/perf-best-practices.html
+
+
+## TRTLLM GPTRuntime设计介绍
+> https://github.com/NVIDIA/TensorRT-LLM/blob/release/0.5.0/docs/source/gpt_runtime.md
+
+
+
 
 ## mpirun
 

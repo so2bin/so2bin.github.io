@@ -1,0 +1,186 @@
+---
+layout: pages
+title: TRTLLM架构
+date: 2024-03-03 11:02:05
+tags: [GPU, Tritonserver, TRT-LLM]
+---
+## 资料
+* https://nvidia.github.io/TensorRT-LLM/architecture/overview.html
+
+## 架构
+### 介绍
+* 本质上是python包了C++，C++基于TensorRT引擎实现了GPT等模型结构；
+* 除模型本身的搭建外，TRTLLM还提供了C++ GPTRuntime，该模块提供了高效的GPT类模型的TRT运行时，如包含了beam-search, top-k采样, kvcache, page-attention等；
+* 还提供了一个tritonserver backend用于LLM在线推理；
+
+### 模型Definition
+* TRTLLM通过pyding11暴露的[TensorRT Python级API](https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/coreConcepts.html)来搭建模型；
+* `tensorrt_llm.Builder`类包含了`tensorrt.Builder`对象，通过`tensorrt_llm.Builder.create_network`函数创建一个`tensorrt.INetworkDefinition`模型对象；
+* 在TRTLLM中，可以基于`tensorrt_llm.functional`模块提供的基础算子库来构建模型网络结构，如下demo所示：
+```python
+# In tensorrt_llm.functional:
+def activation(input: Tensor, act_type: trt.ActivationType) -> Tensor:
+    layer = default_trtnet().add_activation(input.trt_tensor, act_type)   # default_trtnet() -> INetworkDefinition
+    return _create_tensor(layer.get_output(0), layer)
+
+relu    = partial(activation, act_type=trt.ActivationType.RELU)
+sigmoid = partial(activation, act_type=trt.ActivationType.SIGMOID)
+```
+
+#### Adding a Model
+* TRT-LLM提供了多种基础算子/层可用于搭建模型：
+1. low-level functions, like: `concat`, `add`, `sum`
+2. Basic layers, such as: `Linear`, `LayerNorm`
+3. High-level layers, such as: `MLP`, `Attentions`
+
+
+### 模型Compilation
+* 一旦模型结构`tensorrt.INetworkDefinition`定义完成，即可通过`tensorrt.Builder.build_engine`来将模型转换成TRT格式；
+* Tensorrt编译器会遍历整个模型结构，提供了算子融合（通过模式匹配`pattern-matching`自动识别），图融合的能力(compiles the graph of operations into a single [CUDA Graph](https://developer.nvidia.com/blog/cuda-graphs/) that can be launched all at one time)，以提升性能；
+* 对于复杂的算子，如FlashAttention，无法通过TRT自动完成优化，这里就需要复用`plugins`能力；
+* 光有TRT Engine文件还不够，因为LLM的推理不只是简单的forward pass，因此TRTLLM还提供了一个高度优化的C++ Runtime来专用于TRT LLM的推理过程，用以管理如KVCache等能力；
+
+### Plugins
+* 算子融合能做的是有限的，很多功能/算子无法自动识别，仅用算子融合能达到的优化很有限，如`Flash-Atteention`优化MH，因此TRT提供了`plugin`机制用于用户定制功能；
+* plugins是一些用户定义的插入到模型图中的nodes，TRT-LLM中的plugins可以在`cpp/tensorrt_llm/plugins`目录中找到；
+* TRT plugin的编程规范：https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#extending
+
+### Runtime
+* TRT-LLM提供了Python, C++版本的运行时；
+* 对于GPT类的LLM，TRT-LLM Runtime负载模型的加载，input sequence的处理，generation loop的逻辑；
+
+### Multi-GPU与Multi-Node 
+* TensorRT是为单GPU设计，但TRT-LLM通过plugins封装了NCCL库的通信primitives，以及通过plugins优化了多GPU All-Reduce primitive，因此TRT-LLM具备了多GPU推理的能力（`TP`, `PP`）；
+* 这个通信插件源码位于：`cpp/tensorrt_llm/plugins/ncclPlugin`；
+* 在Python API中暴露如下：
+```py
+# In tensorrt_llm/functional.py:
+
+# Collectives.
+def allreduce(tensor: Tensor, group: List[int]) -> Tensor
+def allgather(tensor: Tensor, group: List[int], gather_dim: int = 0) -> Tensor
+
+# Point-to-point communication primitives.
+def send(tensor: Tensor, tgt: int) -> Tensor
+def recv(tensor: Tensor, src: int) -> Tensor
+```
+* `TP`负载较均衡，但有较大的通信带宽压力；
+* `PP`能减少通信带宽需求，但会导致和GPU负载不均衡的问题；
+
+### TensorRT-LLM Checkpoint
+* 随着TRT-LLM的版本/功能变得越稳定，现在TRT-LLM开发团队开始提出unifying the API and workflow of TensorRT-LLM；
+* 三段workflow:
+```text
+NeMo -------------
+                  |
+HuggingFace ------
+                  |   convert                             build                    load
+Modelopt ---------  ----------> TensorRT-LLM Checkpoint --------> TensorRT Engine ------> TensorRT-LLM ModelRunner
+                  |
+JAX --------------
+                  |
+DeepSpeed --------
+```
+* TRT-LLM checkpoint的格式如下：
+1. `config.json`文件：包含模型超参；
+2. 1个或多个rank权重文件，每个文件都是一个权重tensor map，不同的文件根据ranks会被加载到不同的GPU上；
+
+* 权重文件的tensor命名类似pytorch的格式，如`transformer.layers.0.input_layernorm.weight`, kvcache优化参数：`transformer.layers.0.attention.kv_cache_scaling_factor`等；
+
+### TensorRT-LLM Build Workflow
+* 两步编译：
+1. 通过训练框架导出的模型checkpoints定义出TRT-LLM模型；
+2. 编译TRT-LLM模型为TRT-LLM engine；
+
+* 为了泛化/统一TRT-LLM模型优化的过程，TRT-LLM提出一些模型定义的标准或引入格式；
+* 当前的TRT-LLM checkpoint格式定义，适用于所有的decoder-only架构的模式；
+* `trtllm-build`命令工具已经标准化，但当前的`convert_checkpoint.py`脚本仍然还是以源码的形式提供在`examples`目录中，这样做的原因是：
+1. 当前的TRT-LLM模型演进速度很快，所以模型调度相关的`convert_checkpoint.py`脚本很容易过时；
+2. TRT-LLM当前正在推理一套新的high-level API来实现模型转换、engine编译、推理过程，因这些高级API需要调用weight convert代码，因此未来`convert_checkpoint.py`将会提取出一套全新的高级通用API来为这些功能服务；
+* 这些高级模型API可以参考`0.9`版本下的`tensorrt_llm/models/llama`，其演示了一系列新的模型importing, converting weights API；
+
+#### Conversion APIs
+* 为了将模型特定的转换过程附带到模型自己的模块上，TRT-LLM提出了一个通用的模型转换接口类，其它模型都会间接继承该类：
+* 该接口会返回转换后的checkpoint内存对象，需要再根据需要进行持久化到磁盘；
+* 未来该类还会继续扩展对`jax`, `nemo`, `keras`格式的支持；
+```py
+class TopModelMixin:
+    @classmethod
+    def from_hugging_face(cls,
+                          hf_model_dir: str,
+                          dtype: Optional[str] = 'float16',
+                          mapping: Optional[Mapping] = None,
+                          **kwargs):
+        '''
+        Create LLM object and load weights from hugging face
+        Parameters:
+            hf_model_dir: the hugging face model directory
+            dtype: str, the default weights data type when loading from the hugging face model
+            mapping: Mapping, specify the multi-gpu parallel strategy, when it's None, single GPU is used
+        '''
+        raise NotImplementedError("Subclass shall override this")
+```
+
+#### Quantization APIs
+* TRT-LLM的量化能力依赖于NVIDIA的Modelopt工具，如：`FP8`, `W4A16_AWQ`, `W4A8_AWQ`，同时TRT-LLM自己也提供了部分量化实现，如`Smooth Quant`, `INT8 KV cache`, `INT4/INT8` weight only；
+* 在TRT-LLM 0.8版本中，对于`Modelopt`支持的量化算法，example目录下的模型都有一个标准化的`quantize.py`脚本提供TRT-LLM量化模型的导出，而对于`Modelopt`不支持的量化算法，用户需要使用模型特定的`convert_checkpoint.py`脚本来导致TRT-LLM checkpoint；
+* 当前TRT-LLM提供了统一的模型量化接口，所有的模型结构均会继承该类：
+* 默认的`quantize()`接口实现仅提供了`Modelopt`支持的量化算法；
+```py
+class PretrainedModel:
+    @classmethod
+    def quantize(
+        cls,
+        hf_model_dir,
+        output_dir,
+        quant_config: QuantConfig,
+        mapping: Optional[Mapping] = None): #some args are omitted here
+        # Internally quantize the given hugging face models using Modelopt
+        # and save the checkpoint to output_dir
+```
+
+
+#### Build APIs
+* `tensorrt_llm.build` API实现TRT-LLM模型的TRT编译，流程为：creating a builder, creating a network object, tracing the model to the network, buildind TRT engines；
+* 这个其实就是编译TRT的过程；
+```py
+llama = ... # create LLaMAForCausalLM object
+build_config = BuildConfig(max_batch_size=1)
+engine = tensorrt_llm.build(llama, build_config)
+engine.save(engine_dir)
+```
+* TRT-LLM也提供了一个通用的从磁盘读checkpoint文件的接口，后结合`tensorrt_llm.build`接口即可完成编译过程：
+```py
+## TensorRT-LLM code
+class PretrainedModel:
+    @classmethod
+    def from_checkpoint(cls,
+                    ckpt_dir: str,
+                    rank: int = 0,
+                    config: PretrainedConfig = None):
+        # Internally load the model weights from a given checkpoint directory
+```
+
+## Advanced
+### MH, MQA, GQA
+> https://nvidia.github.io/TensorRT-LLM/advanced/gpt-attention.html#multi-head-multi-query-and-group-query-attention
+> https://arxiv.org/abs/1706.03762
+> https://arxiv.org/abs/1911.02150
+> https://arxiv.org/abs/2307.09288
+
+* 这些结构的实现位于`tensorrt_llm.functional.gpt_attention`模块
+
+> 当前的实现中，支持两种输入模式：**padded**, **packed**(non-padded)，由于**packed**模式有更高效的内存使用，并且往往计算速度更快，所以未来**padded**模式可能不再支持；
+
+#### padded vs packed
+* TRTLLM中，GPT注意力的QKV输入支持两种输入模式：`padded`, `packed`，这个模式由全局参数`remove_input_padding`决定；
+* `remove_input_padding=false` 此时，输入长度短于`max_sequence_lenght`的序列将会被padding到最大长度，这会导致内存的浪费以及无效的计算过程；
+* `remove_input_padding=true`  此时，不同长度的输入序列不需要进行padding，TRT-LLM会将这些输入序列packed在一起，但用户端需要提供一个1D tensor来记录不同序列的数据长度；
+
+#### Context and Gneratoin Phases
+
+
+
+
+
+
