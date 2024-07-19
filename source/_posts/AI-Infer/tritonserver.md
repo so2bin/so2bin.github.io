@@ -247,11 +247,5 @@ python3 ./scripts/build_wheel.py --trt_root /usr/local/tensorrt --cuda_architect
 > https://nvidia.github.io/TensorRT-LLM/performance/perf-best-practices.html
 
 
-## TRTLLM GPTRuntime设计介绍
-> https://github.com/NVIDIA/TensorRT-LLM/blob/release/0.5.0/docs/source/gpt_runtime.md
-
-
-
-
 ## mpirun
 

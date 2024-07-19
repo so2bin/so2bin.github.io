@@ -178,9 +178,89 @@ class PretrainedModel:
 * `remove_input_padding=true`  此时，不同长度的输入序列不需要进行padding，TRT-LLM会将这些输入序列packed在一起，但用户端需要提供一个1D tensor来记录不同序列的数据长度；
 
 #### Context and Gneratoin Phases
+##### Context Phase
+* `context_fmha_type=disabled`时，GPT MHA的中间计算结果需要存储到内存中，用于后续的`softmax`操作，效率很底；
+* `context_fmha_type=enabled`，MHA/MQA会融合成一个单独的kernel：
+    * short context: 将使用`vanilla`实现MHA/MQA；
+    * larger context: kernel将使用Flash Attention算法实现，参考：[1](https://arxiv.org/abs/2205.14135), [2](https://arxiv.org/abs/2307.08691)；
+* 当前的实现还会引入额外的kernel来执行一些操作，如前处理，KVCache的获取等；
+
+##### FP8 Context FMHA
+* `use_fp8_context_fmha = enable` 开启Context FHMA FP8量化；
+* 支持同时开启`use_fp8_context_fmha`与`use_paged_context_fmha=enable` paged context FMHA；
+
+##### Generation Phase
+* generation phase是由一个单独的kernal实现：`masked multi-head attention`：That kernel is able to apply pre-processing on the Q, K, and V elements on-the-fly: adds the QKV bias, applies RoPE, and performs dequantization and quantization. 
+* `masked MHA kernel`有一个特殊的版本：在GPU占用率较低时，能够将work分发到多个CUDA thread block上，该特性通过参数`multi_block_mode`开启；（适用于小batch, 小heade的模型场景，这个小的定义是相对于GPU而言，有一个经验公式：`batch_size * num_heads < GPU multi-processors`）
 
 
+##### in-flight Batching
+* 开启该特性后，context phase中的序列可以与generation phase中的一起处理，开启该功能时，input tensor必须使用`packed`模式；
+* 当前的实现中，context phase的序列必须位于generation phase序列的前面；
 
+##### Chunked Context
+* 在原先的处理中，通常我们会一次性处理完所有的context tokens，而当前特性是先将context token拆分成多份(chunks)，这样context tokens就可以与generation tokens组batch，提升整个系统的吞吐；
+* 开始该能力后，对于input sequence长度的限制也就不存在，TRT-LLM支持更长的上下文；
+* 要开启该能力，同时需要开启`use_paged_context_fmha`特性；
+* context chunk的size需要是kv-cache block size的整数倍；
+
+#### KV Cache
+* 在generation phase中，一个通用的优化是在MHA kernel中cache过去计算过的K,V值，即KVCache；
+* TRT-LLM中每一层transformer layer都有一个KV Cache，当前有两种KVCache实现：`contiguous`, `paged`；
+
+##### Contiguous KVCache
+* Contiguous KVCache就是一个大Tensor，shape: `[max_batch_size * max_beam_width, 2, num_heads, max_seqlen, hidden_dim_per_head]`
+* 对于那些请求序列短于`max_seqlen`的请求来说，这种cache实现明显有大量的显存浪费；
+
+##### Paged KVCache
+* 将KVCache分块保存，多个请求共享；
+* 实现于`tensorrt_llm.runtime.KVCacheManager`，manager会追踪序列，按需完成block的分配与回收；
+
+##### INT8/FP8 KVCache
+* TRT-LLM支持INT8, FP8 KVCache量化：`kv_cache_quant_mode=QuantMode.INT8_KV_CACHE`, `kv_cache_quant_mode=QuantMode.FP8_KV_CACHE`；
+* 当开启了INT8/FP8 KVCache量化，input必须量化成8bit，scaling factor存放于`kv_cache_scaling_factor` 1D tensor，目前仅支持per-tensor级的量化；
+* 在generation阶段，这些量化的cache值会被MHA/MQA在线DQ；
+
+##### Sliding Window Attention, Cyclic KVCache
+* TRT-LLM同时支持一种`Cyclic KVCache`的特性，该特性下，KVCache会被当作一个环形buffer，该buffer中仅保存近N个token，N由参数：`max_attention_window_size`决定，缓存丢弃采用LRU策略；
+* 在Context阶段，如何输入序列长度超出了`max_attention_window_size`，则`Sliding Window Attention`机制会激活，该模式下的效果与`sliding_window_size`一样；
+* 该特性会减少在处理超长序列时的KVCache内存使用；
+
+
+##### StreamingLLM
+* 通过`streamingllm`参数控制开启；
+* 该功能使用window attention来为长上下文提供稳定高效的推理，该模式下，仅`max_attention_window_size`个token会被缓存到KVCache中， 且前`sink_token_length`个token一定会被缓存；
+
+#### Input QKV tensor
+* input QKV tensor是在完成与hidden state projection之后 ，将QKV以最后一维拼接起来的tensor，之后会对该tensor执行INT8/FP8量化；
+* 在`padded`模式下，该tensor的shape为：`[batch_beam_sizem, max_seqlen, 3*hidden_dim]`，这里的`batch_beam_sizem`：
+    * 在context phase: `batch_beam_sizem=batch size(sequence number)`
+    * 在generation phase: `batch_beam_sizem=batch size * beam_width`
+* 在`packed`模式下，该tensor的shape为：`[num_tokens, 3*hidden_dim]`，这里的`num_tokens`就是总token数；（因为这里没有pading过程，所以就是总token数）
+    * context phase: `num_tokens`即所有序列的总请求长度
+    * generation phase: `num_tokens`即各序列长度*`beam_width`之和
+
+`packed`模式下`num_tokens`计算的伪代码如下：
+```py
+num_tokens = 0
+
+# Add the length of each sequence in context phase.
+for seq in context_phase:
+    num_tokens += seq.length
+
+# Add the width of the beam for each sequence in generation phase.
+# 这里是因为每次只生成一个token，一个token有beam_width个输出 
+for seq in generation_phase:
+    num_tokens += seq.beam_width
+```
+
+## TRTLLM GPTRuntime
+> https://github.com/NVIDIA/TensorRT-LLM/blob/v0.8.0/docs/source/gpt_runtime.md
+> https://github.com/NVIDIA/TensorRT-LLM/blob/v0.11.0/docs/source/advanced/gpt-runtime.md
+
+* declared in `cpp/include/tensorrt_llm/runtime`
+* implemented in `cpp/tensorrt_llm/runtime`
+* 目前支持如GPT，BLOOM，LLAMA等自回归模型，未来会增加对encoder-decoder如T5的支持；
 
 
 
