@@ -174,6 +174,8 @@ python TensorRT-LLM/examples/llama/convert_checkpoint.py --model_dir /mnt/models
 # 默认：max_batch_size=1, max_input_len=1024, max_output_len=1024, max_num_tokens=1024, use_paged_context_fmha=1024
 #      paged_kv_cache=true, gemm_plugin=false
 trtllm-build --checkpoint_dir  /data/trtllm/output/trtllm-chpt-fp16/ --output_dir  /data/trtllm/output/trtllm_engine_fp16 
+# bf16
+/data/trtllm/TensorRT-LLM# trtllm-build --checkpoint_dir  /data/trtllm/output/trtllm-chpt-bf16/ --output_dir  /data/trtllm/output/trtllm_engine_bf16/ --gpt_attention_plugin bfloat16  --gemm_plugin bfloat16 
 ```
 
 3. 编译模型
@@ -223,12 +225,14 @@ python examples/summarize.py --engine_dir /data/trtllm/output/trtllm_engine_fp16
 4. 测试Dataset准备
 ```bash
 benchmarks/cpp/prepare_dataset.py --output=$dataset_file --tokenizer=$model_name token-norm-dist --num-requests=2000 --input-mean=$isl --output-mean=$osl --input-stdev=0 --output-stdev=0
+# python TensorRT-LLM/benchmarks/cpp/prepare_dataset.py  --output ./output/torken-norm-dist.json --tokenizer /mnt/models/source/  token-norm-dist  --num-requests 100  --input-mean 100 --input-stdev 10  --output-stdev 0 --output-mean 15
 ```
 
 5. 运行Benchmark
 * 该命令将会运行`gptManagerBenchmark`二进制，会报告出吞吐和其它指标数据：
 ```bash
 mpirun -n $tp_size --allow-run-as-root --oversubscribe cpp/build/benchmarks/gptManagerBenchmark --engine_dir $engine_dir --type IFB --dataset $dataset_file --scheduler_policy max_utilization --kv_cache_free_gpu_mem_fraction 0.9 --output_csv $results_csv --request_rate -1.0 --enable_chunked_context --streaming --warm_up 0
+#  cpp/build/benchmarks/gptManagerBenchmark --engine_dir /data/trtllm/output/trtllm_engine_fp16/ --type IFB --dataset ../output/torken-norm-dist.json  --streaming
 ```
 
 ### benchmark

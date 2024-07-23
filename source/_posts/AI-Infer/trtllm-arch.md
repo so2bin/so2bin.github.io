@@ -263,4 +263,35 @@ for seq in generation_phase:
 * 目前支持如GPT，BLOOM，LLAMA等自回归模型，未来会增加对encoder-decoder如T5的支持；
 
 
+## 内存架构
+* TRT-LLM模型推理阶段，内存主要由三部分组成：`weights tensors`, `internal activation tensors`, `I/O tensors`；
+* 对于 `I/O tensors`主要的内存占用来自KVCache；
 
+### Weights Size
+* Weight size是由模型的大小，权重精度，并行策略决定的，在build阶段已经可以确定；
+* 并行策略，如TP=8，则每个rank只保存了1/8的权重；
+
+### Activation Size
+* 在TRT build阶段，TRT会pre-computes需要的activation tensor内存大小，进行提前分配，以避免运行时OOM，减少shape切换时的耗时；
+* 一个profile的内存使用是由其max-tensor-shape决定的；
+* 除此之外，还有一些内部的activation size，如模型结构，算子融合，算子调度等；
+* 在TRT engine编译完成后，Activation Size就被确定下来，可通过日志或`trt.ICudaEngine.device_memory_size`获取；
+* 对于一个指定了精度与并行策略的模型，Activation Size还可以通过`max_batch_size`, `max_num_tokens`, `max_input_length`, `max_beam_width`, `padding removal`, `context FMHA`来进行调整；
+* `context FMHA`可以显著减少GPT Attention plugin的显存占用（未开启时，显存占用是序列长度的二次方关系）；
+* TP并行：每个rank只拥有一部分权重，因此计算时只计算一部分tensor，对应的activation尺寸也是一部分；
+* PP并行：每个rank拥有docoder一部分层，每个层都需要完整的tensor，因此其activation尺寸与运行整个模型是一样的；（所以TP在内存效率上会更高，但需要更高的带宽）
+
+
+### I/O tensors
+#### 非KVCache显存
+* 在进行KVCache分配前，TRT-LLM C++ Runtime会提前分配一用于存储I/O tensor、decoupled dynamic decoder的内存，这些与`max_batch_size` and `max_seq_len`有关；（其实就是输入输出的显存buffer）
+
+
+#### KVCache显存
+##### not paged kvcache
+* 不开启 paged kvcache时，C++ Runtime为每个layer都分配一个固定的cache，shape为：`[batch size, 2, heads,  max seq length, hidden dimension per head]`
+
+##### paged kvcache
+* 开启paged kvcache时，TRT-LLM runtime会在初始化时，pre-allocates kvcache with configured number of blocks，并在运行时使用；
+* `Executor`对象创建时，由`KVCacheConfig`参数控制KVCache的分配，其中有两个可选参数：`maxTokens`, `freeGpuMemoryFraction`，默认分配90%的剩余GPU显存；
+* 在IFB调度时，会自动调度足够多的请求，在保证KVCache有足够空间的前提下；
