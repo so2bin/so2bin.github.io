@@ -9,6 +9,8 @@ tags: [GPU, Tritonserver]
 
 【金山文档 | WPS云文档】 Tritonserver_TensorRT-LLM调研 https://365.kdocs.cn/l/cqu1Q0RUtYog
 
+【金山文档 | WPS云文档】 TRTLLM LLaMa 7B 4090测试数据 https://365.kdocs.cn/l/cqAXum4uoqmf
+
 ## in-flight batching
 > `in-flight batching`在业内也被称为`continuous batching`, `iteration-level batching`
 > TRTLLM triton backend inflight batching使用：https://github.com/triton-inference-server/tensorrtllm_backend/blob/main/inflight_batcher_llm/README.md
@@ -167,6 +169,14 @@ git checkout v0.10.0
 # cd 3rdparty/cutlass && git checkout 7d49e6c7e2f8896c47f586706e67e1fb215529dc
 # 转换到FP16 1GPU
 python TensorRT-LLM/examples/llama/convert_checkpoint.py --model_dir /mnt/models/source/ --output_dir /data/trtllm/output/trtllm-chpt-fp16 --dtype float16
+
+# INT8 wo
+python TensorRT-LLM/examples/llama/convert_checkpoint.py --model_dir /mnt/models/source/ --output_dir /data/trtllm/output/trtllm-chpt-int8-wo  --dtype float16  \
+    --use_weight_only  --weight_only_precision int8
+
+# INT8 wo 2TP
+python TensorRT-LLM/examples/llama/convert_checkpoint.py --model_dir /mnt/models/source/ --output_dir /data/trtllm/output/trtllm-chpt-int8-wo-tp2  --dtype float16  \
+    --use_weight_only  --weight_only_precision int8 --tp_size 2
 ```
 
 4. 编译trt engin:
@@ -175,7 +185,12 @@ python TensorRT-LLM/examples/llama/convert_checkpoint.py --model_dir /mnt/models
 #      paged_kv_cache=true, gemm_plugin=false
 trtllm-build --checkpoint_dir  /data/trtllm/output/trtllm-chpt-fp16/ --output_dir  /data/trtllm/output/trtllm_engine_fp16 
 # bf16
-/data/trtllm/TensorRT-LLM# trtllm-build --checkpoint_dir  /data/trtllm/output/trtllm-chpt-bf16/ --output_dir  /data/trtllm/output/trtllm_engine_bf16/ --gpt_attention_plugin bfloat16  --gemm_plugin bfloat16 
+trtllm-build --checkpoint_dir  /data/trtllm/output/trtllm-chpt-bf16/ --output_dir  /data/trtllm/output/trtllm_engine_bf16/ --gpt_attention_plugin bfloat16  --gemm_plugin bfloat16 
+# int8 wo
+trtllm-build --checkpoint_dir  /data/trtllm/output/trtllm-chpt-int8-wo --output_dir  /data/trtllm/output/trtllm_engine_int8_wo --gemm_plugin float16
+# int8 wo-2tp
+trtllm-build --checkpoint_dir  /data/trtllm/output/trtllm-chpt-int8-wo-tp2 --output_dir  /data/trtllm/output/trtllm_engine_int8_wo_tp2 --gemm_plugin float16 --use_custom_all_reduce disable 
+# 上面TP=2在4090上编译必须带--use_custom_all_reduce disable，否则gptManagerBenchmark启动不了（其默认为true）
 ```
 
 3. 编译模型
@@ -231,8 +246,10 @@ benchmarks/cpp/prepare_dataset.py --output=$dataset_file --tokenizer=$model_name
 5. 运行Benchmark
 * 该命令将会运行`gptManagerBenchmark`二进制，会报告出吞吐和其它指标数据：
 ```bash
-mpirun -n $tp_size --allow-run-as-root --oversubscribe cpp/build/benchmarks/gptManagerBenchmark --engine_dir $engine_dir --type IFB --dataset $dataset_file --scheduler_policy max_utilization --kv_cache_free_gpu_mem_fraction 0.9 --output_csv $results_csv --request_rate -1.0 --enable_chunked_context --streaming --warm_up 0
-#  cpp/build/benchmarks/gptManagerBenchmark --engine_dir /data/trtllm/output/trtllm_engine_fp16/ --type IFB --dataset ../output/torken-norm-dist.json  --streaming
+mpirun -n $tp_size --allow-run-as-root --oversubscribe cpp/build/benchmarks/gptManagerBenchmark --engine_dir $engine_dir --type IFB --dataset $dataset_file --scheduler_policy max_utilization --kv_cache_free_gpu_mem_fraction 0.9 --output_csv $results_csv --request_rate -1.0 --enable_chunked_context --streaming --warm_up 1
+#  cpp/build/benchmarks/gptManagerBenchmark --engine_dir /data/trtllm/output/trtllm_engine_fp16/ --type IFB --dataset ../output/torken-norm-dist.json  --streaming --warm_up 1
+# TP2 INT8 wo
+mpirun -n 2 --allow-run-as-root --oversubscribe TensorRT-LLM/cpp/build/benchmarks/gptManagerBenchmark --engine_dir /data/trtllm/output/trtllm_engine_int8_wo_tp2/ --type IFB --dataset ./output/torken-norm-dist.json  --streaming --warm_up 1
 ```
 
 ### benchmark

@@ -268,7 +268,7 @@ for seq in generation_phase:
 * 对于 `I/O tensors`主要的内存占用来自KVCache；
 
 ### Weights Size
-* Weight size是由模型的大小，权重精度，并行策略决定的，在build阶段已经可以确定；
+* Weights size是由模型的大小，权重精度，并行策略决定的，在build阶段已经可以确定；
 * 并行策略，如TP=8，则每个rank只保存了1/8的权重；
 
 ### Activation Size
@@ -295,3 +295,76 @@ for seq in generation_phase:
 * 开启paged kvcache时，TRT-LLM runtime会在初始化时，pre-allocates kvcache with configured number of blocks，并在运行时使用；
 * `Executor`对象创建时，由`KVCacheConfig`参数控制KVCache的分配，其中有两个可选参数：`maxTokens`, `freeGpuMemoryFraction`，默认分配90%的剩余GPU显存；
 * 在IFB调度时，会自动调度足够多的请求，在保证KVCache有足够空间的前提下；
+
+## modelopt (原ammo)
+> * `modelopt`是由`nvidia-ammo`改名过来的；
+> * https://github.com/NVIDIA/TensorRT-Model-Optimizer
+
+### LLM PTQ
+> https://github.com/NVIDIA/TensorRT-Model-Optimizer/blob/main/llm_ptq/README.md
+
+* modelopt PTQ量化API：
+```py
+import modelopt.torch.quantization as mtq
+
+model = AutoModelForCausalLM.from_pretrained("...")
+
+# Select the quantization config, for example, INT8 Smooth Quant
+config = mtq.INT8_SMOOTHQUANT_CFG
+
+
+# Prepare the calibration set and define a forward loop
+def forward_loop(model):
+    for data in calib_set:
+        model(data)
+
+
+# PTQ with in-place replacement to quantized modules
+model = mtq.quantize(model, config, forward_loop)
+```
+
+* 导出量化后的模型
+```py
+from modelopt.torch.export import export_tensorrt_llm_checkpoint
+
+with torch.inference_mode():
+    export_tensorrt_llm_checkpoint(
+        model,  # The quantized model.
+        decoder_type,  # The type of the model, e.g gptj, llama or gptnext.
+        dtype,  # The exported weights data type.
+        export_dir,  # The directory where the exported files will be stored.
+        inference_tensor_parallel,  # The number of GPUs used in the inference time tensor parallel.
+        inference_pipeline_parallel,  # The number of GPUs used in the inference time pipeline parallel.
+        use_nfs_workspace,  # If exporting in a multi-node setup, please specify a shared directory like NFS for cross-node communication.
+    )
+```
+
+## FP8
+### qformat=fp8
+* PTQ量化：利用的是modelopt工具完成量化（参考上面`LLM PTQ`一节）
+```bash
+python TensorRT-LLM/examples/quantization/quantize.py --model_dir /mnt/models/source/  --output_dir /data/trtllm/output/trtllm-chpt-fp8  --dtype bfloat16  --qformat fp8  --calib_size 256
+```
+* build
+```bash
+trtllm-build --checkpoint_dir /data/trtllm/output/trtllm-chpt-fp8/ --output_dir  /data/trtllm/output/trtllm_engine_fp8 --gemm_plugin bfloat16 --use_custom_all_reduce disable  --max_batch_size 16
+```
+* benchmark
+```bash
+TensorRT-LLM/cpp/build/benchmarks/gptManagerBenchmark --engine_dir /data/trtllm/output/trtllm_engine_fp8/ IFB --dataset ./output/torken-norm-dist.json  --streaming --warm_up 1
+```
+
+### kvcache=fp8
+* PTQ量化：
+```bash
+python TensorRT-LLM/examples/quantization/quantize.py --model_dir /mnt/models/source/  --output_dir /data/trtllm/output/trtllm-chpt-fp8  --dtype float16  --qformat fp8  --kv_cache_dtype fp8
+```
+* build
+```bash
+trtllm-build --checkpoint_dir /data/trtllm/output/trtllm-chpt-fp8/ --output_dir  /data/trtllm/output/trtllm_engine_fp8 --gemm_plugin float16 --use_custom_all_reduce disable  --max_batch_size 16
+```
+* benchmark
+```bash
+TensorRT-LLM/cpp/build/benchmarks/gptManagerBenchmark --engine_dir /data/trtllm/output/trtllm_engine_fp8/ IFB --dataset ./output/torken-norm-dist.json  --streaming --warm_up 1
+```
+
