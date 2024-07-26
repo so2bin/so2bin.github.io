@@ -266,6 +266,10 @@ spec:
 
 
 ## 自定义资源解释器
+> https://github.com/karmada-io/karmada/tree/master/docs/proposals/resource-interpreter-webhook
+
+![自定义资源解释器作用阶段](kmd-res-interpreter.png)
+
 ### Interpret Ops
 * `Retain`的理解：
 karmada控制面板会将资源状态同步到worker集群，而如果用户直接在worker集群修改了一些字段，如`.replicas`，则不会生效，因为还是会被karmada执行sync过程覆盖回去，如修改上述workload资源，改`.replicas`从2改为1，但过一会看，`.replicas`仍然还是2，而`Retain`机制，就是在karmada binding过程，让目标资源对象使用worker集群中的目标值，而不是karmada计算出来的值，这样就实现了资源值可由目标集群中的组件进行控制的目标；
