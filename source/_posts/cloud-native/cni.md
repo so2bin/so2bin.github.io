@@ -1,15 +1,17 @@
 ---
 layout: pages
-title: cni
+title: 容器网络和cni
 date: 2024-02-18 22:15:43
 tags: ["k8s", "CNI"]
 ---
 
 ## 容器网络
 > * https://zhuanlan.zhihu.com/p/364886965
+> * https://outmanzzq.github.io/2019/10/22/docker-network/#22-container
+> * https://tonybai.com/2017/01/11/understanding-linux-network-namespace-for-docker-network/
 
 ### docker网络模式
-* 默认创建如下三种：bridge, host, none
+* 默认创建如下四种：bridge, host, none, container
 ```bash
 hbb@hbb:~$ docker network ls
 NETWORK ID     NAME      DRIVER    SCOPE
@@ -17,16 +19,18 @@ NETWORK ID     NAME      DRIVER    SCOPE
 3d964312d0b5   host      host      local
 07d5e640e74f   none      null      local
 ```
-* 默认容器均采用bridge网桥模式，所有容器均会创建一对虚拟网络接口，容器内一个eth0，容器外一个vethXXX，vethXXX属于docker0，通过docker0实现对外网的访问；
-* `host`模式即与主机共享网络空间，不使用私有的容器网络空间；
-* `none`模式即容器内没有eth0网口，因此无法与容器外通信；
+* `bridge`模式为默认容器模式，所有容器均会创建一对虚拟网络接口，容器内一个eth0，容器外一个vethXXX，vethXXX属于docker0，通过docker0实现对外网的访问；所谓虚拟网络接口，是通过linux Network namespace来实现容器的网络隔离，容器会有自己独立的虚拟网卡，协议栈，iptables等；
+* `host`模式即与主机共享网络空间，不使用私有的容器网络空间，不会虚拟出网卡；
+* `none`模式即容器内没有eth0网口，因此无法与容器外通信，如某些容器仅需访问磁盘；
+* `container`模式也不会创建独立的容器网络，而是复用指定的其它容器的虚拟网络空间；
 
 ### network namespace, veth pair, bridge
 * 下图所示为相关概念：
 ![network namespace vs veth pair vs bridge](basic-concepts.png)
 
 #### `bridge`
-* docker0 bridge即纯软件实现的虚拟交换机，可实现与物理交换机同样的功能，如二层交换，ARP寻找MAC地址；
+* docker0 bridge即纯软件实现的虚拟交换机，可实现与物理交换机同样的功能，如二层交换，ARP寻找MAC地址，连接到docker0的容器将处于一个二层网络中；
+* 主机会给docker0分配一个网段，默认为`172.17.0.0/16`，docker0默认IP为`172.17.0.1`，docker创建出来的veth pair将在该网段范围内分配一个IP；
 
 #### `network namespace`
 * 即将一个物理的网络协议栈进行逻辑隔离，形成网络空间，不同的拷贝协议栈有自己独立的网络接口，ip，route tables, iptables等，而进程可以设置使用不同的network namespace，多个进程也可以属于同一个ns，一个pod有一个独立的ns，pod内的容器属于同一个ns；
