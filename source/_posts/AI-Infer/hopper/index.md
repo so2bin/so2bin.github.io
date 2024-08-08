@@ -24,6 +24,8 @@ tags: [GPU, LLM, Hopper, H100]
 * 第四代NVLink技术：all-reduce操作带宽提升3x，900GB/s，是PCIe Gen5的7x；
 * PCIe Gen5: 提供128GB/s总带宽，单个方向64GB/s；
 
+> * `thread block`: 编程抽象，代表一组cooperative threads，一个SM能执行多个`thread blocks`(32个)，一个`thread blocks`不能跨多个SM；
+> * `thread block cluster`的`thread block`(1cluster最多16个)可以跨SM，因DSMEM的存在支持SM-to-SM通信（虚拟地址空间统一），所以`cluster`内的`thread blocks`允许访问同一个SM内的SMEM，也支持访问`cluster`内的其它SM中的SMEM；
 
 ### 异步
 * 真正的异步GPU：支持应用构建出E2E的异步pipeline：允许将数据into and off the chip，完全重叠和隐藏计算与数据移动；
