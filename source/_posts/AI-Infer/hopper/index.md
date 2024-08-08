@@ -88,3 +88,32 @@ tags: [GPU, LLM, Hopper, H100]
 ![SM-to-SM in cluster](./sm-to-sm.png)
 
 ![cluster性能提升](./cluster-speedup.png)
+
+### Asynchronous execution
+* 基于TMA和`asynchronous transaction barrier`能力，能进一步提升异步计算能力，进一步优化计算与内存copy的重叠；
+* TMA操作是异步的，并是利用A100中引入的基于SMEM的异步屏障能力；
+* TMA编程模型是单线程的，因此只会从一个warp中的选一个线程来执行TMA操作`cuda::memcpy_async`，多个线程会等待在屏障`cuda::barrier`上等数据传输完成；
+
+![TMA address](./TMA_addr.png)
+
+* TMA的另一个优势是可以释放出线程出来执行其它独立的工作。在A100中，异步内存拷贝是利用特殊的指令执行，因此这些线程需要负责生成所有的地址并循环拷贝数据，而在Hopper上，TMA会处理所有的工作：单个线程创建一个copy descriptor，之后的工作由全部由TMA完成；
+
+![Asynchronous memory copy with TMA on H100 vs. LDGSTS on A100](./ldgsts_vs_tma.png)
+
+### Asynchronous barrier
+* 异步屏障是由Ampere架构引入的，用于解决场景：一组线程并行产生数据，这些数据在全部产生后将被继续用于后续的线程计算，这里通过`asynchronous barrier` （如下左图）分为了两步来实现：
+    1. 先生成完了自己部分数据的线程，会发出非阻塞`Arrive`信号，之后该线程可以继续去执行其它工作；
+    2. 那些需要消费上述数据的线程，在执行`Wait`命令后该线程会被阻塞，直到所有线程都完成了`Arrive`；
+* 该功能是让那些在等待的线程可以去执行无关的工作，以提升资源利用率；
+* 在Hopper架构中，优化了`Wait`状态的线程，之前系列GPU中，该状态的线程是处于spin自旋等待状态中，Hopper构架下线程是处于sleep状态；
+* Hopper架构中，`asynchronous barrier`仍然是重要的编程模型，但同时Hopper引入了一种新的`asynchronous transaction barrier`（如下右图），其工作模式与`asynchronous barrier`相似，仍然是分了两步，但除了计数`thread arrive`外，还需要计数`transactions`；
+* `asynchronous transaction barrier`主要是为了解决SM-to-SM SMEM数据交互过程中的线程同步问题，`transaction`计数本质就是一个byte count。该barrier `wait`会阻塞线程，直到所有线程完成`Arrive`，并`transaction counts`达到目标值；
+
+![Asynchronous barrier in A100 vs. asynchronous transaction barrier in H100](./async_trans_barrier.png)
+
+
+## Compute Capability 9.0
+* V100 vs A100 vs H100 计算能力对比：
+
+![Compute Capability 9.0](./sm_90.png)
+
