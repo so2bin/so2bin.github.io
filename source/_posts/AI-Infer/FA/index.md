@@ -108,6 +108,12 @@ class TransformerDecoder(nn.Module):
 * 最后经过Decoder出来的shape是：`[B, S, vocab_size]`，实际在推理中一个sequence只需要生成一个token，而这里生成了`S`个概率分布，一般都是取最好一个分布作为预测的下一个token：`[B, -1, vocab_size]`
 
 ### V1
+* https://zhuanlan.zhihu.com/p/708867810?utm_psn=1808545252048527361
+
+* 结合上述文章介绍，FAv1就是对`softmax(QK)V`计算实现成以tile分块one-pass attention，其最终的计算流程图可参考为：
+
+![FA v1 one-pass attn](fav1_one_pass.png)
+
 
 
 ### V2
