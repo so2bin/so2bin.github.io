@@ -181,5 +181,12 @@ stencil_1d<<<grid_size, block_size, smem_size>>>>();
 
 
 
+### share-memory
+* 功能：提升性能、实现inter-thread数据通信；
+* SMEM bank confilict ??
+
+
+## 05 atomic, reductions, warp shuffle
+
 
 
