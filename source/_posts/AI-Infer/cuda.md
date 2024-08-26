@@ -42,3 +42,14 @@ __global__ void add(int *a, int *b, int *c, int n) {
 ```c++
 add<<<(N+M-1) / M, M>>>(d_a, d_b, d_c, N);
 ```
+
+
+### share-memory
+* 功能：提升性能、实现inter-thread数据通信；
+* SMEM bank confilict ??
+
+
+## 05 atomic, reductions, warp shuffle
+
+
+
