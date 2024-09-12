@@ -52,4 +52,26 @@ add<<<(N+M-1) / M, M>>>(d_a, d_b, d_c, N);
 ## 05 atomic, reductions, warp shuffle
 
 
+## managed/unified memory
+* 一种GPU/CPU内存直接关联，并按需分布、数据自动同步的能力，通过类似page fault的技术实现：
+![managerd memory](./managed-memory.png)
+
+* GPU memory oversubscription, pages are be migrated to GPU on demand:
+```c++
+void foo() {
+    // GPU has 16GB memory
+    char *data;
+    // size_t size = 64ULL*1024*1024*1024;
+    cudaMallocManaged(&data, size);
+}
+```
+* 支持系统级原子操作，支持CPU/GPU/多GPU;
+* 统一内存并不是为了性能优化，主要是为了简化程序开发，甚至该技术的引入因大量的page-fault需要系统介入反而会引入性能下降；
+* explicit prefetching: `cudaMemPrefetchAsync(ptr, len, dstDevice, stream)`，可以将其类比于`cudaMemcpy(Async)`，该能力的引入就可以批量移动数据，避免大量page-fault；  
+
+* UM相关资料：![UM learn](./um-learn.png)
+
+
+
+
 
