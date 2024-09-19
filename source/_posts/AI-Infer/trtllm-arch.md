@@ -162,7 +162,7 @@ class PretrainedModel:
 ```
 
 ## Advanced
-### MH, MQA, GQA
+### MHA, MQA, GQA
 > https://nvidia.github.io/TensorRT-LLM/advanced/gpt-attention.html#multi-head-multi-query-and-group-query-attention
 > https://arxiv.org/abs/1706.03762
 > https://arxiv.org/abs/1911.02150
