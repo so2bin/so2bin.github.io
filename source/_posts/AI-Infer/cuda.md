@@ -209,6 +209,25 @@ void foo() {
 * UM相关资料：![UM learn](./um-learn.png)
 
 
+## streams
+* 同一个stream上的指令的执行顺序一定是issue的顺序，不同stream上的指令的顺序不保证顺序性；
+* Default stream with other streams: 当default stream与其它主动创建的streamm同时运行时，default stream的执行有一点特殊性，即在default stream执行前，会等待其它stream的任务全部完成后才开始，同时在default stream执行过程，其它stream将等待，直接default stream结束后才能开始；
+* 为了避免出现上述的default stream的复杂性，一般如果使用多流，则建议全部使用name stream，在CUDA7后运行将默认stream设置为name stream的特性；
+* `cudaLaunchHostFunc()`运行在cuda stream中以stream的顺序来执行host函数（在该函数里，不能调用cuda API）；
+* cuda api是线程安全的，可以在一个线程上执行`cudaAllocate`，在另一个线程中执行`cudaMemCpy`；
 
+### stream priority
+* CUDA streams运行定义优先级；
+* CUDA block scheduler会尝试先调度具有更高优先级的stream的kernel blocks；
+* 当前的实现不支持blocks的抢占调度；
+* `cudaStreamCreateWithPriority()`
 
+## multi-gpu
+* 流是与device绑定的，如切换到其它device执行stream，会报错；
+* 设备间支持显存直接传输，可以通过`cudaDeviceCanPeerAccess()`来测试两卡之间是否可以通信（PCIE, NVlink）;
+
+## cuda graph
+* CUDA10中引入，由多个计算任务节点(node)，如memcpy, kernel等组成；
+* 一次定义，可以多次使用；
+* 其优势是可以减少cuda kernel的启动开销；
 
