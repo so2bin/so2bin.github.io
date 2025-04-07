@@ -76,4 +76,8 @@ tags: ["vGPU, GPU, NVIDIA"]
 3. 显存上也支持一定程度的配置能力；
 
 
-
+### 架构
+* stream代表了一个软件层的抽象，其封装了一系列有序的命令，如kernels, memcpy等，处于不同stream上的work是可以并行执行的；
+* stream会被映射到一个或多个GPU driver的work queues，work queue是GPU硬件级的一种资源，其上是有序的等GPU执行的命令；
+* 带Hyper-Q能力的GPU，会为每个CUDA context分配一个具体的scheduler用于调度该context上关联的work queues的任务，同一个context上关联的不同work queue的计算任务是可以被GPU并行调度执行的；
+* GPU同时拥有time-sliced调度能力来调度不同CUDA context上的work queues任务：不同context上的work queue能被并行调度，
