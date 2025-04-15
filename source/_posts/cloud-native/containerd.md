@@ -201,6 +201,6 @@ version = 2
 
 ![kubelet-containerd-1.1](kubelet-containerd-1.1.png)
 
-* Kubernetes 社区也做了个专门用于 Kubernetes 的容器运行时 CRI-O，直接兼容 CRI 和 OCI 规范。但是对于用户来说，Docker 大家还是更为熟悉，所以更多的还是选择 Containerd 作为容器运行时
+* Kubernetes 社区也做了个专门用于 Kubernetes 的容器运行时 CRI-O，直接兼容 CRI 和 OCI（Open Container Initiative） 规范。但是对于用户来说，Docker 大家还是更为熟悉，所以更多的还是选择 Containerd 作为容器运行时
 
 ![cri-o](cri-o.png)
