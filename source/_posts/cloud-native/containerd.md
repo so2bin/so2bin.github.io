@@ -188,6 +188,8 @@ version = 2
 * 最初的kubelet使用dockershim与docker交互，dockershim是基于docker生态的CRI实现程序，直接集成在了kubelet中：
 > CRI是kubelet与容器的交互规范接口
 
+> containerd-shim 启动后会去启动一个叫做 /usr/bin/containerd-shim-runc-v2 的进程，然后立即退出，此时 containerd-shim-runc-v2 的父进程就变成了systemd(1)，这样 containerd-shim-runc-v2 就和containerd脱离了关系，即便containerd退出也不会影响到容器（这也是containerd-shim套件的作用）
+
 ![kubelet-dockershim](kubelet-dockershim.png)
 
 * k8s删除对docker的依赖，同时去掉dockershim
