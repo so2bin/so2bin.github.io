@@ -178,3 +178,26 @@ version = 2
 * 开源社区专门为k8s生态打造的CRI标准实现，与k8s seamless integration，与containerd处于同一层，都是实现容器生命周期的管理；
 * 因其是专对k8s实现的，因此不适用于非k8s的运行时场景；
 
+## docker vs dockershim vs containerd vs containerd-shim
+
+> https://www.cnblogs.com/Dy1an/p/17141405.html
+
+* contaierd-shim是由Containerd收到容器创建请求后创建的容器进程的父进程，必须存在，由该shim进程做容器进程的父进程可以避免由于contaierd进程挂掉后导致所有容器进程崩掉；
+* containerd-shim通过runc或其它如kata来创建容器；容器创建遵循OCI标准，规范了容器镜像结构、容器交互指令等；
+* 最初的kubelet使用dockershim与docker交互，dockershim是基于docker生态的CRI实现程序，直接集成在了kubelet中：
+> CRI是kubelet与容器的交互规范接口
+
+![kubelet-dockershim](kubelet-dockershim.png)
+
+* k8s删除对docker的依赖，同时去掉dockershim
+  - 1.0构架
+
+![kubelet-containerd 1.0](kubelet-containerd-1.0.png)
+
+  - 1.1架构
+
+![kubelet-containerd-1.1](kubelet-containerd-1.1.png)
+
+* Kubernetes 社区也做了个专门用于 Kubernetes 的容器运行时 CRI-O，直接兼容 CRI 和 OCI 规范。但是对于用户来说，Docker 大家还是更为熟悉，所以更多的还是选择 Containerd 作为容器运行时
+
+![cri-o](cri-o.png)
