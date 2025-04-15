@@ -181,6 +181,7 @@ version = 2
 ## docker vs dockershim vs containerd vs containerd-shim
 
 > https://www.cnblogs.com/Dy1an/p/17141405.html
+> https://www.cnblogs.com/zhangmingcheng/p/17524721.html
 
 * contaierd-shim是由Containerd收到容器创建请求后创建的容器进程的父进程，必须存在，由该shim进程做容器进程的父进程可以避免由于contaierd进程挂掉后导致所有容器进程崩掉；
 * containerd-shim通过runc或其它如kata来创建容器；容器创建遵循OCI标准，规范了容器镜像结构、容器交互指令等；
