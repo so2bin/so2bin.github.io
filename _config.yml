@@ -103,8 +103,8 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: 'git'
-  repo: git@github.com:so2bin/so2bin.github.io.git
+  type: git
+  repo:  git@github.com:so2bin/so2bin.github.io.git
   branch: master
 
 # 新增文章字数统计
