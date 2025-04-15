@@ -106,6 +106,7 @@ deploy:
   type: git
   repo:  git@github.com:so2bin/so2bin.github.io.git
   branch: master
+  port: 443
 
 # 新增文章字数统计
 symbols_count_time:
