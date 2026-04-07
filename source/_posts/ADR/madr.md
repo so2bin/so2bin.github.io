@@ -1,3 +1,12 @@
+---
+title: MADR
+date: 2025-04-07
+categories: ADR
+tags:
+  - 架构
+  - ADR
+---
+
 # MADR
 ## 资料
 * https://adr.github.io/adr-templates/

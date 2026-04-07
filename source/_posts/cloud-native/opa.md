@@ -1,3 +1,12 @@
+---
+title: OPA
+date: 2025-04-25
+categories: cloud-native
+tags:
+  - OPA
+  - APISIX
+---
+
 # OPA
 ## 资料
 > https://cloud.tencent.com/developer/article/1755148
