@@ -1,0 +1,131 @@
+# Butterfly Theme Configuration
+# Docs: https://butterfly.js.org/
+
+# Menu
+menu:
+  首页: / || fas fa-home
+  归档: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-th
+  关于: /about/ || fas fa-user
+
+# Code Blocks
+highlight_theme: mac # default / mac / mac light / ...
+highlight_copy: true
+highlight_lang: true
+highlight_height_limit: 400
+
+# Social links
+social:
+  fab fa-github: https://github.com/so2bin || GitHub
+  fas fa-envelope: mailto:bbhe_work@163.com || Email
+
+# Avatar
+avatar:
+  img: /images/avatar.png
+  effect: false
+
+# Author info at top of sidebar
+subtitle: 青山一道同云雨，明月何曾是两乡
+
+# Top cover image (can be overridden per post)
+index_img: false
+default_top_img: false
+archive_img: false
+tag_img: false
+category_img: false
+
+# Table of Contents
+toc:
+  post: true
+  page: false
+  number: true
+  expand: false
+  style_simple: false
+
+# Post meta
+post_meta:
+  page:
+    date_type: both
+    categories: true
+    tags: true
+  post:
+    date_type: both
+    categories: true
+    tags: true
+
+# Post copyright
+post_copyright:
+  enable: true
+  decode: false
+  author_href:
+  license: CC BY-NC-SA 4.0
+  license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+# Word count (reuse hexo-symbols-count-time)
+wordcount:
+  enable: true
+  post_wordcount: true
+  min2read: true
+  total_wordcount: false
+
+# Dark mode
+darkmode:
+  enable: true
+  button: true
+  autoChangeMode: 1
+
+# Local search
+local_search:
+  enable: true
+  preload: false
+  CDN:
+
+# Footer
+footer:
+  owner:
+    enable: true
+    since: 2023
+  custom_text:
+  copyright: true
+
+# Beautify
+beautify:
+  enable: true
+  field: post
+  title-prefix-icon: '\f0c1'
+
+# Font
+font:
+  global-font-size:
+  code-font-size:
+  font-family:
+  code-font-family:
+
+# Preloader animation
+preloader:
+  enable: false
+
+# Page transition
+enter_transitions: true
+
+# Aside (sidebar)
+aside:
+  enable: true
+  card_author:
+    enable: true
+    description: 专注于AI框架、平台、架构、k8s、Go、Python领域
+  card_announcement:
+    enable: false
+  card_recent_post:
+    enable: true
+    limit: 5
+  card_categories:
+    enable: true
+  card_tags:
+    enable: true
+    limit: 40
+  card_archives:
+    enable: true
+    type: monthly
+    limit: 12

@@ -41,7 +41,7 @@ external_link:
 filename_case: 0
 render_drafts: false
 post_asset_folder: true # 使用本地相对image目录
-relative_link: true # 相对链接
+relative_link: false
 future: true
 syntax_highlighter: highlight.js
 highlight:
@@ -98,7 +98,8 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next
+theme: butterfly
+# theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -123,3 +124,10 @@ search:
   field: post
   format: html
   limit: 10000
+
+# 自动摘要
+excerpt:
+  depth: 3
+  excerpt_excludes: []
+  more_excludes: []
+  hideWholePostExcerpts: true

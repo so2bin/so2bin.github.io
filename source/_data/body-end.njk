@@ -1,0 +1,67 @@
+<button id="darkmode-toggle" aria-label="切换暗色模式">🌙</button>
+
+<style id="light-theme-override"></style>
+
+<script>
+(function() {
+  var toggle = document.getElementById('darkmode-toggle');
+  var styleEl = document.getElementById('light-theme-override');
+
+  var lightCSS = ':root{' +
+    '--body-bg-color:#fff!important;' +
+    '--content-bg-color:#fff!important;' +
+    '--card-bg-color:#f5f5f5!important;' +
+    '--text-color:#555!important;' +
+    '--blockquote-color:#666!important;' +
+    '--link-color:#555!important;' +
+    '--link-hover-color:#222!important;' +
+    '--brand-color:#393e46!important;' +
+    '--brand-hover-color:#393e46!important;' +
+    '--table-row-odd-bg-color:#f9f9f9!important;' +
+    '--table-row-hover-bg-color:#f0f0f0!important;' +
+    '--menu-item-bg-color:#f5f5f5!important;' +
+    '--theme-color:#fff!important;' +
+    '--btn-default-bg:#fff!important;' +
+    '--btn-default-color:#555!important;' +
+    '--btn-default-border-color:#ccc!important;' +
+    '--btn-default-hover-bg:#f0f0f0!important;' +
+    '--btn-default-hover-color:#222!important;' +
+    '--btn-default-hover-border-color:#aaa!important;' +
+    '--highlight-background:#f7f7f7!important;' +
+    '--highlight-foreground:#4d4d4c!important;' +
+    '--highlight-gutter-background:#efefef!important;' +
+    '--highlight-gutter-foreground:#869194!important;' +
+    'color-scheme:light!important;' +
+  '}img{opacity:1!important;}';
+
+  var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var saved = localStorage.getItem('next-darkmode');
+
+  var isDark;
+  if (saved === 'dark') {
+    isDark = true;
+  } else if (saved === 'light') {
+    isDark = false;
+  } else {
+    isDark = systemDark;
+  }
+
+  function apply() {
+    if (isDark) {
+      styleEl.textContent = '';
+      toggle.textContent = '☀️';
+    } else {
+      styleEl.textContent = lightCSS;
+      toggle.textContent = '🌙';
+    }
+  }
+
+  apply();
+
+  toggle.addEventListener('click', function() {
+    isDark = !isDark;
+    localStorage.setItem('next-darkmode', isDark ? 'dark' : 'light');
+    apply();
+  });
+})();
+</script>
