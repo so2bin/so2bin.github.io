@@ -7,3 +7,6 @@ public/
 .deploy*/
 _multiconfig.yml
 .githooks/
+.env
+.playwright-mcp/
+ossutil_output/

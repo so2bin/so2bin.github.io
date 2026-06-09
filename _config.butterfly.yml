@@ -86,7 +86,7 @@ footer:
   owner:
     enable: true
     since: 2023
-  custom_text:
+  custom_text: '<style>.footer_custom_text{padding:0.2em 0 !important;margin:0 !important;}.footer_custom_text a{color:rgba(255,255,255,0.6) !important;text-decoration:none !important;font-size:0.85em;}.footer_custom_text a:hover{color:rgba(255,255,255,0.9) !important;}</style><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">蜀ICP备2024048352号-1</a>'
   copyright: true
 
 # Beautify
